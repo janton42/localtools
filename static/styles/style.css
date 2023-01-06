@@ -1,14 +1,7 @@
 @import "https://fonts.googleapis.com/css?family=Open+Sans|Roboto";
-/*
-RGB
-$color1: rgba(23, 33, 33, 1);
-$color2: rgba(68, 69, 84, 1);
-$color3: rgba(127, 123, 130, 1);
-$color4: rgba(191, 172, 181, 1);
-$color5: rgba(229, 208, 204, 1);*/
 
 html {
-  background: rgba(148, 149, 149, .3);
+  background: #332730;
   box-sizing: border-box;
 }
 
@@ -27,7 +20,7 @@ body {
   font-family: "Open Sans";
   margin: 0;
   font-size: 95%;
-  background: rgba(127, 123, 130, .25);
+  background: #c0c0cc;
 }
 
 main {
@@ -41,7 +34,7 @@ footer {
   color: #000;
   text-align: center;
   position: relative;
-  background: rgba(191, 172, 181, 1) !important;
+  background: #97ccf0;
 }
 
 nav {
@@ -65,7 +58,6 @@ nav a, footer a {
 
 h1, h2, h3, h4 {
   font-family: "Roboto";
-  color: rgba(191, 172, 181, 1);
 }
 
 h1 {
@@ -73,6 +65,7 @@ h1 {
   font-size: 1.8em;
   margin-top: .3em;
   margin-bottom: 0em;
+  color: rgba(191, 172, 181, 1);
 }
 
 h2 {
@@ -114,30 +107,6 @@ li {
   font-size: .9em;
 }
 
-/*jquery carousel styles*/
-/*#peoplebox {
-  overflow: hidden;
-  *zoom: 1;
-  width: 100%;
-  height: auto;
-  margin: 0 auto;
-  background: rgba(127, 123, 130, 1);
-  padding: 1px 20px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-#peoplebox img {
-  border-radius: 15%;
-  width: 30%;
-  float: left;
-}*/
-
-
-/*#work h3 {
-  background: blue;
-}
-*/
 #work a {
   text-decoration: none;
 }

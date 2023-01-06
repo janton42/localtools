@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user_tasks %}
+    <ul>
+      {% for task in user_tasks %}
+      <li>Task: {{ task.title }} | {{ task.due }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no tasks</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user_profile %}
+    <ul>
+      {% for profile in user_profile %}
+        <li><p>First Name: {{ user.first_name}}</p></li>
+        <li><p>Last Name: {{ user.last_name}}</p></li>
+        <li><p>Nickname: {{ profile.nickname }}</p></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't completed your profile!</p>
+    <a href="{% url 'complete_profile' %}">Complete Profile</a>
+  {% endif %}
+
+{% endblock %}

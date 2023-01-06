@@ -4,10 +4,15 @@
 
 {% if user.is_authenticated %}
 <h2>Welcome, {{ user.first_name }}!</h2>
+
+<a href="{% url 'view_tasks' %}">Tasks</a>
+
 {% else %}
 <h2>Welcome!</h2>
-{% endif %}
-<p>This is the homepage.</p>
 
-<p>This is the homepage.</p>
+<p>This is the homepage. There's nothing intersting here until after
+you login; please do so.</p>
+{% endif %}
+
+
 {% endblock %}

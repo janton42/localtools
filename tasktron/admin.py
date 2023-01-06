@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Profile, FileUpload, Task
+
+admin.site.register(Profile)
+admin.site.register(FileUpload)
+admin.site.register(Task)

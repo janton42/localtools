@@ -4,15 +4,15 @@ from django.conf import settings
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, CompleteProfileForm
 
 # Import any models needed for views. Note: all views accessing db should require login
-# from .models import ModelName, OtherModel, AnotherOne
+from .models import Profile, FileUpload, Task
 
 # Import other python packages, includes ones you wrote. "script_name" is the name of the .py file
 # containing ClassName, which is the desired import
 
-# from .top_level.package_directory.script_name import ClassName 
+# from .top_level.package_directory.script_name import ClassName
 
 # These pages are accessible without a login.
 
@@ -36,13 +36,49 @@ def register(request):
 
 
 # All views below require login
+@login_required
+def view_tasks(request):
+    user_tasks = Task.objects.all()\
+    .filter(user=request.user)\
+    .values()
+    context = { 'user_tasks': user_tasks }
+    return render(request, 'view_tasks.html')
 
-#@login_required
-#def page_with_content_from_db(request):
-#    db_objects_to_display = TableName.objects.all()\
-#    .filter(user=request.user)\
-#    .values()
-#    context = {
-#        'db_objects_to_display': db_objects_to_display
-#    }
-#    return render(request,'page_template.html', context)
+@login_required
+def profile_view(request):
+    user_profile = Profile.objects.all()\
+    .filter(user=request.user)\
+    .values()
+    context = { 'user_profile': user_profile }
+    return render(request, 'profile_view.html', context)
+
+@login_required
+def complete_profile(request):
+    if request.method == 'POST':
+        form = CompleteProfileForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect('complete_profile.html',pk=profile.pk)
+    else:
+        form = CompleteProfileForm()
+    context = { 'form': form }
+    return render(request, 'complete_profile.html', context)
+
+# Upload a file
+@login_required
+def upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            upload = form.save(commit=False)
+            upload.user = request.user
+            upload.save()
+            return redirect('home')
+        else:
+            print(form.errors)
+    else:
+        form = UploadFileForm()
+    context = { 'form': form }
+    return render(request, 'upload.html', context)

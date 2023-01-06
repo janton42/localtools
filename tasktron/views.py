@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from .forms import UserRegistrationForm, CompleteProfileForm,\
-CreateTaskForm
+CreateTaskForm, UpdateTaskForm
 
 # Import any models needed for views. Note: all views accessing db should require login
 from .models import Profile, FileUpload, Task
@@ -59,6 +59,28 @@ def create_task(request):
         form = CreateTaskForm()
     context = { 'form': form }
     return render(request, 'create_task.html', context)
+
+@login_required
+def update_task(request, id):
+    if request.method == 'POST':
+        form = UpdateTaskForm(request.POST)
+        if form.is_valid():
+            task = Task.objects.all()\
+            .filter(user=request.user)\
+            .get(id=id)
+            return redirect(reverse('tasktron:view_tasks'))
+    else:
+        form = UpdateTaskForm()
+    context = { 'form': form }
+    return render(request, 'update_task.html', context)
+
+@login_required
+def delete_task(request, id):
+    task = Task.objects.all()\
+    .filter(user=request.user)\
+    .get(id=id)
+    task.delete()
+    return redirect(reverse('tasktron:view_tasks'))
 
 @login_required
 def profile_view(request):

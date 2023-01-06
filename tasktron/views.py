@@ -62,16 +62,22 @@ def create_task(request):
 
 @login_required
 def update_task(request, id):
+    task = Task.objects.all()\
+    .filter(user=request.user)\
+    .get(id=id)
     if request.method == 'POST':
         form = UpdateTaskForm(request.POST)
         if form.is_valid():
-            task = Task.objects.all()\
-            .filter(user=request.user)\
-            .get(id=id)
+            task.title = form.cleaned_data['title']
+            task.due = form.cleaned_data['due']
+            task.status = form.cleaned_data['status']
+            task.save()
             return redirect(reverse('tasktron:view_tasks'))
     else:
         form = UpdateTaskForm()
-    context = { 'form': form }
+    context = { 'form': form,
+                'task': task,
+                }
     return render(request, 'update_task.html', context)
 
 @login_required

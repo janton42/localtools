@@ -2,13 +2,20 @@
 
 {% block content %}
 
-<!-- # {#% url 'tasktron:update_task' task.id %} -->
+{% if task %}
+<h1>Update Task</h1>
+<ul>
+  <li>Current title: {{ task.title }}</li>
+  <li>Current Due Date: {{ task.due }}</li>
+  <li>Current Status: {{ task.status }}</li>
+</ul>
+
 <form class="post-form" action="" method="POST">
   {% csrf_token %}
   {% for field in form %}
   <div>
     <p>
-      {{ field.label }}: <br> {{ field.value }}
+      {{ field.label }}: <br> {{ field }}
     </p>
 
     {% for error in field.errors %}
@@ -20,5 +27,8 @@
 <button type="reset">Reset</button>
 <a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
 </form>
+{% else %}
+<p>No task selected</p>
+{% endif %}
 
 {% endblock %}

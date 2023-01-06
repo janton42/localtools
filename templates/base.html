@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+<html lang="en-US">
+  <head>
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<meta charset="utf-8">
+  	<title>Site Title</title>
+  	<script src="https://use.fontawesome.com/382d19b8cb.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/>
+  </head>
+
+  <body>
+    <header class="page-header">
+      <div class="topnav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'login' %}">Login</a>
+      </div>
+        <h1>Local Tools</a></h1>
+    </header>
+
+      <main class="container">
+          <div class="row">
+              <div class="col">
+              {% block content %}
+              {% endblock %}
+            </div>m
+          </div>
+      </main>
+
+      <footer>
+          <p>This is the footer</p>
+      </footer>
+
+  </body>
+
+</html>

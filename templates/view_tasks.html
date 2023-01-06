@@ -10,4 +10,5 @@
   {% else %}
     <p>You have no tasks</p>
   {% endif %}
+  <a href="{% url 'tasktron:create_task' %}">Create a task</a>
 {% endblock %}

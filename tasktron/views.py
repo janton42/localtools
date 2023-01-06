@@ -3,8 +3,10 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
-from .forms import UserRegistrationForm, CompleteProfileForm
+from .forms import UserRegistrationForm, CompleteProfileForm,\
+CreateTaskForm
 
 # Import any models needed for views. Note: all views accessing db should require login
 from .models import Profile, FileUpload, Task
@@ -42,7 +44,21 @@ def view_tasks(request):
     .filter(user=request.user)\
     .values()
     context = { 'user_tasks': user_tasks }
-    return render(request, 'view_tasks.html')
+    return render(request, 'view_tasks.html', context)
+
+@login_required
+def create_task(request):
+    if request.method == 'POST':
+        form = CreateTaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+            return redirect(reverse('tasktron:view_tasks'))
+    else:
+        form = CreateTaskForm()
+    context = { 'form': form }
+    return render(request, 'create_task.html', context)
 
 @login_required
 def profile_view(request):
@@ -60,7 +76,7 @@ def complete_profile(request):
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
-            return redirect('complete_profile.html',pk=profile.pk)
+            return redirect(reverse('tasktron:profile_view',pk=profile.pk))
     else:
         form = CompleteProfileForm()
     context = { 'form': form }

@@ -16,8 +16,24 @@
         <div class="topnav">
           <a href="{% url 'home' %}">Home</a>
           {% if user.is_authenticated %}
-          <a href="{% url 'logout' %}">Logout</a>
-          <a href="{% url 'tasktron:profile_view' %}">View Profile</a>
+
+          <div class="dropdown">
+            <a href="#">Toolbox</a>
+            <div class="dropdown-content">
+              <a href="{% url 'tasktron:view_tasks' %}">Tasktron</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">Settings</a>
+            <div class="dropdown-content">
+              <a href="{% url 'logout' %}">Logout</a>
+              <a href="{% url 'tasktron:profile_view' %}">View Profile</a>
+            </div>
+          </div>
+
+
+
           {% else %}
           <a href="{% url 'login' %}">Login</a>
           {% endif %}

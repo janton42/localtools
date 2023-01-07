@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <a href="{% url 'tasktron:create_task' %}">Create a task</a>
   {% if user_tasks %}
-  <table>
-    {% for task in user_tasks %}
-    <tr>
-      <td>{{ task.title }}</td>
-      <td>{{ task.due }}</td>
-      <td>{{ task.status }}</td>
-      <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
-      <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
-    </tr>
-    {% endfor %}
-  </table>
-
+  <div id="table-wrap">
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th colspan="2">Update</th>
+      </tr>
+      {% for task in user_tasks %}
+      <tr>
+        <td>{{ task.title }}</td>
+        <td>{{ task.due }}</td>
+        <td>{{ task.status }}</td>
+        <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+        <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
 
   {% else %}
     <p>You have no tasks</p>
   {% endif %}
-  <a href="{% url 'tasktron:create_task' %}">Create a task</a>
 {% endblock %}

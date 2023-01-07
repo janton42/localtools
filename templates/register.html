@@ -2,7 +2,7 @@
 
 {% block content%}
   <h2>New User Registration</h2>
-  
+
   <hr>
   <form action="" method="POST">
     {% csrf_token %}
@@ -19,5 +19,8 @@
     {% endfor %}
 
     <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+    <a href="{% url 'home' %}">Cancel</a>
+
   </form>
 {% endblock%}

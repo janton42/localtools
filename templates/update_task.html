@@ -1,34 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  {% if task %}
+    <h2>Update Task</h2>
 
-{% if task %}
-<h1>Update Task</h1>
-<ul>
-  <li>Current title: {{ task.title }}</li>
-  <li>Current Due Date: {{ task.due }}</li>
-  <li>Current Status: {{ task.status }}</li>
-</ul>
+    <h3>Current Details</h3>
+    <div id="table-wrap">
 
-<form class="post-form" action="" method="POST">
-  {% csrf_token %}
-  {% for field in form %}
-  <div>
-    <p>
-      {{ field.label }}: <br> {{ field }}
-    </p>
+      <table>
+        <tr>
+          <th>Title</th>
+          <th>Due Date</th>
+          <th>Status</th>
+        </tr>
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.due }}</td>
+          <td>{{ task.status }}</td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <br>
+    <h3>New Details</h3>
+    <div id="table-wrap">
+      <form class="post-form" action="" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+          <p>
+            {{ field.label }}: <br> {{ field }}
+          </p>
 
-    {% for error in field.errors %}
-      <small style="color: red">{{ error }}</small>
-    {% endfor %}
-  </div>
-{% endfor %}
-<button type="submit">Submit</button>
-<button type="reset">Reset</button>
-<a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
-</form>
-{% else %}
-<p>No task selected</p>
-{% endif %}
+          {% for error in field.errors %}
+            <small style="color: red">{{ error }}</small>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
+      <a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
+      </form>
+    </div>
+
+
+  {% else %}
+    <p>No task selected</p>
+  {% endif %}
 
 {% endblock %}

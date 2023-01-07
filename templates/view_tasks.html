@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <a href="{% url 'tasktron:create_task' %}">Create a task</a>
+<h2>Tasktron</h2>
+  <div class="copy">
+    <p>A basic todo list, representing the fundamental database (db)
+      operations: create, read, update, and delete."Create" is acheived
+      through the "Add a Task" button, which will bring users to a form
+      used to write new data to the db. "Read" is the table below, which
+      dynamically pulls a users tasks from the db. "Update" and "Delete"
+      are the "Edit" and "Delete" buttons, respectively.
+    </p>
+  </div>
+  <div id="creator-wrap">
+    <a href="{% url 'tasktron:create_task' %}">Add a Task</a>
+  </div>
+<br>
   {% if user_tasks %}
   <div id="table-wrap">
     <table>

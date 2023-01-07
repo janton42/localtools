@@ -7,57 +7,62 @@
   	<meta charset="utf-8">
   	<title>Site Title</title>
   	<script src="https://use.fontawesome.com/382d19b8cb.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/>
+    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"/></script>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/> -->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css"/>
   </head>
 
   <body>
-    <div id="page-container">
-      <header class="page-header">
-        <div class="topnav">
-          <a href="{% url 'home' %}">Home</a>
-          {% if user.is_authenticated %}
-
-          <div class="dropdown">
-            <a href="#">Toolbox</a>
-            <div class="dropdown-content">
-              <a href="{% url 'tasktron:view_tasks' %}">Tasktron</a>
-            </div>
-          </div>
-
-          <div class="dropdown">
-            <a href="#">Settings</a>
-            <div class="dropdown-content">
-              <a href="{% url 'logout' %}">Logout</a>
-              <a href="{% url 'tasktron:profile_view' %}">View Profile</a>
-            </div>
-          </div>
-
-
+    <header class="page-header">
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <ul class="nav nav-pills">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+              role="button" aria-haspopup="true" aria-expanded="false">Toolbox
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'tasktron:view_tasks' %}">Tasktron</a></li>
+            </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Settings <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li><a href="{% url 'tasktron:profile_view' %}">View Profile</a></li>
+              </ul>
+            </li>
 
           {% else %}
-          <a href="{% url 'login' %}">Login</a>
+          <li><a href="{% url 'login' %}">Login</a></li>
           {% endif %}
+          </ul>
         </div>
-          <h1>Local Tools</a></h1>
-      </header>
-      <div id="content-wrap">
-        <div class="row">
-            <div class="col">
-            {% block content %}
-            {% endblock %}
-          </div>
-        </div>
-        <div class="row">
-            <div class="col">
-            {% block next %}
-            {% endblock %}
-          </div>
+
+      </nav>
+        <h1>Local Tools</a></h1>
+    </header>
+    <div id="content-wrap">
+      <div class="row">
+          <div class="col">
+          {% block content %}
+          {% endblock %}
         </div>
       </div>
-      <footer id="footer">
-          <p>This is the footer</p>
-      </footer>
+      <div class="row">
+          <div class="col">
+          {% block next %}
+          {% endblock %}
+        </div>
+      </div>
     </div>
+    <footer id="footer">
+        <p>This is the footer</p>
+    </footer>
   </body>
 
 </html>

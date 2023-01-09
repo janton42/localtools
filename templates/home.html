@@ -2,17 +2,20 @@
 
 {% block content %}
 
-{% if user.is_authenticated %}
-<h2>Welcome, {{ user.first_name }}!</h2>
 
-<p>This is your personal homepage for internal tools. Have fun.</p>
+  <div class="centered-content">
+    {% if user.is_authenticated %}
+      <h2>Welcome, {{ user.first_name }}!</h2>
 
-{% else %}
-<h2>Welcome!</h2>
+      <p>This is your personal homepage for internal tools. Have fun.</p>
 
-<p>This is the homepage. There's nothing intersting here until after
-you login; please do so.</p>
-{% endif %}
+    {% else %}
+      <h2>Welcome!</h2>
 
+      <p>This is the homepage. There's nothing intersting here until after
+      you login; please do so.</p>
+      {% endif %}
+
+  </div>
 
 {% endblock %}

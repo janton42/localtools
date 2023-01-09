@@ -3,20 +3,33 @@
 {% get_static_prefix as STATIC_PREFIX %}
 <html lang="en-US">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta charset="utf-8">
-  	<title>Site Title</title>
+  	<title>Local Tools</title>
   	<script src="https://use.fontawesome.com/382d19b8cb.js"></script>
     <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"/></script>
-    <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/> -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/ie10-viewport-bug-workaround.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/>
   </head>
 
   <body>
-    <header class="page-header">
       <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-          <ul class="nav nav-pills">
+      <div class="container">
+
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Local Tools</a>
+        </div>
+
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
             <li><a href="{% url 'home' %}">Home</a></li>
             {% if user.is_authenticated %}
             <li role="presentation" class="dropdown">
@@ -36,33 +49,27 @@
                 <li><a href="{% url 'tasktron:profile_view' %}">View Profile</a></li>
               </ul>
             </li>
-
           {% else %}
           <li><a href="{% url 'login' %}">Login</a></li>
           {% endif %}
           </ul>
         </div>
+      </div>
+    </nav>
 
-      </nav>
-        <h1>Local Tools</a></h1>
-    </header>
-    <div id="content-wrap">
-      <div class="row">
-          <div class="col">
+    <div class="container">
           {% block content %}
           {% endblock %}
-        </div>
-      </div>
-      <div class="row">
-          <div class="col">
-          {% block next %}
-          {% endblock %}
-        </div>
-      </div>
     </div>
-    <footer id="footer">
-        <p>This is the footer</p>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">This is the footer</p>
+      </div>
     </footer>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script>window.jQuery</script>
   </body>
 
 </html>

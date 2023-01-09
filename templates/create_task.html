@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form class="post-form" action="" method="POST">
-  {% csrf_token %}
-  {% for field in form %}
-  <div>
-    <p>
-      {{ field.label }}: <br> {{ field }}
-    </p>
+  <form class="post-form" action="" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    <div>
+      <p>
+        {{ field.label }}: <br> {{ field }}
+      </p>
 
-    {% for error in field.errors %}
-      <<small style="color: red">{{ error }}</small>
+      {% for error in field.errors %}
+        <<small style="color: red">{{ error }}</small>
+      {% endfor %}
+    </div>
     {% endfor %}
-  </div>
-  {% endfor %}
-  <button type="submit">Submit</button>
-  <button type="reset">Reset</button>
-  <a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
-</form>
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+    <a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
+  </form>
 {% endblock %}

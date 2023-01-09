@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  {% if user_profile %}
-  <h2>User Details</h2>
-  {% for profile in user_profile %}
-  <p>First Name: {{ user.first_name}}</p>
-  <p>Last Name: {{ user.last_name}}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Nickname: {{ profile.nickname }}</p>
-  {% endfor %}
-  {% else %}
-    <p>You haven't completed your profile!</p>
-    <a href="{% url 'tasktron:complete_profile' %}">Complete Profile</a>
-  {% endif %}
+
+  <div class="content">
+    {% if user_profile %}
+    <h2>User Details</h2>
+    {% for profile in user_profile %}
+    <p>First Name: {{ user.first_name}}</p>
+    <p>Last Name: {{ user.last_name}}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Nickname: {{ profile.nickname }}</p>
+    {% endfor %}
+    {% else %}
+      <p>You haven't completed your profile!</p>
+      <a href="{% url 'tasktron:complete_profile' %}">Complete Profile</a>
+    {% endif %}
+  </div>
 
 {% endblock %}

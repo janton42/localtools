@@ -43,7 +43,11 @@ def view_tasks(request):
     user_tasks = Task.objects.all()\
     .filter(user=request.user)\
     .values()
-    context = { 'user_tasks': user_tasks }
+    completed_tasks = user_tasks.filter(status='Complete')
+    ns_tasks = user_tasks.filter(status='Not Started')
+    context = { 'completed_tasks': completed_tasks,
+                'ns_tasks': ns_tasks
+                }
     return render(request, 'view_tasks.html', context)
 
 @login_required

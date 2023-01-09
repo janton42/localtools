@@ -15,7 +15,7 @@
     </p>
     <a href="{% url 'tasktron:create_task' %}">Add a Task</a>
     <br>
-    {% if user_tasks %}
+    {% if ns_tasks %}
       <table>
         <tr>
           <th>Title</th>
@@ -23,7 +23,7 @@
           <th>Status</th>
           <th colspan="2">Update</th>
         </tr>
-        {% for task in user_tasks %}
+        {% for task in ns_tasks %}
         <tr>
           <td>{{ task.title }}</td>
           <td>{{ task.due }}</td>
@@ -36,7 +36,31 @@
 
 
     {% else %}
-      <p>You have no tasks</p>
+      <p>You have no pending tasks.</p>
+    {% endif %}
+
+    {% if completed_tasks %}
+      <table>
+        <tr>
+          <th>Title</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th colspan="2">Update</th>
+        </tr>
+        {% for task in completed_tasks %}
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.due }}</td>
+          <td>{{ task.status }}</td>
+          <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+          <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+
+
+    {% else %}
+      <p>You have no pending tasks.</p>
     {% endif %}
   </div>
 {% endblock %}

@@ -21,6 +21,7 @@ from tasktron import views as tasktron_views
 
 urlpatterns = [
     path('', tasktron_views.home, name='home'),
+    path('informedvoter/', include('informedvoter.urls')),
     path('tasktron/', include('tasktron.urls')),
     path('register/', tasktron_views.register, name='register'),
     path('admin/', admin.site.urls, name='admin'),

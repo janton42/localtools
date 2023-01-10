@@ -18,4 +18,21 @@ from django.urls import reverse
 # These pages are accessible without a login.
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'informedvoter/index.html')
+
+# Upload a file
+@login_required
+def upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            upload = form.save(commit=False)
+            upload.user = request.user
+            upload.save()
+            return redirect('home')
+        else:
+            print(form.errors)
+    else:
+        form = UploadFileForm()
+    context = { 'form': form }
+    return render(request, 'informedvoter/upload.html', context)

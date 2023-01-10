@@ -17,16 +17,19 @@ from django.contrib import admin
 from django.urls import include,path
 from django.contrib.auth import views as auth_views
 
-from tasktron import views as tasktron_views
+from userprofile import views as userprofile_views
 
 urlpatterns = [
-    path('', tasktron_views.home, name='home'),
+    path('', userprofile_views.home, name='home'),
+    path('userprofile/', include('userprofile.urls')),
     path('informedvoter/', include('informedvoter.urls')),
     path('tasktron/', include('tasktron.urls')),
-    path('register/', tasktron_views.register, name='register'),
     path('admin/', admin.site.urls, name='admin'),
     path('login/', auth_views\
-    .LoginView.as_view(template_name='login.html'), name='login'),
+    .LoginView.as_view(template_name='userprofile/login.html'),\
+     name='login'),
+
     path('logout/', auth_views\
-    .LogoutView.as_view(template_name='logout.html'), name='logout'),
+    .LogoutView.as_view(template_name='userprofile/logout.html'),\
+     name='logout'),
 ]

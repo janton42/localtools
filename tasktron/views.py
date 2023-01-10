@@ -5,11 +5,10 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from .forms import UserRegistrationForm, CompleteProfileForm,\
-CreateTaskForm, UpdateTaskForm
+from .forms import CreateTaskForm, UpdateTaskForm
 
 # Import any models needed for views. Note: all views accessing db should require login
-from .models import Profile, FileUpload, Task
+from .models import Task
 
 # Import other python packages, includes ones you wrote. "script_name" is the name of the .py file
 # containing ClassName, which is the desired import
@@ -18,6 +17,7 @@ from .models import Profile, FileUpload, Task
 
 # These pages are accessible without a login.
 
+# MOVE TO userprofile app
 def home(request):
     return render(request, 'home.html')
 
@@ -35,21 +35,9 @@ def register(request):
     context = {'form': form}
     return render(request, 'register.html', context)
 
-
-
 # All views below require login
-@login_required
-def view_tasks(request):
-    user_tasks = Task.objects.all()\
-    .filter(user=request.user)\
-    .values()
-    completed_tasks = user_tasks.filter(status='Complete')
-    ns_tasks = user_tasks.filter(status='Not Started')
-    context = { 'completed_tasks': completed_tasks,
-                'ns_tasks': ns_tasks
-                }
-    return render(request, 'view_tasks.html', context)
 
+# CREATE an item in the db
 @login_required
 def create_task(request):
     if request.method == 'POST':
@@ -62,8 +50,26 @@ def create_task(request):
     else:
         form = CreateTaskForm()
     context = { 'form': form }
-    return render(request, 'create_task.html', context)
+    return render(request, 'tasktron/create_task.html', context)
 
+# READ items in the db
+@login_required
+def view_tasks(request):
+    user_tasks = Task.objects.all()\
+    .filter(user=request.user)\
+    .values()
+    completed_tasks = user_tasks.filter(status='Complete')
+    ns_tasks = user_tasks.filter(status='Not Started')
+    ip_tasks = user_tasks.filter(status='In progress')
+    oh_tasks = user_tasks.filter(status='On Hold')
+    context = { 'completed_tasks': completed_tasks,
+                'ns_tasks': ns_tasks,
+                'ip_tasks': ip_tasks,
+                'oh_tasks': oh_tasks,
+                }
+    return render(request, 'tasktron/view_tasks.html', context)
+
+# UPDATE an item in the db
 @login_required
 def update_task(request, id):
     task = Task.objects.all()\
@@ -86,8 +92,9 @@ def update_task(request, id):
     context = { 'form': form,
                 'task': task,
                 }
-    return render(request, 'update_task.html', context)
+    return render(request, 'tasktron/update_task.html', context)
 
+# DELETE an item from the db
 @login_required
 def delete_task(request, id):
     task = Task.objects.all()\
@@ -96,6 +103,8 @@ def delete_task(request, id):
     task.delete()
     return redirect(reverse('tasktron:view_tasks'))
 
+
+# MOVE TO userprofile app
 @login_required
 def profile_view(request):
     user_profile = Profile.objects.all()\
@@ -117,20 +126,3 @@ def complete_profile(request):
         form = CompleteProfileForm()
     context = { 'form': form }
     return render(request, 'complete_profile.html', context)
-
-# Upload a file
-@login_required
-def upload(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            upload = form.save(commit=False)
-            upload.user = request.user
-            upload.save()
-            return redirect('home')
-        else:
-            print(form.errors)
-    else:
-        form = UploadFileForm()
-    context = { 'form': form }
-    return render(request, 'upload.html', context)

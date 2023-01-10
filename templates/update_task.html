@@ -3,25 +3,6 @@
 {% block content %}
   {% if task %}
     <h2>Update Task</h2>
-
-    <h3>Current Details</h3>
-    <div id="table-wrap">
-
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th>Status</th>
-        </tr>
-        <tr>
-          <td>{{ task.title }}</td>
-          <td>{{ task.due }}</td>
-          <td>{{ task.status }}</td>
-        </tr>
-      </table>
-    </div>
-    <br>
-    <br>
     <h3>New Details</h3>
     <div id="table-wrap">
       <form class="post-form" action="" method="POST">

@@ -78,7 +78,11 @@ def update_task(request, id):
             task.save()
             return redirect(reverse('tasktron:view_tasks'))
     else:
-        form = UpdateTaskForm()
+        form = UpdateTaskForm(initial={
+                "title": task.title,
+                "due": task.due,
+                "status": task.status
+                })
     context = { 'form': form,
                 'task': task,
                 }

@@ -15,6 +15,8 @@
     </p>
     <a href="{% url 'tasktron:create_task' %}">Add a Task</a>
     <br>
+    <br>
+    <h3>Not Started</h3>
     {% if ns_tasks %}
       <table>
         <tr>
@@ -38,7 +40,9 @@
     {% else %}
       <p>You have no pending tasks.</p>
     {% endif %}
-
+    <br>
+    <br>
+    <h3>Completed</h3>
     {% if completed_tasks %}
       <table>
         <tr>

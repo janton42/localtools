@@ -36,3 +36,7 @@ def upload(request):
         form = UploadFileForm()
     context = { 'form': form }
     return render(request, 'informedvoter/upload.html', context)
+
+@login_required
+def voter_info(request):
+    return render(request, 'informedvoter/voter_info.html')

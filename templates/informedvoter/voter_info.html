@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="https://votinginfotool.org/css/compiled/vit.css"/>
+<script src="https://votinginfotool.org/js/compiled/app.js"></script>
+<div class="centered-content">
+<div id="_vit" style="min-width: 360px; max-width: 640px; height: 480px;"></div>
+</div>
+
+<script>
+  var config = {
+    "logo": {"type":"default"},
+    "official-only": true
+  };
+  var loadVIT = function () {
+    if (typeof vit !== 'undefined'){
+      vit.core.init("_vit", config);
+    } else {
+      setTimeout(loadVIT, 500);
+    };
+  };
+  loadVIT();
+</script>
+
+{% endblock %}

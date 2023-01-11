@@ -9,6 +9,7 @@ django = "*"
 django-environ = "*"
 sqlparse = "*"
 mysqlclient = "*"
+requests = "*"
 
 [dev-packages]
 

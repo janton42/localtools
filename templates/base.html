@@ -8,7 +8,6 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<title>Local Tools</title>
   	<script src="https://use.fontawesome.com/382d19b8cb.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"/></script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/ie10-viewport-bug-workaround.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/>
@@ -53,20 +52,24 @@
           <li><a href="{% url 'login' %}">Login</a></li>
           {% endif %}
           </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
         </div>
       </div>
     </nav>
 
-    <div class="container">
+    <!-- <div class="container"> -->
           {% block content %}
           {% endblock %}
-    </div>
+    <!-- </div> -->
 
     <footer class="footer">
       <div class="container">
         <p class="text-muted">This is the footer</p>
       </div>
     </footer>
+    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"/></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <script>window.jQuery</script>

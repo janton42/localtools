@@ -16,107 +16,122 @@
     <a href="{% url 'tasktron:create_task' %}">Add a Task</a>
     <br>
     <br>
-    <h3>In Progress</h3>
-    {% if ip_tasks %}
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th colspan="2">Update</th>
-        </tr>
-        {% for task in ip_tasks %}
-        <tr>
-          <td>{{ task.title }}</td>
-          <td>{{ task.due }}</td>
-          <td>{{ task.status }}</td>
-          <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
-          <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-      </table>
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>In Progress</h3>
+        {% if ip_tasks %}
+        <div class="table-responsive">
+          <table class="table">
+            <tr>
+              <th>Title</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th colspan="2">Update</th>
+            </tr>
+            {% for task in ip_tasks %}
+            <tr>
+              <td>{{ task.title }}</td>
+              <td>{{ task.due }}</td>
+              <td>{{ task.status }}</td>
+              <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+              <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
 
 
-    {% else %}
-      <p>You have no tasks in progress.</p>
-    {% endif %}
-    <br>
-    <br>
-    <h3>Not Started</h3>
-    {% if ns_tasks %}
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th colspan="2">Update</th>
-        </tr>
-        {% for task in ns_tasks %}
-        <tr>
-          <td>{{ task.title }}</td>
-          <td>{{ task.due }}</td>
-          <td>{{ task.status }}</td>
-          <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
-          <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-      </table>
 
+        {% else %}
+          <p>You have no tasks in progress.</p>
+        {% endif %}
+        </div>
+      <div class="col-sm-6">
+        <h3>Not Started</h3>
+        {% if ns_tasks %}
 
-    {% else %}
-      <p>You have no pending tasks.</p>
-    {% endif %}
-    <br>
-    <br>
-    <h3>On Hold</h3>
-    {% if oh_tasks %}
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th colspan="2">Update</th>
-        </tr>
-        {% for task in oh_tasks %}
-        <tr>
-          <td>{{ task.title }}</td>
-          <td>{{ task.due }}</td>
-          <td>{{ task.status }}</td>
-          <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
-          <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-      </table>
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th colspan="2">Update</th>
+              </tr>
+              {% for task in ns_tasks %}
+              <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due }}</td>
+                <td>{{ task.status }}</td>
+                <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+                <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
 
+        {% else %}
+          <p>You have no pending tasks.</p>
+        {% endif %}
+        </div>
+      </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>On Hold</h3>
+        {% if oh_tasks %}
 
-    {% else %}
-      <p>You have no tasks on hold.</p>
-    {% endif %}
-    <br>
-    <br>
-    <h3>Completed</h3>
-    {% if completed_tasks %}
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th colspan="2">Update</th>
-        </tr>
-        {% for task in completed_tasks %}
-        <tr>
-          <td>{{ task.title }}</td>
-          <td>{{ task.due }}</td>
-          <td>{{ task.status }}</td>
-          <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
-          <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-      </table>
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th colspan="2">Update</th>
+              </tr>
+              {% for task in oh_tasks %}
+              <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due }}</td>
+                <td>{{ task.status }}</td>
+                <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+                <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
 
+        {% else %}
+          <p>You have no tasks on hold.</p>
+        {% endif %}
+        </div>
+      <div class="col-sm-6">
+        <h3>Completed</h3>
+        {% if completed_tasks %}
 
-    {% else %}
-      <p>You have no completed tasks.</p>
-    {% endif %}
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th colspan="2">Update</th>
+              </tr>
+              {% for task in completed_tasks %}
+              <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due }}</td>
+                <td>{{ task.status }}</td>
+                <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+                <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+
+        {% else %}
+          <p>You have no completed tasks.</p>
+        {% endif %}
+        </div>
+      </div>
   </div>
 {% endblock %}

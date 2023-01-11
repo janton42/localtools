@@ -2,6 +2,7 @@
 
 {% block content %}
   {% if task %}
+  <div class="container">
     <h2>Update Task</h2>
     <h3>New Details</h3>
     <div id="table-wrap">
@@ -22,6 +23,7 @@
       <button type="reset">Reset</button>
       <a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
       </form>
+      </div>
     </div>
 
 

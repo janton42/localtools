@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'tasktron.apps.TasktronConfig',
     'informedvoter.apps.InformedvoterConfig',
     'userprofile.apps.UserprofileConfig',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,27 @@ DATABASES = {
     }
 }
 
+# Caching
+# https://docs.djangoproject.com/en/4.1/topics/cache/#setting-up-the-cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'practice_cache',
+    }
+}
+
+# Queing
+# https://django-q.readthedocs.io/en/latest/configure.html#orm
+
+Q_CLUSTER = {
+    'name': 'localtools',
+    'workers': 4,
+    'timeout': 600,
+    'retry': 615,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

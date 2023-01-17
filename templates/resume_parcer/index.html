@@ -2,16 +2,12 @@
 
 {% block content %}
 <div class="centered-content">
-  <h2>Tasktron</h2>
+  <h2>Resume Parcer</h2>
 </div>
 
 <div class="container">
-  <p>A basic todo list, representing the fundamental database (db)
-    operations: create, read, update, and delete."Create" is acheived
-    through the "Add a Task" button, which will bring users to a form
-    used to write new data to the db. "Read" is the table below, which
-    dynamically pulls a users tasks from the db. "Update" and "Delete"
-    are the "Edit" and "Delete" buttons, respectively.
+  <p>Resume parsing tool. Reads an uploaded resume, and labels each line
+    
   </p>
   <a href="{% url 'resume_parcer:upload' %}">Upload a resume</a>
   <br>

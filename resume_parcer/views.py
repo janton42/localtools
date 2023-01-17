@@ -9,6 +9,8 @@ from .forms import UploadFileForm
 
 from .models import ResumeUpload
 
+from .local_scripts.resume_parser.parser import ResumeParser
+
 # Show uploaded resumes
 @login_required
 def index(request):
@@ -44,5 +46,28 @@ def delete_upload(request, id):
     upload = ResumeUpload.objects.all()\
     .filter(user=request.user)\
     .get(id=id)
-    uploade.delete()
+    upload.delete()
     return redirect(reverse('resume_parcer:index'))
+
+
+# Parse an uploaded resume
+@login_required
+def parse_resume(request, resume_id):
+    resume = ResumeUpload.objects.all()\
+    .filter(user=request.user)\
+    .get(id=resume_id)\
+    .values()
+    for r in resume:
+        # Initialize a parcer instance named after the current user
+        parser = ResumeParser(name=request.user)
+        # Make a folder for this user, if one doesn't already exist,
+        # get the full path to the selected resume file to be parsed,
+        # and get the uploaded file's extension
+        parser.get_resume_paths(r['resume'])
+        status = parser.say_status()
+        parser.read_resume()
+    context = {
+        'resume': resume,
+        'status': status
+    }
+    return render(request, 'parsed.html', context)

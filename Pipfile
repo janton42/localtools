@@ -10,6 +10,12 @@ django-environ = "*"
 sqlparse = "*"
 mysqlclient = "*"
 requests = "*"
+joblib = "*"
+nltk = "*"
+pandas = "*"
+pdfminer = "*"
+"pdfminer.six" = "*"
+striprtf = "*"
 
 [dev-packages]
 

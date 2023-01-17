@@ -1,0 +1,43 @@
+Bullet Model 1:
+	model_name = raw_rf (raw features using a Random Forest classifier)
+	Validation Set Results:
+		Accuracy: 0.906
+		Precision: 0.914
+		Recall: 0.86
+		Latency: 0.129ms
+
+	Test Set Results:
+		Accuracy: 0.93
+		Precision: 0.928
+		Recall: 0.877
+		Latency: 0.038ms
+
+Name Model:
+	model_name = all_gb (all features using Gradient Boosting)
+
+	Validation Set Results:
+		Accuracy: 0.986
+Precision: 0.987
+Recall: 0.962
+Latency: 0.003ms
+	
+	Test Set Results
+	Accuracy: 1.0
+Precision: 1.0
+Recall: 1.0
+Latency: 0.003ms
+
+Bullet Model 2:
+	Records and features were added for the Name model, so this model was rerun using the new features
+	model_name = reduced_gb (a reduced set of features using Gradient Boosting)
+	reduced_features = ['stopword_percentage','word_count', 'proper_noun_percentage','verb_percentage']
+	Validation Set Results:
+		Accuracy: 0.933
+		Precision: 0.878
+		Recall: 0.889
+		Latency: 0.004ms
+	Test Set Results:
+		Accuracy: 0.929
+		Precision: 0.909
+		Recall: 0.811
+		Latency: 0.003ms		

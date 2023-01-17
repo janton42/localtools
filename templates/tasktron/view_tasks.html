@@ -18,6 +18,67 @@
     <br>
     <div class="row">
       <div class="col-sm-6">
+        <h3>Completed Today</h3>
+        {% if tc_tasks %}
+        <div class="table-responsive-sm">
+          <table class="table table-hover">
+            <tr>
+              <th>Title</th>
+              <th>Due</th>
+              <th>Status</th>
+              <th colspan="2">Update</th>
+            </tr>
+            {% for task in tc_tasks %}
+            <tr>
+              <td>{{ task.title }}</td>
+              <td>{{ task.due }}</td>
+              <td>{{ task.status }}</td>
+              <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+              <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+
+
+
+        {% else %}
+          <p>You haven't completed anything today.</p>
+        {% endif %}
+        </div>
+
+        <div class="col-sm-6">
+          <h3>Due Today</h3>
+          {% if td_tasks %}
+          <div class="table-responsive-sm">
+            <table class="table table-hover">
+              <tr>
+                <th>Title</th>
+                <th>Due</th>
+                <th>Status</th>
+                <th colspan="2">Update</th>
+              </tr>
+              {% for task in td_tasks %}
+              <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due }}</td>
+                <td>{{ task.status }}</td>
+                <td><a href="{% url 'tasktron:update_task' task.id %}">Edit</a></td>
+                <td><a href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+
+
+
+          {% else %}
+            <p>You have no tasks due today.</p>
+          {% endif %}
+          </div>
+      </div>
+    <div class="row">
+      <div class="col-sm-6">
         <h3>In Progress</h3>
         {% if ip_tasks %}
         <div class="table-responsive-sm">

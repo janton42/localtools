@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from datetime import datetime
 
 from .forms import CreateTaskForm, UpdateTaskForm
 
@@ -16,24 +17,6 @@ from .models import Task
 # from .top_level.package_directory.script_name import ClassName
 
 # These pages are accessible without a login.
-
-# MOVE TO userprofile app
-def home(request):
-    return render(request, 'home.html')
-
-def register(request):
-    if request.method =='POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-
-            messages.success(request, 'Your account has been created.\n\
-            You can now log in.')
-            return redirect('login')
-    else:
-        form = UserRegistrationForm()
-    context = {'form': form}
-    return render(request, 'register.html', context)
 
 # All views below require login
 
@@ -55,6 +38,7 @@ def create_task(request):
 # READ items in the db
 @login_required
 def view_tasks(request):
+    t = datetime.date(datetime.now()).isoformat()
     user_tasks = Task.objects.all()\
     .filter(user=request.user)\
     .values()
@@ -62,10 +46,14 @@ def view_tasks(request):
     ns_tasks = user_tasks.filter(status='Not Started')
     ip_tasks = user_tasks.filter(status='In progress')
     oh_tasks = user_tasks.filter(status='On Hold')
+    tc_tasks = user_tasks.filter(due=t, status='Complete')
+    td_tasks = user_tasks.filter(due=t).exclude(status='Complete')
     context = { 'completed_tasks': completed_tasks,
                 'ns_tasks': ns_tasks,
                 'ip_tasks': ip_tasks,
                 'oh_tasks': oh_tasks,
+                'tc_tasks': tc_tasks,
+                'td_tasks': td_tasks,
                 }
     return render(request, 'tasktron/view_tasks.html', context)
 
@@ -102,27 +90,3 @@ def delete_task(request, id):
     .get(id=id)
     task.delete()
     return redirect(reverse('tasktron:view_tasks'))
-
-
-# MOVE TO userprofile app
-@login_required
-def profile_view(request):
-    user_profile = Profile.objects.all()\
-    .filter(user=request.user)\
-    .values()
-    context = { 'user_profile': user_profile }
-    return render(request, 'profile_view.html', context)
-
-@login_required
-def complete_profile(request):
-    if request.method == 'POST':
-        form = CompleteProfileForm(request.POST)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            return redirect(reverse('tasktron:profile_view',pk=profile.pk))
-    else:
-        form = CompleteProfileForm()
-    context = { 'form': form }
-    return render(request, 'complete_profile.html', context)

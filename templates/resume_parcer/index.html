@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="centered-content">
+  <h2>Tasktron</h2>
+</div>
+
+<div class="container">
+  <p>A basic todo list, representing the fundamental database (db)
+    operations: create, read, update, and delete."Create" is acheived
+    through the "Add a Task" button, which will bring users to a form
+    used to write new data to the db. "Read" is the table below, which
+    dynamically pulls a users tasks from the db. "Update" and "Delete"
+    are the "Edit" and "Delete" buttons, respectively.
+  </p>
+  <a href="{% url 'resume_parcer:upload' %}">Upload a resume</a>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>Uploaded Resumes</h3>
+      {% if user_uploads %}
+      <div class="table-responsive-sm">
+        <table class="table table-hover">
+          <tr>
+            <th>Title</th>
+            <th colspan="2">Update</th>
+          </tr>
+          {% for resume in user_uploads %}
+          <tr>
+            <td>{{ resume.title }}</td>
+            <td>
+              <a href="#">
+                Delete
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+
+
+      {% else %}
+        <p>You don't have any uploaded resumes, you lazy bitch!</p>
+      {% endif %}
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}

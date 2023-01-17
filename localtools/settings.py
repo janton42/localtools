@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'tasktron.apps.TasktronConfig',
     'informedvoter.apps.InformedvoterConfig',
     'userprofile.apps.UserprofileConfig',
+    'resume_parcer.apps.ResumeParcerConfig',
     'django_q',
 ]
 

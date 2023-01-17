@@ -24,7 +24,9 @@
           </tr>
           {% for resume in user_uploads %}
           <tr>
-            <td>{{ resume.title }}</td>
+            <td>
+              <a href="{{ resume.file.url }}">{{ resume.title }} : {{ resume.resume.url }}</a>
+            </td>
             <td>
               <a href="{% url 'resume_parcer:delete_upload' resume.id %}">
                 Delete
@@ -34,8 +36,6 @@
           {% endfor %}
         </table>
       </div>
-
-
 
       {% else %}
         <p>You don't have any uploaded resumes, you lazy bitch!</p>

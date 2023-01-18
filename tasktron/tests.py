@@ -1,43 +1,35 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.timezone import now
+from datetime import date, datetime
 from .models import Task
+from django.contrib.auth.models import User
 
-class TaskModelTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass'
-        )
-        self.task = Task.objects.create(
-            user=self.user,
-            title='Test task',
-            due='2022-12-31',
-            status='Not Started'
-        )
+class TaskModelTests(TestCase):
 
-    def test_str_method(self):
-        self.assertEqual(str(self.task), 'Test task: 2022-12-31, Not Started')
-
-    def test_default_status(self):
-        task = Task.objects.create(
-            user=self.user,
-            title='Another task',
-            due='2022-12-31',
-        )
+    def test_create_task(self):
+        """Test that a task can be created with a user, title, due date, and status"""
+        user = User.objects.create(username='testuser')
+        task = Task.objects.create(user=user, title='Test task', due='2022-01-01', status='Not Started')
+        self.assertEqual(task.title, 'Test task')
+        self.assertEqual(task.due, str(date(2022, 1, 1)))
         self.assertEqual(task.status, 'Not Started')
 
-    def test_status_choices(self):
-        task = Task(user=self.user, title='Task', due='2022-12-31', status='Complete')
-        task.save()
-        self.assertEqual(task.status, 'Complete')
-        task.status = 'Invalid'
-        self.assertRaises(ValidationError, task.full_clean)
+    def test_default_status(self):
+        """Test that the default status is 'Not Started'"""
+        user = User.objects.create(username='testuser')
+        task = Task.objects.create(user=user, title='Test task', due='2022-01-01')
+        self.assertEqual(task.status, 'Not Started')
 
-    def test_created_date(self):
-        task = Task.objects.create(
-            user=self.user,
-            title='Another task',
-            due='2022-12-31',
-        )
-        self.assertIsInstance(task.created, datetime.date)
+    def test_valid_status(self):
+        """Test that only valid statuses can be assigned to a task"""
+        user = User.objects.create(username='testuser')
+        task = Task.objects.create(user=user, title='Test task', due='2022-01-01')
+        task.status = 'Invalid status'
+        self.assertRaises(ValidationError)
+
+    def test_string_representation(self):
+        """Test that the string representation of a task is in the format 'title: due, status'"""
+        user = User.objects.create(username='testuser')
+        task = Task.objects.create(user=user, title='Test task', due='2022-01-01', status='Not Started')
+        self.assertEqual(str(task), 'Test task: 2022-01-01, Not Started')

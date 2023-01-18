@@ -25,11 +25,16 @@
           {% for resume in user_uploads %}
           <tr>
             <td>
-              <a href="{{ resume.file.url }}">{{ resume.title }} : {{ resume.resume.url }}</a>
+              <a href="{{ resume.resume }}">{{ resume.title }} : {{MEDIA_URL}}{{ resume.resume }}</a>
             </td>
             <td>
               <a href="{% url 'resume_parcer:delete_upload' resume.id %}">
                 Delete
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'resume_parcer:parse' resume.id %}">
+                Parse
               </a>
             </td>
           </tr>

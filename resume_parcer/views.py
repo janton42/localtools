@@ -54,9 +54,7 @@ def delete_upload(request, id):
 @login_required
 def parse_resume(request, resume_id):
     resume = ResumeUpload.objects.all()\
-    .filter(user=request.user)\
-    .get(id=resume_id)\
-    .values()
+    .filter(id=resume_id).values()
     for r in resume:
         # Initialize a parcer instance named after the current user
         parser = ResumeParser(name=request.user)
@@ -70,4 +68,4 @@ def parse_resume(request, resume_id):
         'resume': resume,
         'status': status
     }
-    return render(request, 'parsed.html', context)
+    return render(request, 'resume_parcer/parsed.html', context)

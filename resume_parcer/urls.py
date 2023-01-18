@@ -7,6 +7,7 @@ urlpatterns = [
     path('resume_parcer/', views.index, name='index'),
     path('resume_parcer/upload/', views.upload, name='upload'),
     path('resume_parcer/delete/<int:id>', views.delete_upload,\
-     name='delete_upload')
-
+     name='delete_upload'),
+    path('resume_parcer/parsed/<int:resume_id>', views.parse_resume,\
+    name='parse')
 ]

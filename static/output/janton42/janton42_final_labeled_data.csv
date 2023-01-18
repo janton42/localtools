@@ -1,0 +1,89 @@
+m_index,doc_line,line,is_bullet,is_name,is_org,label,ents
+0,0.0, Je,0.0,0.0,1.0,Person,1.0
+1,1.0," Solutions professional, US Marine Corps Veteran, & UC Berkeley graduate ",0.0,0.0,0.0,Organization,6.0
+2,2.0," specializing in operational excellence, data analytics, compliance, team ",1.0,0.0,0.0,Bullet,0.0
+3,3.0," leadership, and global contingent workforce management. ",1.0,0.0,0.0,Bullet,0.0
+4,4.0, EXPERIENCE ,0.0,0.0,1.0,None,0.0
+63,5.0,Upwork Inc,0.0,0.0,0.0,Organization,0.0
+64,5.0,Remote,0.0,0.0,0.0,None,0.0
+65,5.0,San Francisco,0.0,0.0,0.0,City,0.0
+66,5.0,Ca,0.0,0.0,0.0,State_or_province,0.0
+67,6.0,Program Manager,0.0,0.0,0.0,Title,0.0
+68,6.0,,0.0,0.0,0.0,None,0.0
+69,6.0,Data Analytics Operations,0.0,0.0,0.0,Organization,0.0
+5,7.0, JANUARY 2020 - MAY 2022 ,0.0,0.0,0.0,Date,3.0
+6,8.0," Led a team of analysts, program admins and processes auditors. ",1.0,0.0,0.0,Bullet,0.0
+7,9.0," Designed and implemented processes for data handling, analysis and ",1.0,0.0,0.0,Bullet,0.0
+8,10.0, reporting; daily operations; special projects; process and compliance ,1.0,0.0,0.0,Bullet,0.0
+9,11.0, audits. ,0.0,0.0,1.0,None,0.0
+10,12.0," Conducted statistical analysis to provide actionable insights, trends, and ",1.0,0.0,0.0,Bullet,0.0
+11,13.0, performance measurement. ,0.0,0.0,1.0,None,0.0
+70,14.0,San Mateo,0.0,0.0,0.0,City,0.0
+71,14.0,,0.0,0.0,0.0,None,0.0
+72,14.0,Ca,0.0,0.0,0.0,State_or_province,0.0
+12,15.0, (707) 301-8624 ,0.0,0.0,0.0,None,0.0
+13,16.0, jantonstock@gmail.com ,0.0,0.0,0.0,Email,1.0
+14,17.0, linkedin.com/in/stockj ,0.0,0.0,1.0,None,0.0
+15,18.0, github.com/janton42 ,0.0,0.0,1.0,Number,1.0
+16,19.0, EDUCATION ,0.0,0.0,1.0,None,0.0
+17,20.0," University of California, ",0.0,0.0,0.0,Organization,3.0
+18,21.0, Berkeley ,0.0,0.0,0.0,City,1.0
+19,22.0, ● ,0.0,0.0,1.0,None,0.0
+20,23.0, BA:  Linguistics ,0.0,0.0,1.0,None,0.0
+21,24.0, Defense Language Institute ,0.0,0.0,0.0,Organization,3.0
+22,25.0, ● ,0.0,0.0,1.0,None,0.0
+23,26.0, ● ,0.0,0.0,1.0,None,0.0
+73,27.0,Aa,0.0,0.0,0.0,None,0.0
+74,27.0,Russian,0.0,0.0,0.0,Language (human),0.0
+75,27.0,Language,0.0,0.0,0.0,Misc,0.0
+24,28.0, Russian Arms Control ,0.0,0.0,0.0,Nationality,1.0
+25,29.0, Speaking Proﬁciency ,0.0,0.0,1.0,None,0.0
+26,30.0, Course ,0.0,0.0,1.0,None,0.0
+27,31.0," Associate Program Manager, Contingent Workforce ",0.0,0.0,0.0,Title,2.0
+28,32.0, SKILLS ,0.0,0.0,1.0,None,0.0
+29,33.0,    Python (Intermediate) ,0.0,0.0,0.0,None,0.0
+30,34.0,    Javascript (Intermediate) ,0.0,0.0,0.0,None,0.0
+31,35.0, SQL (Basic) ,0.0,0.0,0.0,None,0.0
+32,36.0, Linux ,0.0,0.0,1.0,None,0.0
+33,37.0,    Looker ,0.0,0.0,1.0,Person,1.0
+34,38.0,    Asana ,0.0,0.0,0.0,Person,1.0
+35,39.0, LANGUAGES ,0.0,0.0,1.0,None,0.0
+36,40.0, Russian (Full Professional) ,0.0,0.0,0.0,Nationality,1.0
+37,41.0, English (Native) ,0.0,0.0,0.0,Nationality,1.0
+38,42.0, Spanish (Beginner) ,0.0,0.0,0.0,Nationality,1.0
+39,43.0, Mandarin Chinese (Beginner) ,0.0,0.0,0.0,Nationality,1.0
+40,44.0, AUGUST 2018 - DECEMBER 2019 ,0.0,0.0,0.0,Date,3.0
+41,45.0," Managed service delivery, compliance & policy adherence, data analytics ",0.0,0.0,0.0,None,0.0
+42,46.0, and reporting for global contingent workforce program. ,1.0,0.0,0.0,Bullet,0.0
+43,47.0, Increased operational e,0.0,0.0,1.0,None,0.0
+44,48.0," handling, communication, and document creation processes. ",1.0,0.0,0.0,Bullet,0.0
+45,49.0, Reduced inbound support requests ~7% by designing and building ,1.0,0.0,0.0,Bullet,0.0
+46,50.0, self-service information site for internal hiring managers using Google ,1.0,0.0,0.0,Bullet,0.0
+47,51.0," (Sites, Docs, Forms, Sheets, Presentations, Apps Script). ",0.0,0.0,0.0,None,0.0
+48,52.0, Account Executive ,0.0,0.0,0.0,Title,2.0
+49,53.0, DECEMBER 2017- AUGUST 2018 ,0.0,0.0,0.0,Date,3.0
+50,54.0, Presented solutions and developed mutually beneﬁcial relationships with ,1.0,0.0,0.0,Bullet,0.0
+51,55.0, key Fortune 500 clients by demonstrating value and services to end ,1.0,0.0,0.0,Bullet,0.0
+52,56.0, customers. ,0.0,0.0,1.0,None,0.0
+53,57.0," United States Marine Corps,  Various Locations ",0.0,0.0,0.0,Organization,4.0
+54,58.0, Russian Special Intelligence ,0.0,0.0,0.0,Nationality,1.0
+55,59.0, OCTOBER 2006 - SEPTEMBER 2010 ,0.0,0.0,0.0,Date,3.0
+56,60.0, Senior Russian linguist and bilingual U.S. representative for multinational ,1.0,0.0,0.0,Bullet,0.0
+57,61.0," training events, military exercises, and diplomatic conferences. ",1.0,0.0,0.0,Bullet,0.0
+76,62.0,Intelligence Lead During Conventional Forces -lrb- Cfe -rrb- And,0.0,0.0,0.0,None,0.0
+77,62.0,Europe,0.0,0.0,0.0,Location,0.0
+78,62.0,Vienna,0.0,0.0,0.0,City,0.0
+58,63.0, Document of 1999 (VD99) treaty compliance inspections across Former ,1.0,0.0,0.0,Bullet,0.0
+59,64.0, Soviet Republics and Western European countries. ,1.0,0.0,0.0,Bullet,0.0
+79,65.0,Team Manager,0.0,0.0,0.0,Title,0.0
+80,65.0,,0.0,0.0,0.0,None,0.0
+81,65.0,Linguistics Signal Intelligence,0.0,0.0,0.0,Organization,0.0
+60,66.0, NOVEMBER 2001- OCTOBER 2006 ,0.0,0.0,0.0,Date,3.0
+61,67.0, Led a 7 person signals intelligence  collection team in and around ,1.0,0.0,0.0,Bullet,0.0
+82,68.0,Fallujah,0.0,0.0,0.0,Location,0.0
+83,68.0,During -lrb- Oif And Oif Iii -rrb-,0.0,0.0,0.0,None,0.0
+84,68.0,Iraq,0.0,0.0,0.0,Country,0.0
+85,68.0,Operation Freedom,0.0,0.0,0.0,Misc,0.0
+86,68.0,Iraqi,0.0,0.0,0.0,Language (human),0.0
+87,68.0,Ii,0.0,0.0,0.0,Number,0.0
+62,69.0,,0.0,0.0,1.0,None,0.0

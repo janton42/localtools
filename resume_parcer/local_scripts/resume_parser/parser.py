@@ -80,42 +80,42 @@ class ResumeParser(object):
 		self.server.java_options = ['-mx5g']
 		self.server.url = 'http://localhost:9000'
 		self.bullet_feature_headings = [
-			'stopword_%',
+			'stopword_percentage',
 			'word_count',
-			'proper_noun_%',
-			'verb_%'
+			'proper_noun_percentage',
+			'verb_percentage'
 		]
 		self.name_feature_headings = [
 			'line_length',
 			'word_count',
-			'verb_%',
-			'adj_%',
-			'stopword_%',
-			'punctuation_%',
-			'number_%',
-			'proper_noun_%',
+			'verb_percentage',
+			'adj_percentage',
+			'stopword_percentage',
+			'punctuation_percentage',
+			'number_percentage',
+			'proper_noun_percentage',
 			'symbol_count',
 			'list_markers_count',
 			'determiners_count',
 			'name_count',
 			'line_length_trans',
 			'word_count_trans',
-			'verb_%_trans',
-			'adj_%_trans',
-			'stopword_%_trans',
-			'punctuation_%_trans',
-			'number_%_trans',
-			'proper_noun_%_trans'
+			'verb_percentage_trans',
+			'adj_percentage_trans',
+			'stopword_percentage_trans',
+			'punctuation_percentage_trans',
+			'number_percentage_trans',
+			'proper_noun_percentage_trans'
 		]
 		self.org_feature_headings = [
 			'line_length',
 			 'word_count',
-			 'verb_%',
-			 'adj_%',
-			 'stopword_%',
-			 'punctuation_%',
-			 'number_%',
-			 'proper_noun_%',
+			 'verb_percentage',
+			 'adj_percentage',
+			 'stopword_percentage',
+			 'punctuation_percentage',
+			 'number_percentage',
+			 'proper_noun_percentage',
 			 'symbol_count',
 			 'list_markers_count',
 			 'determiners_count',
@@ -123,12 +123,12 @@ class ResumeParser(object):
 			 'company_count',
 			 'line_length_trans',
 			 'word_count_trans',
-			 'verb_%_trans',
-			 'adj_%_trans',
-			 'stopword_%_trans',
-			 'punctuation_%_trans',
-			 'number_%_trans',
-			 'proper_noun_%_trans'
+			 'verb_percentage_trans',
+			 'adj_percentage_trans',
+			 'stopword_percentage_trans',
+			 'punctuation_percentage_trans',
+			 'number_percentage_trans',
+			 'proper_noun_percentage_trans'
 		]
 		self.keepers = keepers = [
 					    'Name',

@@ -16,6 +16,7 @@ pandas = "*"
 pdfminer = "*"
 "pdfminer.six" = "*"
 striprtf = "*"
+scikit-learn = "*"
 
 [dev-packages]
 

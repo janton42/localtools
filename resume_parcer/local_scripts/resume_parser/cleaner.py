@@ -98,23 +98,23 @@ def create_features(data):
     # Tag each line with parts of speach
     data['tagged_line'] = data['line'].apply(lambda x: nltk.pos_tag(nltk.word_tokenize(x)))
 
-    # Find the % of verbs in each line
-    data['verb_%'] = data['tagged_line'].apply(lambda x: count_verbs(x))
+    # Find the percentage of verbs in each line
+    data['verb_percentage'] = data['tagged_line'].apply(lambda x: count_verbs(x))
 
-    # Find the % of adjectives in each line
-    data['adj_%'] = data['tagged_line'].apply(lambda x: count_adj(x))
+    # Find the percentage of adjectives in each line
+    data['adj_percentage'] = data['tagged_line'].apply(lambda x: count_adj(x))
 
-    # Find the % of stop words in each line
-    data['stopword_%'] = data['line'].apply(lambda x: count_stopwords(x))
+    # Find the percentage of stop words in each line
+    data['stopword_percentage'] = data['line'].apply(lambda x: count_stopwords(x))
 
-    # Find the % of punctuation in each line
-    data['punctuation_%'] = data['line'].apply(lambda x: count_punct(x))
+    # Find the percentage of punctuation in each line
+    data['punctuation_percentage'] = data['line'].apply(lambda x: count_punct(x))
 
-    # Find the % of numbers in each line
-    data['number_%'] = data['tagged_line'].apply(lambda x: count_nums(x))
+    # Find the percentage of numbers in each line
+    data['number_percentage'] = data['tagged_line'].apply(lambda x: count_nums(x))
 
-    # Find the % of numbers in each line
-    data['proper_noun_%'] = data['tagged_line'].apply(lambda x: count_proper_nouns(x))
+    # Find the percentage of numbers in each line
+    data['proper_noun_percentage'] = data['tagged_line'].apply(lambda x: count_proper_nouns(x))
 
     # Count symbols in each line
     data['symbol_count'] = data['tagged_line'].apply(lambda x: count_symbols(x))
@@ -132,17 +132,17 @@ def create_features(data):
 
     data['word_count_trans'] = data['word_count'].apply(lambda x : x**(1/3))
 
-    data['verb_%_trans'] = data['verb_%'].apply(lambda x : x**(1/2))
+    data['verb_percentage_trans'] = data['verb_percentage'].apply(lambda x : x**(1/2))
 
-    data['adj_%_trans'] = data['adj_%'].apply(lambda x : x**(1/2))
+    data['adj_percentage_trans'] = data['adj_percentage'].apply(lambda x : x**(1/2))
 
-    data['stopword_%_trans'] = data['stopword_%'].apply(lambda x : x**(1/2))
+    data['stopword_percentage_trans'] = data['stopword_percentage'].apply(lambda x : x**(1/2))
 
-    data['punctuation_%_trans'] = data['punctuation_%'].apply(lambda x : x**(1/2))
+    data['punctuation_percentage_trans'] = data['punctuation_percentage'].apply(lambda x : x**(1/2))
 
-    data['number_%_trans'] = data['number_%'].apply(lambda x : x**(1/1))
+    data['number_percentage_trans'] = data['number_percentage'].apply(lambda x : x**(1/1))
 
-    data['proper_noun_%_trans'] = data['proper_noun_%'].apply(lambda x : x**(1/1))
+    data['proper_noun_percentage_trans'] = data['proper_noun_percentage'].apply(lambda x : x**(1/1))
 
     # Count company names in each line
     data['company_count'] = data['line_nostop'].apply(lambda x: count_companies(x))

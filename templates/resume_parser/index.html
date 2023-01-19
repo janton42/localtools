@@ -9,7 +9,7 @@
   <p>Resume parsing tool. Reads an uploaded resume, and labels each line
 
   </p>
-  <a href="{% url 'resume_parcer:upload' %}">Upload a resume</a>
+  <a href="{% url 'resume_parser:upload' %}">Upload a resume</a>
   <br>
   <br>
   <div class="row">
@@ -28,12 +28,12 @@
               <a href="{{ resume.resume }}">{{ resume.title }} : {{MEDIA_URL}}{{ resume.resume }}</a>
             </td>
             <td>
-              <a href="{% url 'resume_parcer:delete_upload' resume.id %}">
+              <a href="{% url 'resume_parser:delete_upload' resume.id %}">
                 Delete
               </a>
             </td>
             <td>
-              <a href="{% url 'resume_parcer:parse' resume.id %}">
+              <a href="{% url 'resume_parser:parse' resume.id %}">
                 Parse
               </a>
             </td>

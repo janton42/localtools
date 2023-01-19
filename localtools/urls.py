@@ -25,7 +25,7 @@ urlpatterns = [
     path('', userprofile_views.home, name='home'),
     path('userprofile/', include('userprofile.urls')),
     path('informedvoter/', include('informedvoter.urls')),
-    path('resume_parcer/', include('resume_parcer.urls')),
+    path('resume_parser/', include('resume_parser.urls')),
     path('tasktron/', include('tasktron.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path('login/', auth_views\

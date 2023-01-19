@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ResumeParcerConfig(AppConfig):
+class ResumeParserConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'resume_parcer'
+    name = 'resume_parser'

@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+    <div class="container">
+
 {% if resume %}
   <p>You parsed the resume below</p>
   <br>
@@ -20,5 +22,5 @@
 {% else %}
 <p>Negative Ghost Rider!</p>
 {% endif %}
-
+    </div>
 {% endblock %}

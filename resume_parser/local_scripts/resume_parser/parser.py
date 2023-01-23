@@ -20,52 +20,52 @@ warnings.simplefilter(action='ignore', category=UserWarning)
 class ResumeParser(object):
     """Parses a user-input resume.
 
-	Retrieves an uploaded resume file, checks the file type, converts the info
-	to text; applies machine learning models, Stanford's Named Entity
-	Recognition (NER) tagger, and other homegrown algorithms to label the
-	parts of the resume for further processing.
+    Retrieves an uploaded resume file, checks the file type, converts the info
+    to text; applies machine learning models, Stanford's Named Entity
+    Recognition (NER) tagger, and other homegrown algorithms to label the
+    parts of the resume for further processing.
 
-	Attributes:
-		birth: Timestamp of when an instance is created.
-		name: The user name associated with the instance.
-		server: A CoreNLPServer instance needed for the NER tagger.
-		server.corenlp_options: A list of flags (strings) to be passed
-			in the Java command when starting the server. Include
-			'-preload', then list modules to load. This process only
-			requires 'ner', but others can be added.
-			['-preload','ner']
-		server.java_options: A list of flags (strings) for Java.
-		server.url = A string containing the url for a user interface
-			with the tagger.
-		bullet_feature_headings: List of heading names needed for the
-			machine learning model. Must match the headings used when
-			training the model.
-		name_feature_headings: Same as 'bullet_feature_headings', but
-			for the 'name' label.
-		org_feature_headings: Same as 'bullet_feature_headings', but
-			for the 'org' label.
-		keepers: List of single-word tags from NER tagging.
-		resume_out_path: String with the destination for user-specific
-			output. The path is derived from the that in settings.py
-			and should be in /static/username/
-		resume_in_path: String with path to an uploaded file, which will
-			be in the applicaiton's /uploads/ directory.
-		resume_file_ext: String with the file type of the resume file.
-		death: Timestamp of when the parser returns the final output.
+    Attributes:
+        birth: Timestamp of when an instance is created.
+        name: The user name associated with the instance.
+        server: A CoreNLPServer instance needed for the NER tagger.
+        server.corenlp_options: A list of flags (strings) to be passed
+            in the Java command when starting the server. Include
+            '-preload', then list modules to load. This process only
+            requires 'ner', but others can be added.
+            ['-preload','ner']
+        server.java_options: A list of flags (strings) for Java.
+        server.url = A string containing the url for a user interface
+            with the tagger.
+        bullet_feature_headings: List of heading names needed for the
+        machine learning model. Must match the headings used when
+            training the model.
+        name_feature_headings: Same as 'bullet_feature_headings', but
+            for the 'name' label.
+        org_feature_headings: Same as 'bullet_feature_headings', but
+            for the 'org' label.
+        keepers: List of single-word tags from NER tagging.
+        resume_out_path: String with the destination for user-specific
+            output. The path is derived from the that in settings.py
+            and should be in /static/username/
+        resume_in_path: String with path to an uploaded file, which will
+            be in the applicaiton's /uploads/ directory.
+        resume_file_ext: String with the file type of the resume file.
+        death: Timestamp of when the parser returns the final output.
 
-	"""
+    """
 
     def __init__(self, name: str):
         super(ResumeParser, self).__init__()
-        '''Inits ResumeParser with birth, name, server,
-			server.corenlp_options, server.java_options, server.url,
-			bullet_feature_headings, name_feature_headings,
-			org_feature_headings, and keepers.
+        """Inits ResumeParser with birth, name, server,
+            server.corenlp_options, server.java_options, server.url,
+            bullet_feature_headings, name_feature_headings,
+            org_feature_headings, and keepers.
 
-		Args:
-			name: String of the username for the user requesting a
-				parsed resume.
-		 '''
+        Args:
+            name: String of the username for the user requesting a
+                parsed resume.
+        """
         print('La Maquina lives!!!\t(ResumeParser instantiated.)')
         self.birth = datetime.now()
         self.name = str(name)
@@ -74,6 +74,10 @@ class ResumeParser(object):
         self.server.java_options = ['-mx5g']
         self.server.url = 'http://localhost:9000'
         self.death = None
+        self.resume_out_path = None
+        self.resume_file_ext = None
+        self.resume_in_path = None
+        self.ner_tagger = None
         self.bullet_feature_headings = [
             'stopword_percentage',
             'word_count',
@@ -145,47 +149,44 @@ class ResumeParser(object):
         ]
 
     def get_resume_paths(self, resume_file: str):
-        '''Retrieves relevant filepaths for handling input and output
-		files.
+        """Retrieves relevant filepaths for handling input and output
+        files.
 
-		Args:
-			resume_file: String with filename of uploaded file.
+        Args:
+            resume_file: String with filename of uploaded file.
 
-		Returns:
-			Sets the resume_out_path, resume_in_path, and
-			resume_file_ext attributes.
-
-		'''
+        Returns:
+            Sets the resume_out_path, resume_in_path, and
+            resume_file_ext attributes.
+        """
         self.resume_out_path = os.path.join(settings.RESUME_OUT_PATH, self.name + '/')
-
         os.makedirs(self.resume_out_path, exist_ok=True)
         self.resume_in_path = os.path.join(settings.BASE_DIR, resume_file)
         self.resume_file_ext = self.resume_in_path.split('.')[-1]
 
     def introduce_self(self):
-        '''Prints basic information about the class to stdout.'''
+        """Prints basic information about the class to stdout."""
         print('***INFORMATION***\n\
-		Hi. I\'m a parser.\n\
-		My name is {}.\n\
-		I was born at {}\
-		Here are my paths: \n\
-		\tresume_in_path = "{}"\n\
-		\tresume_out_path = "{}"\n\
-		My resume file type is: {}'.format(
+        Hi. I\'m a parser.\n\
+        My name is {}.\n\
+        I was born at {}\
+        Here are my paths: \n\
+        \tresume_in_path = "{}"\n\
+        \tresume_out_path = "{}"\n\
+        My resume file type is: {}'.format(
             self.name, self.birth, self.resume_in_path, self.resume_out_path, self.resume_file_ext))
 
     def text_compiler(self):
-        '''Pulls text from different types of files.
+        """Pulls text from different types of files.
 
-		Runs the proper text extraction function for the given file
-		extension, which is the resume_file_ext attribute.
+        Runs the proper text extraction function for the given file
+        extension, which is the resume_file_ext attribute.
 
-		Returns:
-			A text and a csv file containing the text extracted from the
-			input file. The files are saved in the user's output folder at
-			/static/output/username/
-
-		'''
+        Returns:
+        A text and a csv file containing the text extracted from the
+            input file. The files are saved in the user's output folder at
+            /static/output/username/
+        """
         if self.resume_file_ext == 'pdf':
             text = extract_text(self.resume_in_path)
         elif self.resume_file_ext == 'rtf':
@@ -214,36 +215,35 @@ class ResumeParser(object):
         df.to_csv(raw_filename, header=['line'])
 
     def clean_text(self):
-        '''Removes unnamed column from csv.
+        """Removes unnamed column from csv.
 
-		Returns:
-			Pandas DataFrame.
-		'''
+        Returns:
+            Pandas DataFrame.
+        """
 
-        # TODO(janton42): update this for general use
         filename = self.resume_out_path + self.name + '_out.csv'
         df = pd.read_csv(filename)
         df.drop('Unnamed: 0', axis=1, inplace=True)
         return df
 
     def classify_text(self, text):
-        '''Homegrown ML models for classifying parts of a resume.
+        """Homegrown ML models for classifying parts of a resume.
 
-		Classifies 'bullets', 'names', and 'orgs' using machine learning
-		models.
+        Classifies 'bullets', 'names', and 'orgs' using machine learning
+        models.
 
-		Args:
-			text: Pandas DataFrame with rows of unlabeled, raw text from
-				an uploaded resume file.
+        Args:
+            text: Pandas DataFrame with rows of unlabeled, raw text from
+                an uploaded resume file.
 
-		Returns:
-			A Pandas DataFrame with each line labeled as either a name,
-			organization, bullet statement, or none of those using 1's
-			and 0's for labels.
+        Returns:
+            A Pandas DataFrame with each line labeled as either a name,
+            organization, bullet statement, or none of those using 1's
+            and 0's for labels.
 
-			Also write's out the feature data into a csv in the user's
-			output folder: /static/output/username/
-		'''
+        Also writes out the feature data into a csv in the user's
+            output folder: /static/output/username/
+        """
 
         # Build paths to the ML models
         bullet_model_path = os.path.join(settings.ML_MODELS_PATH, 'bullets.pkl')
@@ -295,23 +295,20 @@ class ResumeParser(object):
         return classified
 
     def labeler(self, row):
-        '''Labels named entities.
+        """Labels named entities.
+        Gives final labels using Stanford's NLP Named Entity tagger to
+        supplement already tagged data. Fills in the non-bullet items,
+        giving the "None" label to anything remaining unidentified.
 
-		Gives final labels using Stanford's NLP Named Entity tagger to
-		supplement already tagged data. Fills in the non-bullet items,
-		giving the "None" label to anything remaining unidentified.
+        Args:
+            row: A Pandas DataFrame
 
-		Args:
-			row: A Pandas DataFrame
-
-		Returns:
-			Either a one-word string label, or a list of tuples
-			containing individual words and their respective ner tags.
-			For example:
-			'Bullet'
-			- or -
-			[('word', 'TAG'),...]
-		'''
+        Returns:
+        Either a one-word string label, or a list of tuples
+            containing individual words and their respective ner tags.
+            For example:
+            'Bullet' - or - [('word', 'TAG'),...]
+        """
 
         if row['is_bullet'] == 1:
             return 'Bullet'
@@ -324,20 +321,21 @@ class ResumeParser(object):
                 ents = self.ner_tagger.tag(row['line'].split())
                 return ents
 
-    def count_named_ents(self, label: str) -> int:
-        '''Sums the named entities in a row.
+    @staticmethod
+    def count_named_ents(label: str) -> int:
+        """Sums the named entities in a row.
 
-		Takes in the list of tuples from 'label' column of a Pandas
-		DataFrame, and sums the total number of NER tags that are
-		not the general-purpose 'O' tag.
+        Takes in the list of tuples from 'label' column of a Pandas
+        DataFrame, and sums the total number of NER tags that are
+        not the general-purpose 'O' tag.
 
-		Args:
-			label: String or list of tuples.
+        Args:
+            label: String or list of tuples.
 
-		Returns:
-			Integer sum of the named entities in a given row.
+        Returns:
+            Integer sum of the named entities in a given row.
 
-		'''
+        """
 
         skips = ['Name', 'Bullet', 'None']
         if label not in skips:
@@ -346,17 +344,18 @@ class ResumeParser(object):
         else:
             return 0
 
-    def relabeler(self, row):
-        '''Applies a label to a row based on number of named entities.
+    @staticmethod
+    def relabeler(row):
+        """Applies a label to a row based on number of named entities.
 
-		Looks at the total number of named entities in a row, and applies
-		a single label as a string wherever possible.
+        Looks at the total number of named entities in a row, and applies
+        a single label as a string wherever possible.
 
-		Returns:
-			String or list of tuples. If there are multiple named entities
-			further processin is needed to parse them, so relabeler
-			returns the list of tuples untouched in such cases.
-		'''
+        Returns:
+            String or list of tuples. If there are multiple named entities
+            further processin is needed to parse them, so relabeler
+            returns the list of tuples untouched in such cases.
+        """
         if row['ents'] == 0 and row['label'] == 'Bullet' \
                 or row['label'] == 'Name':
             return row['label']
@@ -376,34 +375,35 @@ class ResumeParser(object):
             else:
                 return row['label']
 
-    def tag_grouper(self, label: list) -> list:
-        '''Groups words together by their common tag.
+    @staticmethod
+    def tag_grouper(label: list) -> list:
+        """Groups words together by their common tag.
 
-		Takes in a list of word-tag tuples, and groups the words in the
-		list by tag.
+        Takes in a list of word-tag tuples, and groups the words in the
+        list by tag.
 
-		Args:
-			label: list of tuples containing word and tag pairs in the
-				following format:
-					[(word, TAG), ...]
-		Returns:
-			List of dictionaries. Each dictionary represents a grouping
-			of words that have a common label and were in the same line
-			of the original document.The list contains the tag, a list,
-			and a single string containing the words associated with
-			that tag. For example:
-				[	{
-						'label': 'Example',
-						'words': ['Words', 'Associated', 'With', 'Label'],
-						'phrase': 'Words Associated With Label'
-					},
-					{
-						'label': 'Title',
-						'words': ['Program', 'Manager'],
-						'phrase': 'Program Manager'
-					},
-					...]
-		'''
+        Args:
+            label: list of tuples containing word and tag pairs in the
+                following format:
+                [(word, TAG), ...]
+        Returns:
+            List of dictionaries. Each dictionary represents a grouping
+            of words that have a common label and were in the same line
+            of the original document.The list contains the tag, a list,
+            and a single string containing the words associated with
+            that tag. For example:
+                [	{
+                        'label': 'Example',
+                        'words': ['Words', 'Associated', 'With', 'Label'],
+                        'phrase': 'Words Associated With Label'
+                    },
+                    {
+                        'label': 'Title',
+                        'words': ['Program', 'Manager'],
+                        'phrase': 'Program Manager'
+                    },
+                    ...]
+        """
         locations = [
             'City',
             'STATE_OR_COUNTRY',
@@ -442,21 +442,22 @@ class ResumeParser(object):
             groups.append(group)
         return groups
 
-    def get_loosies(self, row):
-        '''Compiles grouped words into a Pandas DataFrame
+    @staticmethod
+    def get_loosies(row):
+        """Compiles grouped words into a Pandas DataFrame
 
-		Gathers dictionaries from the 'grouped' column, and adds them to
-		a Pandas DataFrame.
+        Gathers dictionaries from the 'grouped' column, and adds them to
+        a Pandas DataFrame.
 
-		Args:
-			row: Pandas DataFrame.
+        Args:
+            row: Pandas DataFrame.
 
-		Returns:
-			A new Pandas DataFrame with 'doc_line' matching the original
-			'doc_line','line' matching the dictionary 'phrase',
-			'label' matching the dictionary 'label', and all other \
-			values set to zero (0.0).
-		'''
+        Returns:
+            A new Pandas DataFrame with 'doc_line' matching the original
+            'doc_line','line' matching the dictionary 'phrase',
+            'label' matching the dictionary 'label', and all other \
+            values set to zero (0.0).
+        """
         looks = 0
         detailed = pd.DataFrame(
             {
@@ -491,24 +492,25 @@ class ResumeParser(object):
         detailed.reset_index(drop=True, inplace=True)
         return detailed
 
+    @property
     def say_status(self):
-        '''Shows if DEBUG is True or False.
+        """Shows if DEBUG is True or False.
 
-		Returns:
-			Boolean.
-		'''
+        Returns:
+            Boolean.
+        """
         status = settings.DEBUG
         return status
 
     def read_resume(self):
-        '''Reads a resume.
+        """Reads a resume.
 
-		Main class method for Resume.
+        Main class method for Resume.
 
-		Returns:
-			A csv file with each row labeled.
+        Returns:
+            A csv file with each row labeled.
 
-		'''
+        """
         # Compile text from several files of the same type in a given folder
         print('La Maquina is getting your text...')
         self.text_compiler()
@@ -614,6 +616,9 @@ class ResumeParser(object):
         print('La Maquina has printed your results.')
         self.death = datetime.now()
         lifespan = self.death - self.birth
-        print('La Maquina read your resume in {} seconds.' \
-              .format(lifespan))
+        print('La Maquina read your resume in {} seconds.'.format(lifespan))
         print('You\'re welcome for my service.')
+
+# make a hook for django_q to call
+def hook_after_reading(task):
+    print(task.result)

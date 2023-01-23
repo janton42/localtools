@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{%  block content %}
+    <div class="container"
+    {% if user.is_authenticated %}
+    {% if job %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Parse Request</h4>
+                        <p class="card-category">Filename: {{ job.title }}</p>
+                        <p class="card-category">Job ID: {{ job.id }}</p>
+                        <p class="card-category">Status: {{ job.status }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% else %}
+        <p> Please <a href="{% url 'userprofile:login' %}">login</a> to view this page </p>
+    {% endif %}
+    </div>
+{% endblock %}

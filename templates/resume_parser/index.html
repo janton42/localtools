@@ -25,7 +25,7 @@
           {% for resume in user_uploads %}
           <tr>
             <td>
-              <a href="{{ resume.resume }}">{{ resume.title }} : {{MEDIA_URL}}{{ resume.resume }}</a>
+              <a href="{{MEDIA_URL}}{{ resume.resume }}">{{ resume.title }}</a>
             </td>
             <td>
               <a href="{% url 'resume_parser:delete_upload' resume.id %}">
@@ -33,7 +33,7 @@
               </a>
             </td>
             <td>
-              <a href="{% url 'resume_parser:parse' resume.id %}">
+              <a href="{% url 'resume_parser:confirm_parse' resume.id %}">
                 Parse
               </a>
             </td>

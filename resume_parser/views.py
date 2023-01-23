@@ -51,16 +51,13 @@ def delete_upload(request, file_id):
 
 
 # Parse an uploaded resume
+# TODO: Add async for the parsing process
 @login_required
 def parse_resume(request, resume_id):
     resume = ResumeUpload.objects.all() \
         .filter(id=resume_id).values()
     for r in resume:
-        # Initialize a parser instance named after the current user
         parser = ResumeParser(name=request.user)
-        # Make a folder for this user, if one doesn't already exist,
-        # get the full path to the selected resume file to be parsed,
-        # and get the uploaded file's extension
         parser.get_resume_paths(r['resume'])
         status: bool = parser.say_status()
         parser.read_resume()

@@ -1,11 +1,10 @@
 from django.test import TestCase, Client
 from django.core.exceptions import ValidationError
-from django.utils.timezone import now
-from datetime import date, datetime
+from datetime import date
 from .models import Task
 from django.contrib.auth.models import User
-from tasktron.forms import CreateTaskForm, UpdateTaskForm
 from django.urls import reverse
+
 
 class TaskModelTests(TestCase):
 
@@ -35,6 +34,7 @@ class TaskModelTests(TestCase):
         user = User.objects.create(username='testuser')
         task = Task.objects.create(user=user, title='Test task', due='2022-01-01', status='Not Started')
         self.assertEqual(str(task), 'Test task: 2022-01-01, Not Started')
+
 
 class TaskTests(TestCase):
     def setUp(self):
@@ -103,7 +103,7 @@ class TaskTests(TestCase):
         """
         self.client.login(username='testuser', password='testpassword')
         form_data = {
-            'title': '', # Invalid data, title is required
+            'title': '',  # Invalid data, title is required
             'due': '2022-12-31',
             'status': 'Not Started'
         }
@@ -147,7 +147,7 @@ class TaskTests(TestCase):
         """
         self.client.login(username='testuser', password='testpassword')
         form_data = {
-            'title': '', # Invalid data, title is required
+            'title': '',  # Invalid data, title is required
             'due': '2022-12-31',
             'status': 'In progress'
         }

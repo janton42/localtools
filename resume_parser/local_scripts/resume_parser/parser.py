@@ -628,12 +628,3 @@ def read_resume(name: str, path_name: str):
 # make a hook for django_q to call
 def hook_after_reading(task):
     print(task.result)
-
-
-def sleep_and_print(secs):
-    sleep(secs)
-    print('Task run for {} seconds'.format(secs))
-
-
-def hook_after_sleeping(task):
-    print(task.result)

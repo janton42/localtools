@@ -66,12 +66,10 @@ def parse_resume(request, resume_id):
 
 
 @login_required
-# confirm to user that they requested a particular resume to be parsed
 def confirm_parse(request, resume_id):
     global job
     resume = ResumeUpload.objects.all() \
         .filter(id=resume_id).values()
-    # Set job user as request user and title as resume title
     for r in resume:
         job = Job(user=request.user, title=r['title'], status='Processing')
     job.save()

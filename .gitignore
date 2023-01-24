@@ -132,3 +132,8 @@ investotron/
 db/
 *.db
 api.py
+
+uploads/
+*.csv
+*.pdf
+output/

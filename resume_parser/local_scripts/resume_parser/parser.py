@@ -11,6 +11,7 @@ from nltk.parse.corenlp import CoreNLPServer, CoreNLPParser
 from pdfminer.high_level import extract_text
 from striprtf.striprtf import rtf_to_text
 
+from time import sleep
 from .cleaner import create_features
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -502,8 +503,10 @@ class ResumeParser(object):
         status = settings.DEBUG
         return status
 
-    def read_resume(self):
-        """Reads a resume.
+
+# move the call from views.py to here, so that it can be called in asnyc_task
+def read_resume(name: str, path_name: str):
+    """Reads a resume.
 
         Main class method for Resume.
 
@@ -511,114 +514,126 @@ class ResumeParser(object):
             A csv file with each row labeled.
 
         """
-        # Compile text from several files of the same type in a given folder
-        print('La Maquina is getting your text...')
-        self.text_compiler()
-        # Remove unecessary columns
-        print('La Maquina is cleaning things up a bit...')
-        data = self.clean_text()
+    parser = ResumeParser(name)
+    parser.get_resume_paths(path_name)
+    # Compile text from several files of the same type in a given folder
+    print('La Maquina is getting your text...')
+    parser.text_compiler()
+    # Remove unecessary columns
+    print('La Maquina is cleaning things up a bit...')
+    data = parser.clean_text()
 
-        # Create features for use by the ML model
-        print('La Maquina is learning English...\t(creating features)')
-        data = create_features(data)
+    # Create features for use by the ML model
+    print('La Maquina is learning English...\t(creating features)')
+    data = create_features(data)
 
-        # Write out data for debugging, or for use elsewhere
-        print('Writing out clean(er) data with features')
-        working_data = self.resume_out_path + self.name + '_working_data.csv'
-        data.to_csv(working_data)
+    # Write out data for debugging, or for use elsewhere
+    print('Writing out clean(er) data with features')
+    working_data = parser.resume_out_path + parser.name + '_working_data.csv'
+    data.to_csv(working_data)
 
-        # Run ML model on input text with features included
-        print('La Maquina is reading your resume...')
-        labeled = self.classify_text(data)
+    # Run ML model on input text with features included
+    print('La Maquina is reading your resume...')
+    labeled = parser.classify_text(data)
 
-        # Write out data for debugging, or for use elsewhere
-        labeled_data = self.resume_out_path + self.name + '_labeled_data.csv'
-        labeled.to_csv(labeled_data)
+    # Write out data for debugging, or for use elsewhere
+    labeled_data = parser.resume_out_path + parser.name + '_labeled_data.csv'
+    labeled.to_csv(labeled_data)
 
-        # Read data back in (??)
-        partial = pd.read_csv(self.resume_out_path + self.name + '_labeled_data.csv', sep=',')
+    # Read data back in (??)
+    partial = pd.read_csv(parser.resume_out_path + parser.name + '_labeled_data.csv', sep=',')
 
-        # Start Stanford NLP Server
-        print('La Maquina needs more input!...\t(starting server for Stanford ner tagger)\n')
-        self.server.start()
-        print('La Maquina is connected to the network...\t(server started)')
+    # Start Stanford NLP Server
+    print('La Maquina needs more input!...\t(starting server for Stanford ner tagger)\n')
+    parser.server.start()
+    print('La Maquina is connected to the network...\t(server started)')
 
-        # Instantiate a NER tagger
-        print('La Maquina is learning more...\t(instantiating a Stanford ner tagger)')
-        self.ner_tagger = CoreNLPParser(url='http://localhost:9000',
-                                        tagtype='ner')
-        print('La Maquina is ready to read more of your resume...')
-        # Rename unnamed column
-        print('La Maquina is labeling data...')
-        partial.rename({'Unnamed: 0': 'doc_line'}, axis=1, inplace=True)
+    # Instantiate a NER tagger
+    print('La Maquina is learning more...\t(instantiating a Stanford ner tagger)')
+    parser.ner_tagger = CoreNLPParser(url='http://localhost:9000',
+                                      tagtype='ner')
+    print('La Maquina is ready to read more of your resume...')
+    # Rename unnamed column
+    print('La Maquina is labeling data...')
+    partial.rename({'Unnamed: 0': 'doc_line'}, axis=1, inplace=True)
 
-        # Label Named Entities using Stanford NER tagger
-        partial['label'] = partial.apply(lambda x: self.labeler(x), axis=1)
-        print('Data has been labeled.\nShutting down server...')
+    # Label Named Entities using Stanford NER tagger
+    partial['label'] = partial.apply(lambda x: parser.labeler(x), axis=1)
+    print('Data has been labeled.\nShutting down server...')
 
-        # Shutdown server
-        self.server.stop()
-        print('Server shut down.')
+    # Shutdown server
+    parser.server.stop()
+    print('Server shut down.')
 
-        # Count named entities.
-        # Rationale:
-        # if the only tag availible is "O", there are no useful tags,
-        # if there is only 1 non-"O" tag, than the line gets that tag
-        # if there are multiple tags, more processing is needed
-        partial['ents'] = partial['label'].apply(lambda x: self.count_named_ents(x))
-        partial['label'] = partial.apply(lambda x: self.relabeler(x), axis=1)
+    # Count named entities.
+    # Rationale:
+    # if the only tag availible is "O", there are no useful tags,
+    # if there is only 1 non-"O" tag, than the line gets that tag
+    # if there are multiple tags, more processing is needed
+    partial['ents'] = partial['label'].apply(lambda x: parser.count_named_ents(x))
+    partial['label'] = partial.apply(lambda x: parser.relabeler(x), axis=1)
 
-        # Write out the data for reference
-        ner_labeled_data = self.resume_out_path + self.name + '_ner_labeled_data.csv'
-        partial.to_csv(ner_labeled_data)
+    # Write out the data for reference
+    ner_labeled_data = parser.resume_out_path + parser.name + '_ner_labeled_data.csv'
+    partial.to_csv(ner_labeled_data)
 
-        print('La Maquina is cleaning things up a bit more...')
-        # Break apart the lines with multiple NER tags, by filtering
-        # single-word labels from a list. The results are a list of tuples
-        # following the pattern [(word, tag), ...]
+    print('La Maquina is cleaning things up a bit more...')
+    # Break apart the lines with multiple NER tags, by filtering
+    # single-word labels from a list. The results are a list of tuples
+    # following the pattern [(word, tag), ...]
 
-        # Slice any row with a 'label' not listed in the ResumeParser.keepers
-        # attribute.
-        keep = partial[~partial['label'].isin(self.keepers)]
-        keep.reset_index(drop=True, inplace=True)
+    # Slice any row with a 'label' not listed in the ResumeParser.keepers
+    # attribute.
+    keep = partial[~partial['label'].isin(parser.keepers)]
+    keep.reset_index(drop=True, inplace=True)
 
-        # Make a working copy
-        new_df = keep.copy()
+    # Make a working copy
+    new_df = keep.copy()
 
-        new_df['grouped'] = new_df.label.apply(lambda x: self.tag_grouper(x))
+    new_df['grouped'] = new_df.label.apply(lambda x: parser.tag_grouper(x))
 
-        # Remove the rows with lists of tuples for labels from the labeled
-        # DataFrame
-        trash = partial[partial['doc_line'].isin(keep.doc_line)].index
-        partial.drop(trash, inplace=True)
+    # Remove the rows with lists of tuples for labels from the labeled
+    # DataFrame
+    trash = partial[partial['doc_line'].isin(keep.doc_line)].index
+    partial.drop(trash, inplace=True)
 
-        # Gather newly made rows into one DataFrame
-        loosies = self.get_loosies(new_df)
+    # Gather newly made rows into one DataFrame
+    loosies = parser.get_loosies(new_df)
 
-        # Append the newly made DataFrame to the main DataFrame
-        main = pd.concat([partial, loosies], axis=0)
+    # Append the newly made DataFrame to the main DataFrame
+    main = pd.concat([partial, loosies], axis=0)
 
-        # Reset the index, so that the newly added rows have higher numbers
-        main.reset_index(drop=True, inplace=True)
-        # Since 'doc_line' reflects the line from the original document,
-        # it can be used to reconstruct the order of the lines. Sorting
-        # by it first brings the newly created rows to the proper place
-        # on the page. Sorting next by 'm_index', which is the arbitrary
-        # name given to the previously unnamed index, will then put the
-        # lines in order with their local page neighbors.
-        main = main.rename_axis('m_index').sort_values(by=['doc_line', 'm_index'], ascending=[True, True])
+    # Reset the index, so that the newly added rows have higher numbers
+    main.reset_index(drop=True, inplace=True)
+    # Since 'doc_line' reflects the line from the original document,
+    # it can be used to reconstruct the order of the lines. Sorting
+    # by it first brings the newly created rows to the proper place
+    # on the page. Sorting next by 'm_index', which is the arbitrary
+    # name given to the previously unnamed index, will then put the
+    # lines in order with their local page neighbors.
+    main = main.rename_axis('m_index').sort_values(by=['doc_line', 'm_index'], ascending=[True, True])
 
-        # Write out the fully labeled data
-        final_labeled_data = self.resume_out_path + self.name + '_final_labeled_data.csv'
-        main.to_csv(final_labeled_data)
+    # Write out the fully labeled data
+    final_labeled_data = parser.resume_out_path + parser.name + '_final_labeled_data.csv'
+    main.to_csv(final_labeled_data)
 
-        # Print confirmation message, and report how long the process took
-        print('La Maquina has printed your results.')
-        self.death = datetime.now()
-        lifespan = self.death - self.birth
-        print('La Maquina read your resume in {} seconds.'.format(lifespan))
-        print('You\'re welcome for my service.')
+    # Print confirmation message, and report how long the process took
+    print('La Maquina has printed your results.')
+    parser.death = datetime.now()
+    lifespan = parser.death - parser.birth
+    print('La Maquina read your resume in {} seconds.'.format(lifespan))
+    print('You\'re welcome for my service.')
+
 
 # make a hook for django_q to call
 def hook_after_reading(task):
+    print(task.result)
+
+
+def sleep_and_print(secs):
+    sleep(secs)
+    print('Task run for {} seconds'.format(secs))
+
+
+def hook_after_sleeping(task):
     print(task.result)

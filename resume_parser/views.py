@@ -1,13 +1,11 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django_q.tasks import async_task
 
 from .forms import UploadFileForm
-
+# from .local_scripts.resume_parser.parser import sleep_and_print, hook_after_sleeping
 from .models import ResumeUpload, Job
-
-from .local_scripts.resume_parser.parser import ResumeParser, hook_after_reading
 
 
 # Show uploaded resumes
@@ -41,10 +39,10 @@ def upload(request):
 
 # DELETE an uploaded resume
 @login_required
-def delete_upload(request, file_id):
+def delete_upload(request, id):
     file = ResumeUpload.objects.all() \
         .filter(user=request.user) \
-        .get(id=file_id)
+        .get(id=id)
     file.delete()
     return redirect(reverse('resume_parser:index'))
 
@@ -56,14 +54,13 @@ def parse_resume(request, resume_id):
     resume = ResumeUpload.objects.all() \
         .filter(id=resume_id).values()
     for r in resume:
-        parser = ResumeParser(name=request.user)
-        parser.get_resume_paths(r['resume'])
-        status: bool = parser.say_status
-        # This is the heavy processing; needs to be async
-        async_task('parser.read_resume', hook='hook_after_reading')
+        parse_name = request.user.username
+        parse_path = r['resume']
+        async_task('resume_parser.local_scripts.resume_parser.parser.read_resume',
+                   name=parse_name, path_name=parse_path,
+                   hook='resume_parser.local_scripts.resume_parser.parser.hook_after_reading')
     context = {
         'resume': resume,
-        'status': status,
     }
     return render(request, 'resume_parser/parsed.html', context)
 

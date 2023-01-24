@@ -106,6 +106,7 @@ CACHES = {
 
 Q_CLUSTER = {
     'name': 'localtools',
+    'max_attempts': 3,
     'workers': 4,
     'timeout': 600,
     'retry': 615,
@@ -162,9 +163,9 @@ STATIC_URL = 'static/'
 RESUME_OUT_PATH = os.path.join(BASE_DIR,'static/output/')
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
 
-MEDIA_URL = '/localtools/'
+# MEDIA_URL = '/localtools/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

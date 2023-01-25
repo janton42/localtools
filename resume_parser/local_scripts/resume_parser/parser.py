@@ -625,6 +625,6 @@ def read_resume(name: str, path_name: str):
     print('You\'re welcome for my service.')
 
 
-# make a hook for django_q to call
+0# make a hook for django_q to call
 def hook_after_reading(task):
-    print(task.result)
+    print(task.name)

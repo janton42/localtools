@@ -51,8 +51,7 @@ def delete_upload(request, id):
 # TODO: Add async for the parsing process
 @login_required
 def parse_resume(request, resume_id):
-    resume = ResumeUpload.objects.all() \
-        .filter(id=resume_id).values()
+    resume = ResumeUpload.objects.all().filter(id=resume_id).values()
     for r in resume:
         parse_name = request.user.username
         parse_path = r['resume']

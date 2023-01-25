@@ -3,24 +3,7 @@
 
 {% block content %}
     <div class="container">
+    <h1>Resume Parser</h1>
 
-{% if resume %}
-  <p>You parsed the resume below</p>
-  <br>
-  {% for r in resume %}
-
-    <p>Title:               {{ r.title }}</p>
-    <p>Uploaded file path:  {{ r.resume }}</p>
-  {% endfor %}
-  {% if status == True %}
-  <p>You are in a local development environment.</p>
-  <!-- <a onclick="startDownload('http://somedomain.com/somefolder/somefile')" download="myapp-v1.1.0.apk"> <img src="img/download-apk.png" alt=""/> </a> -->
-    <a href="../../static/output/{{user.username}}/{{user.username}}_final_labeled_data.csv" download="{{user.username}}_labeled_data.csv">Download Parsed Resume</a>
-  {% elif status == False %}
-  <p>You are on the live site!!</p>
-  {% endif %}
-{% else %}
-<p>Negative Ghost Rider!</p>
-{% endif %}
     </div>
 {% endblock %}

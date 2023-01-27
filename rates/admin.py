@@ -22,9 +22,9 @@ class SkillAdmin(admin.ModelAdmin):
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code', 'zone')
-    list_filter = ('name', 'code', 'zone')
-    search_fields = ('name', 'code', 'zone')
+    list_display = ('rank', 'name', 'zone')
+    list_filter = ('rank', 'name', 'zone')
+    search_fields = ('rank', 'name', 'zone')
 
 
 admin.site.register(RateRequest, RateRequestAdmin)

@@ -1,24 +1,26 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from .choices import ZONES, LEVELS
+from .choices import ZONES, LEVELS, HDI, SKILL_CODES
 
 
 class Skill(models.Model):
     name = models.CharField(max_length=50)
+    code = models.IntegerField(default=None, null=True, choices=SKILL_CODES)
 
     def __str__(self):
         return f'{self.name}'
 
 
 class Country(models.Model):
+    rank = models.IntegerField(default=None, null=True)
     name = models.CharField(max_length=50)
-    code = models.CharField(max_length=2)
-    zone = models.CharField(max_length=1,
-                            choices=ZONES)
+    value = models.DecimalField(max_digits=8, decimal_places=3, default=0.00)
+    hdi = models.CharField(max_length=10, default=None, null=True, choices=HDI)
+    zone = models.CharField(max_length=1, default=None, null=True, choices=ZONES)
 
     def __str__(self):
-        return f'{self.code}, {self.name}, {self.zone}'
+        return f'{self.name}'
 
 
 class RateRequest(models.Model):

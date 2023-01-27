@@ -4,7 +4,6 @@ from django.urls import reverse
 from django_q.tasks import async_task
 
 from .forms import UploadFileForm
-# from .local_scripts.resume_parser.parser import sleep_and_print, hook_after_sleeping
 from .models import ResumeUpload, Job
 
 
@@ -55,9 +54,9 @@ def parse_resume(request, resume_id):
     for r in resume:
         parse_name = request.user.username
         parse_path = r['resume']
-        async_task('resume_parser.local_scripts.resume_parser.parser.read_resume',
+        async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
                    name=parse_name, path_name=parse_path,
-                   hook='resume_parser.local_scripts.resume_parser.parser.hook_after_reading')
+                   hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
     context = {
         'resume': resume,
     }

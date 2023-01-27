@@ -134,9 +134,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Path to machine learning and natural language processing scripts and models
 ML_MODELS_PATH = os.path.join(BASE_DIR, \
-                              'resume_parser/local_scripts/resume_parser/final_models/')
+                              'resume_parser/static/scripts/resume_parser/final_models/')
 ENTITIES_PATH = os.path.join(BASE_DIR, \
-                             'resume_parser/local_scripts/resume_parser/entities/')
+                             'resume_parser/static/scripts/resume_parser/entities/')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -158,7 +158,7 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = 'static/'
-RESUME_OUT_PATH = os.path.join(BASE_DIR, 'static/output/')
+RESUME_OUT_PATH = os.path.join(BASE_DIR, 'resume_parser/static/output/')
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
 

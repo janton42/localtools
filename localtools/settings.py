@@ -30,7 +30,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -63,7 +62,7 @@ ROOT_URLCONF = 'localtools.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR /'templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,7 +77,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'localtools.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -135,10 +133,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Path to machine learning and natural language processing scripts and models
-ML_MODELS_PATH = os.path.join(BASE_DIR,\
- 'resume_parser/local_scripts/resume_parser/final_models/')
-ENTITIES_PATH = os.path.join(BASE_DIR,\
-  'resume_parser/local_scripts/resume_parser/entities/')
+ML_MODELS_PATH = os.path.join(BASE_DIR, \
+                              'resume_parser/local_scripts/resume_parser/final_models/')
+ENTITIES_PATH = os.path.join(BASE_DIR, \
+                             'resume_parser/local_scripts/resume_parser/entities/')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -151,7 +149,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -161,8 +158,7 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = 'static/'
-RESUME_OUT_PATH = os.path.join(BASE_DIR,'static/output/')
-
+RESUME_OUT_PATH = os.path.join(BASE_DIR, 'static/output/')
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
 

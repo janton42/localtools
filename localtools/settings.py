@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'informedvoter.apps.InformedvoterConfig',
     'userprofile.apps.UserprofileConfig',
     'resume_parser.apps.ResumeParserConfig',
+    'rates.apps.RatesConfig',
     'django_q',
 ]
 

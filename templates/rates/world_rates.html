@@ -3,22 +3,23 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <div class="container">
-            <h2>Upload A Resume<h2>
-            <form action="" method="POST">
-                {% csrf_token %}
-                {% for field in form %}
+        <h2>Rate Recommendation Request<h2>
+
+        <p>Fill out the form below to get a rate recommendation.</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
                 <p>
-                {{ field.label }}:
-                <br>
-                {{ field }}
+                    {{ field.label }}:
+                    <br>
+                    {{ field }}
                 </p>
             {% endfor %}
             <button type="submit">Submit</button>
             <button type="reset">Reset</button>
-            </form>
-        </div>
+        </form>
     {% else %}
         <h1>Log in to get rate estimates.</h1>
     {% endif %}
+
 {% endblock %}

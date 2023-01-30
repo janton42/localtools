@@ -13,10 +13,10 @@ requests = "*"
 joblib = "*"
 nltk = "*"
 pandas = "*"
-pdfminer = "*"
-"pdfminer.six" = "*"
 striprtf = "*"
 scikit-learn = "*"
+django-q = "*"
+"pdfminer.six" = "*"
 
 [dev-packages]
 

@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django_q.tasks import async_task
+from django.contrib import messages
 
 from .forms import UploadFileForm
 from .models import ResumeUpload, Job
@@ -11,6 +12,7 @@ from .models import ResumeUpload, Job
 
 @login_required
 def index(request):
+    messages.add_message(request, messages.INFO, 'Welcome to Resume Parser!')
     user_uploads = ResumeUpload.objects.all().filter(user=request.user).values()
     context = {
         'user_uploads': user_uploads

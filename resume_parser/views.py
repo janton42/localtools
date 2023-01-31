@@ -12,7 +12,7 @@ from .models import ResumeUpload, Job
 
 @login_required
 def index(request):
-    messages.add_message(request, messages.INFO, 'Welcome to Resume Parser!')
+    messages.add_message(request, messages.INFO, 'Welcome, Fucko!')
     user_uploads = ResumeUpload.objects.all().filter(user=request.user).values()
     context = {
         'user_uploads': user_uploads

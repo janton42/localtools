@@ -6,7 +6,13 @@
 </div>
 
 <div class="container">
-
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
   <p>Resume parsing tool. Reads an uploaded resume, and labels each line
 
   </p>

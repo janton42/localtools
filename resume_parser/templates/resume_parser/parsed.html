@@ -3,7 +3,18 @@
 
 {% block content %}
     <div class="container">
+    {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
     <h1>Resume Parser</h1>
-
+    {%  if result_list %}
+        {%  for result in result_list %}
+            {{ result.name }}
+        {% endfor %}
+    {%  endif %}
     </div>
 {% endblock %}

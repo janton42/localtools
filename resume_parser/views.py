@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django_q.tasks import async_task
 from django.contrib import messages
 
+# For async tasks
+from django_q.tasks import async_task, result
+
+# Local imports
 from .forms import UploadFileForm
 from .models import ResumeUpload, Job
 
@@ -52,16 +55,20 @@ def delete_upload(request, id):
 # TODO: Add async for the parsing process
 @login_required
 def parse_resume(request, resume_id):
+    messages.add_message(request, messages.INFO, 'Parsing your resume...')
     resume = ResumeUpload.objects.all().filter(id=resume_id).values()
     for r in resume:
         parse_name = request.user.username
         parse_path = r['resume']
-        async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
-                   name=parse_name, path_name=parse_path,
-                   hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
+        la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
+                                name=parse_name, path_name=parse_path,
+                                hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
+        result_list = result(la_maquina, wait=5)
     context = {
         'resume': resume,
+        'result_list': result_list,
     }
+    # hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading'
     return render(request, 'resume_parser/parsed.html', context)
 
 

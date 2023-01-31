@@ -68,6 +68,14 @@
 
     <footer class="footer">
       <div class="container">
+          {%  if user.is_authenticated %}
+<p class="text-muted">Logged in as {{ user.username }}</p>
+              {% if user.is_superuser %}
+                <p class="text-muted">You are an <a href="{% url 'admin:index' %}">Admin</a></p>
+
+                {% endif %}
+          {% endif %}
+
         <p class="text-muted"></p>
       </div>
     </footer>

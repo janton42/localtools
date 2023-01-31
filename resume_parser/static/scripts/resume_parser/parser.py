@@ -623,15 +623,11 @@ def read_resume(name: str, path_name: str):
     lifespan = parser.death - parser.birth
     print('La Maquina read your resume in {} seconds.'.format(lifespan))
     print('You\'re welcome for my service.')
-    return 1
+    return main
 
 
 # make a hook for django_q to call
 
 
 def hook_after_reading(task):
-    status = 0
-    if task.result:
-        status = 1
-    print(f'Name: {task.name}, Result: {status}')
     return task.name

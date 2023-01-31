@@ -1,18 +1,26 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, reverse
+from django.utils import timezone
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .forms import RateRequestForm
 
 from .models import RateRequest
 
 
-@login_required
-def index(request):
-    rate_estimates = RateRequest.objects.all().filter(user=request.user).values()
-    context = {
-        'rate_estimates': rate_estimates
-    }
-    return render(request, 'rates/index.html', context)
+class RateRequestListView(LoginRequiredMixin, ListView):
+    model = RateRequest
+    paginate_by = 5
+    template_name = 'rates/index.html'
+
+    def get_context_data(self, **kwargs):
+        rate_estimates = self.model.objects.all().filter(user=self.request.user).values()
+        context = {
+            'now': timezone.now(),
+            'rate_estimates': rate_estimates
+        }
+        return context
 
 
 @login_required

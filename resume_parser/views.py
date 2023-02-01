@@ -6,9 +6,12 @@ from django.contrib import messages
 # For async tasks
 from django_q.tasks import async_task, result
 
+# Fetch Django Q models for async tasks
+from django_q.models import Success, Failure, Schedule
+
 # Local imports
 from .forms import UploadFileForm
-from .models import ResumeUpload, Job
+from .models import ResumeUpload
 
 
 # Show uploaded resumes
@@ -62,7 +65,7 @@ def parse_resume(request, resume_id):
         parse_path = r['resume']
         la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
                                 name=parse_name, path_name=parse_path,
-                                hook='resume_parser.static.scripts.resume_parser.parser.hook')
+                                hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
     context = {
         'resume': resume,
         'la_maquina': la_maquina,
@@ -70,17 +73,11 @@ def parse_resume(request, resume_id):
     return render(request, 'resume_parser/confirm_parse.html', context)
 
 
+# Show parsed resume
 @login_required
-def confirm_parse(request, resume_id):
-    messages.add_message(request, messages.INFO, 'Parsing your resume...')
-    global job
-    resume = ResumeUpload.objects.all() \
-        .filter(id=resume_id).values()
-    for r in resume:
-        job = Job(user=request.user, title=r['title'], status='Processing')
-    job.save()
-
+def show_parsed_resume(request, task_id):
+    resume = Success.objects.all().filter(id=task_id).values()
     context = {
-        'job': job,
+        'resume': resume,
     }
-    return render(request, 'resume_parser/confirm_parse.html', context)
+    return render(request, 'resume_parser/parsed.html', context)

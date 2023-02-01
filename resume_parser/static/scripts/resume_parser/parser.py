@@ -631,4 +631,5 @@ def read_resume(name: str, path_name: str):
 
 def hook_after_reading(task):
     print(f'{task.id} complete')
+
     return task.id

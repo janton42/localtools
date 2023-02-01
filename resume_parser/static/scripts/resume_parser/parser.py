@@ -623,8 +623,8 @@ def read_resume(name: str, path_name: str):
     lifespan = parser.death - parser.birth
     print('La Maquina read your resume in {} seconds.'.format(lifespan))
     print('You\'re welcome for my service.')
+    main = main.to_json()
     return main
-
 
 # make a hook for django_q to call
 
@@ -632,4 +632,4 @@ def read_resume(name: str, path_name: str):
 def hook_after_reading(task):
     print(f'{task.id} complete')
 
-    return task.id
+    return task.result

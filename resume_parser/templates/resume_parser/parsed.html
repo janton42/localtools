@@ -12,9 +12,7 @@
 {% endif %}
     <h1>Resume Parser</h1>
     {%  if resume %}
-        {%  for result in result_list %}
-            {{ result.name }}
-        {% endfor %}
+        <p>Resume: {{ resume }}</p>
     {%  endif %}
     </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 import os
 import string
 import warnings
+import json
 from datetime import datetime
 
 import joblib
@@ -10,6 +11,10 @@ from django.conf import settings
 from nltk.parse.corenlp import CoreNLPServer, CoreNLPParser
 from pdfminer.high_level import extract_text
 from striprtf.striprtf import rtf_to_text
+
+from django.core import serializers
+
+
 
 from time import sleep
 from .cleaner import create_features
@@ -78,6 +83,7 @@ class ResumeParser(object):
         self.resume_out_path = None
         self.resume_file_ext = None
         self.resume_in_path = None
+        self.resume_id = None
         self.ner_tagger = None
         self.bullet_feature_headings = [
             'stopword_percentage',
@@ -505,7 +511,7 @@ class ResumeParser(object):
 
 
 # move the call from views.py to here, so that it can be called in asnyc_task
-def read_resume(name: str, path_name: str):
+def read_resume(name: str, path_name: str, resume_id: int) -> object:
     """Reads a resume.
 
         Main class method for Resume.
@@ -612,7 +618,11 @@ def read_resume(name: str, path_name: str):
     # name given to the previously unnamed index, will then put the
     # lines in order with their local page neighbors.
     main = main.rename_axis('m_index').sort_values(by=['doc_line', 'm_index'], ascending=[True, True])
-
+    # Reset the index back to the original, and drop the old index
+    # Now that the lines are in order locally how they were on the original page,
+    # the index needs to be in normal order, or else the
+    # resulting json will have illogical keys.
+    main.reset_index(drop=True, inplace=True)
     # Write out the fully labeled data
     final_labeled_data = parser.resume_out_path + parser.name + '_final_labeled_data.csv'
     main.to_csv(final_labeled_data)
@@ -623,13 +633,19 @@ def read_resume(name: str, path_name: str):
     lifespan = parser.death - parser.birth
     print('La Maquina read your resume in {} seconds.'.format(lifespan))
     print('You\'re welcome for my service.')
-    main = main.to_json()
+    main = main.to_json(orient='index')
     return main
 
-# make a hook for django_q to call
 
-
+# make a hook for django_q to call after the task is finished
 def hook_after_reading(task):
-    print(f'{task.id} complete')
-
-    return task.result
+    data = json.loads(task.result)
+    serialized = list()
+    for line in data:
+        data[line]['user'] = task.kwargs['name']
+        data[line]['upload'] = task.kwargs['resume_id']
+        formatted = dict(
+            model='resume_parser.ParsedResume',
+            fields=data[line])
+        serialized.append(formatted)
+    print(serialized[0])

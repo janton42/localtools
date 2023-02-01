@@ -31,3 +31,18 @@ class Job(models.Model):
     def __str__(self):
         return '{}: {}, {}, {}'.format(self.user, self.title, self.status, self.result)
 
+
+class ParsedResume(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    upload = models.ForeignKey(ResumeUpload, on_delete=models.CASCADE)
+    doc_line = models.IntegerField()
+    line = models.CharField(max_length=1000, blank=False)
+    label = models.CharField(max_length=20, blank=False)
+    is_bullet = models.IntegerField(default=0)
+    is_name = models.IntegerField(default=0)
+    is_org = models.IntegerField(default=0)
+    ents = models.IntegerField(default=0)
+
+    def __str__(self):
+        return '{}: {}, {}, {}'.format(self.user, self.upload, self.doc_line, self.line, self.label)
+#

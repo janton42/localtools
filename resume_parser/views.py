@@ -64,7 +64,7 @@ def parse_resume(request, resume_id):
         parse_name = request.user.username
         parse_path = r['resume']
         la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
-                                name=parse_name, path_name=parse_path,
+                                name=parse_name, path_name=parse_path, resume_id=resume_id,
                                 hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
     context = {
         'resume': resume,

@@ -11,18 +11,22 @@
   {% endfor %}
 {% endif %}
     <div class="row">
-      <h3>Parsed Resumes</h3>
-      {% if resume %}
+      <h3>You're Welcome</h3>
+      {% if parsed %}
       <div class="table-responsive-sm">
         <table class="table table-hover">
           <tr>
             <th>Line</th>
+            <th>Label</th>
             <th colspan="2">Update</th>
           </tr>
-          {% for r in resume %}
+          {% for r in parsed %}
           <tr>
             <td>
-              <a href="#">{{ r.line }}</a>
+              <p>{{ r.line }}</p>
+            </td>
+            <td>
+              <p>{{ r.label }}</p>
             </td>
             <td>
               <a href="#">
@@ -40,7 +44,7 @@
       </div>
 
       {% else %}
-        <p>You don't have any uploaded resumes, you lazy bitch!</p>
+        <p>Yh duhn fucked up sumwhr, bwah!</p>
       {% endif %}
       </div>
     </div>

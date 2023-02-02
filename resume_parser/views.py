@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # For async tasks
 from django_q.tasks import async_task, result
 
@@ -21,9 +22,6 @@ def index(request):
     messages.add_message(request, messages.INFO, 'Welcome, Fucko!')
     context = {}
     user_uploads = ResumeUpload.objects.all().filter(user=request.user).values()
-    # if ParsedResume.objects.all().filter(user=request.user, upload=resume_id).exists():
-    #     parsed_resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
-    #     context['parsed'] = parsed_resume
     context['user_uploads'] = user_uploads
 
     return render(request, 'resume_parser/index.html', context)
@@ -65,6 +63,8 @@ def parse_resume(request, resume_id):
     if ParsedResume.objects.all().filter(user=request.user, upload=resume_id).exists():
         parsed_resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
         context['parsed'] = parsed_resume
+
+        return render(request, 'resume_parser/parsed.html', context)
     else:
         resume = ResumeUpload.objects.all().filter(id=resume_id).values()
 
@@ -76,12 +76,13 @@ def parse_resume(request, resume_id):
                                     hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
         context['resume'] = resume
 
-    return render(request, 'resume_parser/confirm_parse.html', context)
+        return render(request, 'resume_parser/confirm_parse.html', context)
 
 
 # Show parsed resume
 @login_required
-def show_parsed_resume(request, resume_id):
+@receiver(post_save, sender=ParsedResume)
+def show_parsed_resume(request, resume_id, **kwargs):
     resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
     context = {
         'resume': resume,

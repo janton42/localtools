@@ -39,9 +39,15 @@
                               </a>
                           </td>
                           <td>
-                              <a href="{% url 'resume_parser:parse' resume.id %}">
-                                  Parse
-                              </a>
+                              {% if parsed %}
+                                    <a href="{% url 'resume_parser:parsed' resume.id %}">
+                                        View
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'resume_parser:parse' resume.id %}">
+                                        Parse
+                                    </a>
+                                {% endif %}
                           </td>
                       </tr>
                   {% endfor %}

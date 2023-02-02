@@ -19,10 +19,13 @@ from .models import ResumeUpload, ParsedResume
 @login_required
 def index(request):
     messages.add_message(request, messages.INFO, 'Welcome, Fucko!')
+    context = {}
     user_uploads = ResumeUpload.objects.all().filter(user=request.user).values()
-    context = {
-        'user_uploads': user_uploads,
-    }
+    # if ParsedResume.objects.all().filter(user=request.user, upload=resume_id).exists():
+    #     parsed_resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
+    #     context['parsed'] = parsed_resume
+    context['user_uploads'] = user_uploads
+
     return render(request, 'resume_parser/index.html', context)
 
 
@@ -58,12 +61,10 @@ def delete_upload(request, id):
 # TODO: Add async for the parsing process
 @login_required
 def parse_resume(request, resume_id):
+    context = {}
     if ParsedResume.objects.all().filter(user=request.user, upload=resume_id).exists():
-        resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
-        context = {
-            'resume': resume,
-        }
-        return render(request, 'resume_parser/parsed.html', context)
+        parsed_resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
+        context['parsed'] = parsed_resume
     else:
         resume = ResumeUpload.objects.all().filter(id=resume_id).values()
 
@@ -73,11 +74,9 @@ def parse_resume(request, resume_id):
             la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
                                     name=parse_name, path_name=parse_path, resume_id=resume_id,
                                     hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
-        context = {
-            'resume': resume,
-            'la_maquina': la_maquina,
-        }
-        return render(request, 'resume_parser/confirm_parse.html', context)
+        context['resume'] = resume
+
+    return render(request, 'resume_parser/confirm_parse.html', context)
 
 
 # Show parsed resume

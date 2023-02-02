@@ -23,6 +23,7 @@ from userprofile import views as userprofile_views
 
 urlpatterns = [
     path('', userprofile_views.home, name='home'),
+    path('chat/', include('chat.urls')),
     path('userprofile/', include('userprofile.urls')),
     path('informedvoter/', include('informedvoter.urls')),
     path('rates/', include('rates.urls')),

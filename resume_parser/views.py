@@ -61,7 +61,7 @@ def parse_resume(request, resume_id):
 
     resume = ResumeUpload.objects.all().filter(id=resume_id).values()
     for r in resume:
-        parse_name = request.user.username
+        parse_name = request.user.id
         parse_path = r['resume']
         la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
                                 name=parse_name, path_name=parse_path, resume_id=resume_id,

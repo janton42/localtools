@@ -645,7 +645,10 @@ def hook_after_reading(task):
         data[line]['user'] = task.kwargs['name']
         data[line]['upload'] = task.kwargs['resume_id']
         formatted = dict(
-            model='resume_parser.ParsedResume',
+            model='resume_parser.parsedresume',
             fields=data[line])
         serialized.append(formatted)
-    print(serialized[0])
+    result = json.dumps(serialized)
+    for obj in serializers.deserialize('json', result):
+        obj.save()
+    print('Hook completed successfully')

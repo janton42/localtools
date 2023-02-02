@@ -20,10 +20,8 @@ from .models import ResumeUpload, ParsedResume
 def index(request):
     messages.add_message(request, messages.INFO, 'Welcome, Fucko!')
     user_uploads = ResumeUpload.objects.all().filter(user=request.user).values()
-    parsed_resumes = ParsedResume.objects.all().filter(user=request.user).values()
     context = {
         'user_uploads': user_uploads,
-        'parsed_resumes': parsed_resumes,
     }
     return render(request, 'resume_parser/index.html', context)
 
@@ -61,8 +59,11 @@ def delete_upload(request, id):
 @login_required
 def parse_resume(request, resume_id):
     if ParsedResume.objects.all().filter(user=request.user, upload=resume_id).exists():
-        messages.add_message(request, messages.INFO, 'Resume already parsed')
-        return redirect(reverse('resume_parser:index'))
+        resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
+        context = {
+            'resume': resume,
+        }
+        return render(request, 'resume_parser/parsed.html', context)
     else:
         resume = ResumeUpload.objects.all().filter(id=resume_id).values()
 
@@ -81,8 +82,8 @@ def parse_resume(request, resume_id):
 
 # Show parsed resume
 @login_required
-def show_parsed_resume(request, task_id):
-    resume = Success.objects.all().filter(id=task_id).values()
+def show_parsed_resume(request, resume_id):
+    resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
     context = {
         'resume': resume,
     }

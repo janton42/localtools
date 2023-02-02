@@ -10,9 +10,38 @@
     </div>
   {% endfor %}
 {% endif %}
-    <h1>Resume Parser</h1>
-    {%  if resume %}
-        <p>Resume: {{ resume }}</p>
-    {%  endif %}
+    <div class="row">
+      <h3>Parsed Resumes</h3>
+      {% if resume %}
+      <div class="table-responsive-sm">
+        <table class="table table-hover">
+          <tr>
+            <th>Line</th>
+            <th colspan="2">Update</th>
+          </tr>
+          {% for r in resume %}
+          <tr>
+            <td>
+              <a href="#">{{ r.line }}</a>
+            </td>
+            <td>
+              <a href="#">
+                Delete - {{ r.id }}
+              </a>
+            </td>
+            <td>
+              <a href="#">
+                  Edit
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      {% else %}
+        <p>You don't have any uploaded resumes, you lazy bitch!</p>
+      {% endif %}
+      </div>
     </div>
 {% endblock %}

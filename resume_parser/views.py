@@ -11,7 +11,7 @@ from django_q.models import Success, Failure, Schedule
 
 # Local imports
 from .forms import UploadFileForm
-from .models import ResumeUpload
+from .models import ResumeUpload, ParsedResume
 
 
 # Show uploaded resumes
@@ -20,8 +20,10 @@ from .models import ResumeUpload
 def index(request):
     messages.add_message(request, messages.INFO, 'Welcome, Fucko!')
     user_uploads = ResumeUpload.objects.all().filter(user=request.user).values()
+    parsed_resumes = ParsedResume.objects.all().filter(user=request.user).values()
     context = {
-        'user_uploads': user_uploads
+        'user_uploads': user_uploads,
+        'parsed_resumes': parsed_resumes,
     }
     return render(request, 'resume_parser/index.html', context)
 

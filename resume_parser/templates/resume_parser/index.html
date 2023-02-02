@@ -20,28 +20,61 @@
   <br>
   <br>
   <div class="row">
-    <div class="col-sm-6">
       <h3>Uploaded Resumes</h3>
       {% if user_uploads %}
+          <div class="table-responsive-sm">
+              <table class="table table-hover">
+                  <tr>
+                      <th>Title</th>
+                      <th colspan="2">Update</th>
+                  </tr>
+                  {% for resume in user_uploads %}
+                      <tr>
+                          <td>
+                              <a href="{{MEDIA_URL}}{{ resume.resume }}">{{ resume.title }}</a>
+                          </td>
+                          <td>
+                              <a href="{% url 'resume_parser:delete_upload' resume.id %}">
+                                  Delete
+                              </a>
+                          </td>
+                          <td>
+                              <a href="{% url 'resume_parser:parse' resume.id %}">
+                                  Parse
+                              </a>
+                          </td>
+                      </tr>
+                  {% endfor %}
+              </table>
+          </div>
+
+      {% else %}
+          <p>You don't have any uploaded resumes, you lazy bitch!</p>
+      {% endif %}
+  </div>
+
+    <div class="row">
+      <h3>Parsed Resumes</h3>
+      {% if parsed_resumes %}
       <div class="table-responsive-sm">
         <table class="table table-hover">
           <tr>
-            <th>Title</th>
+            <th>Line</th>
             <th colspan="2">Update</th>
           </tr>
-          {% for resume in user_uploads %}
+          {% for resume in parsed_resumes %}
           <tr>
             <td>
-              <a href="{{MEDIA_URL}}{{ resume.resume }}">{{ resume.title }}</a>
+              <a href="#">{{ resume.line }}</a>
             </td>
             <td>
-              <a href="{% url 'resume_parser:delete_upload' resume.id %}">
-                Delete
+              <a href="#">
+                Delete - {{ resume.id }}
               </a>
             </td>
             <td>
-              <a href="{% url 'resume_parser:parse' resume.id %}">
-                Parse
+              <a href="#">
+                Edit
               </a>
             </td>
           </tr>
@@ -54,7 +87,6 @@
       {% endif %}
       </div>
     </div>
-
 </div>
 
 {% endblock %}

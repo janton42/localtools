@@ -60,19 +60,23 @@ def delete_upload(request, id):
 # TODO: Add async for the parsing process
 @login_required
 def parse_resume(request, resume_id):
+    if ParsedResume.objects.all().filter(user=request.user, upload=resume_id).exists():
+        messages.add_message(request, messages.INFO, 'Resume already parsed')
+        return redirect(reverse('resume_parser:index'))
+    else:
+        resume = ResumeUpload.objects.all().filter(id=resume_id).values()
 
-    resume = ResumeUpload.objects.all().filter(id=resume_id).values()
-    for r in resume:
-        parse_name = request.user.id
-        parse_path = r['resume']
-        la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
-                                name=parse_name, path_name=parse_path, resume_id=resume_id,
-                                hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
-    context = {
-        'resume': resume,
-        'la_maquina': la_maquina,
-    }
-    return render(request, 'resume_parser/confirm_parse.html', context)
+        for r in resume:
+            parse_name = request.user.id
+            parse_path = r['resume']
+            la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
+                                    name=parse_name, path_name=parse_path, resume_id=resume_id,
+                                    hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
+        context = {
+            'resume': resume,
+            'la_maquina': la_maquina,
+        }
+        return render(request, 'resume_parser/confirm_parse.html', context)
 
 
 # Show parsed resume

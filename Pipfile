@@ -19,6 +19,7 @@ django-q = "*"
 "pdfminer.six" = "*"
 channels = {extras = ["daphne"], version = "*"}
 channels-redis = "*"
+django-redis = "*"
 
 [dev-packages]
 

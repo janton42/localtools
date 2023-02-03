@@ -18,6 +18,7 @@ scikit-learn = "*"
 django-q = "*"
 "pdfminer.six" = "*"
 channels = {extras = ["daphne"], version = "*"}
+channels-redis = "*"
 
 [dev-packages]
 

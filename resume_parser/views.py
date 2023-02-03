@@ -81,7 +81,6 @@ def parse_resume(request, resume_id):
 
 # Show parsed resume
 @login_required
-@receiver(post_save, sender=ParsedResume)
 def show_parsed_resume(request, resume_id, **kwargs):
     resume = ParsedResume.objects.all().filter(user=request.user, upload=resume_id).values()
     context = {

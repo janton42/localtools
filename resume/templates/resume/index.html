@@ -86,7 +86,9 @@
     <h3>Courses & Certifications</h3>
     <ul>
       {% for cert in certs%}
-        <li><strong>{{ cert.title }}:</strong><br>{{ cert.description }}<br><br><strong>Issuing Organization:</strong> <a href="cert.org.website">{{ cert.org }}</a></li>
+          <br>
+        <li><strong>{{ cert.title }}:</strong><br>{{ cert.description }}<br><br><strong>Issuing Organization:</strong> <a href="{{ cert.org.website }}">{{ cert.org }}</a></li>
+
       {% endfor %}
     </ul>
   {% endif %}
@@ -140,8 +142,8 @@
 
 {% block skills %}
 <div id="skills">
-  <h3>FATS</h3>
-  <h5>Frameworks, Abilities, Technologies, & Skills (FATS)</h5>
+  <h3>Other Skills, Frameworks and Abilities</h3>
+
   <ul>
     {% for framework in frameworks %}
       <li>{{ framework.title }}: {{ framework.level }}</li>

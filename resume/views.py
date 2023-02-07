@@ -4,7 +4,7 @@ from .models import *
 
 
 # Create your views here.
-def home(request):
+def index(request):
     overview = Overview.objects.all().filter(title='Program Manager').values()
     orgs = Organization.objects.all().order_by('-chronological_order')
     work = Experience.objects.all().order_by('-start_date')
@@ -36,4 +36,4 @@ def home(request):
         'technologies': technologies,
         'skills': skills
     }
-    return render(request, 'home.html', context)
+    return render(request, 'resume/index.html', context)

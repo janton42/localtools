@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rates.apps.RatesConfig',
     'django_q',
     'chat',
+    'resume',
 ]
 
 MIDDLEWARE = [

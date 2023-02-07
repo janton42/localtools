@@ -17,7 +17,6 @@ striprtf = "*"
 scikit-learn = "*"
 django-q = "*"
 "pdfminer.six" = "*"
-channels = {extras = ["daphne"], version = "*"}
 
 [dev-packages]
 

@@ -33,8 +33,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
-    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +45,6 @@ INSTALLED_APPS = [
     'resume_parser.apps.ResumeParserConfig',
     'rates.apps.RatesConfig',
     'django_q',
-    'chat',
     'resume',
 ]
 
@@ -81,8 +78,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'localtools.wsgi.application'
-ASGI_APPLICATION = 'localtools.asgi.application'
-CHANNEL_LAYERS = {}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

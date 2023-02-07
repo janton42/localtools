@@ -107,11 +107,8 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.1/topics/cache/#setting-up-the-cache
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'main_cache',
     }
 }
 
@@ -126,7 +123,7 @@ Q_CLUSTER = {
     'retry': 615,
     'queue_limit': 50,
     'bulk': 10,
-    'django_redis': 'default',
+    'orm': 'default',
 }
 
 # Password validation

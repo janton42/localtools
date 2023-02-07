@@ -9,7 +9,6 @@
 
       <p>This is your personal homepage for internal tools. Have fun.</p>
     {% if user.is_superuser %}
-        <p>As a superuser, you can access the <a href="{% url 'admin:index' %}">Django admin</a>.</p>
         <p>Your current resume is <a href="{% url 'resume:index' %}">here</a></p>
         {% endif %}
     {% else %}

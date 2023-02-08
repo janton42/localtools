@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from .forms import UserRegistrationForm, CompleteProfileForm, UserPasswordChangeForm
+from .forms import UserRegistrationForm, CompleteProfileForm, UserPasswordChangeForm, PasswordResetForm
 
 # Import any models needed for views. Note: all views accessing db should require login
 from .models import Profile
@@ -79,11 +79,6 @@ def password_change(request):
 
 
 @login_required
-def password_change_done(request):
-    return render(request, 'userprofile/password_change_done.html')
-
-
-@login_required
 def update_profile(request):
     if request.method == 'POST':
         form = CompleteProfileForm(request.POST)
@@ -93,7 +88,7 @@ def update_profile(request):
             profile.save()
             return redirect(reverse('userprofile:profile_view'))
     else:
-        form = CompleteProfileForm(initial = {
+        form = CompleteProfileForm(initial={
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
             'email': request.user.email,
@@ -103,3 +98,15 @@ def update_profile(request):
         'form': form,
     }
     return render(request, 'userprofile/update_profile.html', context)
+
+
+@login_required
+def password_reset(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            form.subject_template_name = 'userprofile/password_reset_subject.txt'
+            form.email_template_name = 'userprofile/password_reset_email.html'
+            form.save()
+            return redirect(reverse('userprofile:password_reset_done'))
+    return render(request, 'userprofile/password_reset.html')

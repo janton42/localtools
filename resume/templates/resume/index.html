@@ -100,7 +100,7 @@
     <h3>Projects </h3>
     <ul>
       {% for project in projects%}
-        <li><strong>{{ project.title }}:</strong><br>{{ project.description }}<br><br><strong>Organization:</strong> <a href="project.org.website">{{ project.org }}</a><br><br></li>
+        <li><strong>{{ project.title }}:</strong><br>{{ project.description }}<br><br><strong>Organization:</strong> <a href="{{ project.org.website }}">{{ project.org }}</a><br><br></li>
       {% endfor %}
     </ul>
   {% endif %}
@@ -113,7 +113,7 @@
       <h3>Activities</h3>
       <ul>
         {% for activity in activities%}
-          <li><strong>{{ activity.title }}:</strong><br>{{ activity.description }}<br><br><strong>Organization:</strong> <a href="activity.org.website">{{ activity.org }}</a><br><br></li>
+          <li><strong>{{ activity.title }}:</strong><br>{{ activity.description }}<br><br><strong>Organization:</strong> <a href="{{ activity.org.website }}">{{ activity.org }}</a><br><br></li>
         {% endfor %}
       </ul>
     {% endif %}

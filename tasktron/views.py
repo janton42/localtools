@@ -40,7 +40,7 @@ def create_task(request):
 
 # READ items in the db
 @login_required
-@permission_required('tasktron.view_task')
+@permission_required('tasktron.view_task', raise_exception=True)
 def view_tasks(request):
     t = datetime.date(datetime.now()).isoformat()
     user_tasks = Task.objects.all() \

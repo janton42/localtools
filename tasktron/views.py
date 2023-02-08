@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 from datetime import datetime
 
@@ -23,6 +23,7 @@ from .models import Task
 
 # CREATE an item in the db
 @login_required
+@permission_required('tasktron.add_task')
 def create_task(request):
     if request.method == 'POST':
         form = CreateTaskForm(request.POST)
@@ -39,6 +40,7 @@ def create_task(request):
 
 # READ items in the db
 @login_required
+@permission_required('tasktron.view_task', raise_exception=True)
 def view_tasks(request):
     t = datetime.date(datetime.now()).isoformat()
     user_tasks = Task.objects.all() \
@@ -62,6 +64,7 @@ def view_tasks(request):
 
 # UPDATE an item in the db
 @login_required
+@permission_required('tasktron.change_task')
 def update_task(request, id):
     task = Task.objects.all() \
         .filter(user=request.user) \
@@ -88,6 +91,7 @@ def update_task(request, id):
 
 # DELETE an item from the db
 @login_required
+@permission_required('tasktron.delete_task')
 def delete_task(request, id):
     task = Task.objects.all() \
         .filter(user=request.user) \

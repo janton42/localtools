@@ -42,10 +42,21 @@
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+            {% if perms.tasktron %}
               <li><a href="{% url 'tasktron:view_tasks' %}">Tasktron</a></li>
+            {% endif %}
+            {% if perms.informedvoter %}
               <li><a href="{% url 'informedvoter:index' %}">Informed Voter</a></li>
+             {% endif %}
+            {% if perms.resume_parser %}
               <li><a href="{% url 'resume_parser:index' %}">Resume Parser</a></li>
+            {% endif %}
+            {% if perms.rates %}
               <li><a href="{% url 'rates:index' %}">Rate Recommender</a></li>
+            {% endif %}
+            {% if user.is_superuser %}
+               <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
+            {% endif %}
             </ul>
             </li>
             <li role="presentation" class="dropdown">
@@ -94,13 +105,12 @@
     <footer class="footer">
       <div class="container">
           {%  if user.is_authenticated %}
-<p class="text-muted">Logged in as {{ user.username }}</p>
-              {% if user.is_superuser %}
-                <p class="text-muted">You are an <a href="{% url 'admin:index' %}">Admin</a></p>
-
-                {% endif %}
-          {% endif %}
-
+    <p class="text-muted">Logged in as
+        {% if user.is_superuser %}
+        </s>uperuser
+            {% endif %}
+            {{ user.username }}</p>
+            {% endif %}
         <p class="text-muted"></p>
       </div>
     </footer>

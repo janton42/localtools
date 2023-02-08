@@ -1,16 +1,93 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
 
-  <div class="centered-content">
+  <div class="container">
     {% if user.is_authenticated %}
       <h2>Welcome, {{ user.first_name }}!</h2>
-
-      <p>This is your personal homepage for internal tools. Have fun.</p>
     {% if user.is_superuser %}
+      <p>This is your personal homepage for internal tools. Have fun.</p>
+
         <p>Your current resume is <a href="{% url 'resume:index' %}">here</a></p>
         {% endif %}
+        <p>Here's what you have access to:</p>
+        <div class="container">
+        <div class="row">
+        {% if perms.tasktron %}
+            <div class="col-sm-3">
+            <div class="card">
+            <img class="card-img-top" src="{% static '/images/tasktron_logo.svg' %}">
+              <div class="card-block">
+                <div class="card-body">
+                <h5 class="card-title">Tasktron</h5>
+                <h6 class="card-subtitle mb-2 text-muted">A simple task manager.</h6>
+                <p class="card-text">Seriously simple task management. Users create, read, update, and delete tasks. Super.
+                <div class="card-footer">
+                    <a href="{% url 'tasktron:view_tasks' %}" class="btn btn-primary">Go!</a>
+                </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        {% endif %}
+        {% if perms.informedvoter %}
+            <div class="col-sm-3">
+            <div class="card">
+            <img class="card-img-top" src="{% static '/images/informedvoter_logo.svg' %}">
+              <div class="card-body">
+                <h5 class="card-title">Informed Voter</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Your civic duty.</h6>
+                  <p class="card-text">A localized aggregator of information relevant to voting Americans.
+                  Addresses are used to show details on elections, candidates, their funding sources,
+                  business dealings, organizational involvement, and more!</p>
+                <div class="card-footer">
+                  <a href="{% url 'informedvoter:index' %}" class="btn btn-primary">Go!</a>
+                </div>
+                </div>
+            </div>
+            </div>
+        {% endif %}
+        {% if perms.rates %}
+            <div class="col-sm-3">
+            <div class="card" >
+            <img class="card-img-top" src="{% static '/images/rate_recommender_logo.svg' %}" >
+              <div class="card-body">
+                <h5 class="card-title">Rate Recommender</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Global pay equity.</h6>
+                <p class="card-text">A tool for recommending pay rates for different regions. Given a skillset, a source
+                country, a target coutnry, and a pay rate for that skillset in the source country,
+                 Rate Recommender returns a pay rate range that is roughly equivalent in the target country.</p>
+
+                  <div class="card-footer">
+                  <a href="{% url 'rates:index' %}" class="btn btn-primary">Go!</a>
+                  </div>
+                      <br>
+              </div>
+            </div>
+            </div>
+        {% endif %}
+        {% if perms.ratresume_parser %}
+            <div class="col-sm-3">
+            <div class="card">
+            <img class="card-img-top" src="{% static '/images/resume_parser_logo.svg' %}">
+              <div class="card-body">
+                <h5 class="card-title">Tasktron</h5>
+                <h6 class="card-subtitle mb-2 text-muted">AI algorithm for reading resumes.</h6>
+                  <p class="card-text">A tool for parsing resumes into a database. Currently, the algorithm is capable
+                      of labeling bullet statements, and proper names with an accuracy of over 90%.
+                  <div class="card-footer">
+                    <a href="{% url 'resume_parser:index' %}" class="btn btn-primary">Go!</a>
+                    </div>
+              </div>
+            </div>
+            </div>
+        {% endif %}
+        </div>
+        </div>
+        <br><br>
+        <p>** Demo apps can also be accessed in the top navbar under "Toolbox" at anytime.</p>
     {% else %}
       <h2>Welcome!</h2>
 

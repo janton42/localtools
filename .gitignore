@@ -137,3 +137,5 @@ uploads/
 *.csv
 *.pdf
 output/
+
+*.xml

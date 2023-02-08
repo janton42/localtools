@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'localtools.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'localtools',
+        'NAME': 'janton42$localtools',
         'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASSWORD'),
         'HOST': 'janton42.mysql.pythonanywhere-services.com',

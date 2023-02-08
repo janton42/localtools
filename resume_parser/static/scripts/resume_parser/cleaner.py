@@ -27,19 +27,19 @@ companies = company_list.trimmed_name.unique()
 
 def remove_stopwords(text: object) -> object:
     text = ''.join([word for word in text if word not in string.punctuation])
-    tokens = re.split('\W+', text)
+    tokens = re.split(r'\W+', text)
     text = [word for word in tokens if word not in stopwords]
     return text
 
 
 def get_stems(tokenized_text):
     text = [ps.stem(word) for word in tokenized_text]
-    return tokenized_text
+    return text
 
 
 def count_words(text):
     text = ''.join([word for word in text if word not in string.punctuation])
-    tokens = re.split('\W+', text)
+    tokens = re.split(r'\W+', text)
     return len(tokens)
 
 

@@ -3,6 +3,7 @@ import os
 import string
 import warnings
 import json
+import nltk
 from datetime import datetime
 
 import joblib

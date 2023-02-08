@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 
 # from .forms import
@@ -16,7 +16,7 @@ from django.urls import reverse
 # from .top_level.package_directory.script_name import ClassName
 
 # These pages are accessible without a login.
-
+@login_required
 def index(request):
     return render(request, 'informedvoter/index.html')
 

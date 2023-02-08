@@ -165,7 +165,7 @@ RESUME_OUT_PATH = os.path.join(BASE_DIR, 'resume_parser/static/output/')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+DEFAULT_FROM_EMAIL = 'jantonstock@gmail.com'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 

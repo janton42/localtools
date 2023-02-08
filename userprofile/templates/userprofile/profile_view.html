@@ -10,10 +10,12 @@
     <p>Last Name: {{ user.last_name}}</p>
     <p>Email: {{ user.email }}</p>
     <p>Nickname: {{ profile.nickname }}</p>
+        <button type="button" onclick="location.href='{% url 'userprofile:update_profile' %}'">Change Nickname</button>
+
     {% endfor %}
     {% else %}
       <p>You haven't completed your profile!</p>
-      <a href="{% url 'userprofile:complete_profile' %}">Complete Profile</a>
+      <button type="button" onclick="location.href='{% url 'userprofile:update_profile' %}'">Change Nickname</button>
     {% endif %}
   </div>
 

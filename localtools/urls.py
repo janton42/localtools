@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,6 +29,4 @@ urlpatterns = [
     path('resume_parser/', include('resume_parser.urls')),
     path('tasktron/', include('tasktron.urls')),
     path('admin/', admin.site.urls, name='admin'),
-    path('login/', auth_views.LoginView.as_view(template_name='userprofile/login.html'),name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='userprofile/logout.html'),name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

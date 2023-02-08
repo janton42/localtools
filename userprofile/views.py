@@ -5,10 +5,11 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from .forms import UserRegistrationForm, CompleteProfileForm
+from .forms import UserRegistrationForm, CompleteProfileForm, UserPasswordChangeForm
 
 # Import any models needed for views. Note: all views accessing db should require login
 from .models import Profile
+
 
 # Import other python packages, includes ones you wrote. "script_name" is the name of the .py file
 # containing ClassName, which is the desired import
@@ -21,8 +22,9 @@ from .models import Profile
 def home(request):
     return render(request, 'home.html')
 
+
 def register(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -35,16 +37,18 @@ def register(request):
     context = {'form': form}
     return render(request, 'userprofile/register.html', context)
 
+
 # All views below require login
 
 # MOVE TO userprofile app
 @login_required
 def profile_view(request):
-    user_profile = Profile.objects.all()\
-    .filter(user=request.user)\
-    .values()
-    context = { 'user_profile': user_profile }
+    user_profile = Profile.objects.all() \
+        .filter(user=request.user) \
+        .values()
+    context = {'user_profile': user_profile}
     return render(request, 'userprofile/profile_view.html', context)
+
 
 @login_required
 def complete_profile(request):
@@ -57,7 +61,45 @@ def complete_profile(request):
             return redirect(reverse('userprofile:profile_view'))
     else:
         form = CompleteProfileForm()
-    context = { 'form': form }
+    context = {'form': form}
     return render(request, 'userprofile/complete_profile.html', context)
 
-# MOVE TO fileprocessing app.
+
+@login_required
+def password_change(request):
+    if request.method == 'POST':
+        form = UserPasswordChangeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('userprofile:password_change_done'))
+    else:
+        form = UserPasswordChangeForm()
+    context = {'form': form}
+    return render(request, 'userprofile/password_change.html', context)
+
+
+@login_required
+def password_change_done(request):
+    return render(request, 'userprofile/password_change_done.html')
+
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = CompleteProfileForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect(reverse('userprofile:profile_view'))
+    else:
+        form = CompleteProfileForm(initial = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+            'nickname': request.user.profile.nickname,
+        })
+    context = {
+        'form': form,
+    }
+    return render(request, 'userprofile/update_profile.html', context)

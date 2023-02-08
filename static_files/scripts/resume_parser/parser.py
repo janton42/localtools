@@ -1,27 +1,37 @@
 #!/usr/bin/python3
+import json
 import os
+import re
 import string
 import warnings
-import json
 from datetime import datetime
 
 import joblib
+import nltk
 import pandas as pd
 from django.conf import settings
-from nltk.parse.corenlp import CoreNLPServer, CoreNLPParser
+from django.core import serializers
 from pdfminer.high_level import extract_text
 from striprtf.striprtf import rtf_to_text
-
-from django.core import serializers
-
-
-
-from time import sleep
-from .cleaner import create_features
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
 
+# Constants and instantiations
+stopwords = nltk.corpus.stopwords.words('english')
+ps = nltk.PorterStemmer()
+wn = nltk.WordNetLemmatizer()
+verb_tags = ['VB', 'VBG', 'VBD', 'VBN', 'VBN-HL', 'VERB']
+adj_tags = ['JJ', 'JJR', 'JJS']
+symbol_tags = ['SYM']
+list_tags = ['LS']
+determiner_tags = ['DT']
+name_path = os.path.join(settings.ENTITIES_PATH, 'freq_names.csv')
+name_list = pd.read_csv(name_path)
+names = name_list.name.unique()
+company_path = os.path.join(settings.ENTITIES_PATH, 'companies.csv')
+company_list = pd.read_csv(company_path)
+companies = company_list.trimmed_name.unique()
 
 class ResumeParser(object):
     """Parses a user-input resume.
@@ -75,16 +85,11 @@ class ResumeParser(object):
         print('La Maquina lives!!!\t(ResumeParser instantiated.)')
         self.birth = datetime.now()
         self.name = str(name)
-        self.server = CoreNLPServer()
-        self.server.corenlp_options = ['-preload', 'ner']
-        self.server.java_options = ['-mx5g']
-        self.server.url = 'http://localhost:9000'
         self.death = None
         self.resume_out_path = None
         self.resume_file_ext = None
         self.resume_in_path = None
         self.resume_id = None
-        self.ner_tagger = None
         self.bullet_feature_headings = [
             'stopword_percentage',
             'word_count',
@@ -136,7 +141,7 @@ class ResumeParser(object):
             'number_percentage_trans',
             'proper_noun_percentage_trans'
         ]
-        self.keepers = keepers = [
+        self.keepers = [
             'Name',
             'Organization',
             'Date',
@@ -322,11 +327,7 @@ class ResumeParser(object):
         elif row['is_name'] == 1:
             return 'Name'
         else:
-            if len(row['line']) == 1:
-                return 'None'
-            else:
-                ents = self.ner_tagger.tag(row['line'].split())
-                return ents
+            return 'None'
 
     @staticmethod
     def count_named_ents(label: str) -> int:
@@ -363,8 +364,7 @@ class ResumeParser(object):
             further processin is needed to parse them, so relabeler
             returns the list of tuples untouched in such cases.
         """
-        if row['ents'] == 0 and row['label'] == 'Bullet' \
-                or row['label'] == 'Name':
+        if row['ents'] == 0 and row['label'] == 'Bullet' or row['label'] == 'Name':
             return row['label']
         elif row['ents'] == 1:
             label = [ent[1].capitalize() for ent in row['label'] if ent[1] != 'O']
@@ -510,6 +510,148 @@ class ResumeParser(object):
         return status
 
 
+def remove_stopwords(text: object) -> object:
+    text = ''.join([word for word in text if word not in string.punctuation])
+    tokens = re.split(r'\W+', text)
+    text = [word for word in tokens if word not in stopwords]
+    return text
+
+
+def get_stems(tokenized_text):
+    text = [ps.stem(word) for word in tokenized_text]
+    return text
+
+
+def count_words(text):
+    text = ''.join([word for word in text if word not in string.punctuation])
+    tokens = re.split(r'\W+', text)
+    return len(tokens)
+
+
+def count_verbs(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] in verb_tags])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_adj(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] in adj_tags])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_nums(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] == 'CD'])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_proper_nouns(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] == 'NNP'])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_stopwords(line: str) -> int:
+    count = sum([1 for word in nltk.word_tokenize(line) if word in nltk.corpus.stopwords.words('english')])
+    return round(count / (len(line) - line.count(' ')), 3) * 100 if len(line) > 0 else 0
+
+
+def count_punct(line: str) -> int:
+    count = sum([1 for char in line if char in string.punctuation])
+    return round(count / (len(line) - line.count(' ')), 3) * 100 if len(line) > 0 else 0
+
+
+def count_symbols(line: str) -> int:
+    count = sum([1 for pair in line if pair[1] in symbol_tags])
+    return round(count / (len(line)), 3) * 100 if len(line) > 0 else 0
+
+
+def count_list_item_markers(line: str) -> int:
+    count = sum([1 for pair in line if pair[1] in list_tags])
+    return round(count / (len(line)), 3) * 100 if len(line) > 0 else 0
+
+
+def count_determiners(line: str) -> int:
+    count = sum([1 for pair in line if pair[1] in determiner_tags])
+    return round(count / (len(line)), 3) * 100 if len(line) > 0 else 0
+
+
+def count_names(line: str) -> int:
+    count = sum([1 for name in line if name in names])
+    return count
+
+
+def count_companies(line: str) -> int:
+    count = sum([1 for company in line if company in companies])
+    return count
+
+
+def create_features(data):
+    # Remove stop words
+    data['line_nostop'] = data['line'].apply(lambda x: remove_stopwords(x.lower()))
+
+    # Collect the word stems
+    data['line_stemmed'] = data['line_nostop'].apply(lambda x: get_stems(x))
+
+    # Find line length
+    data['line_length'] = data['line'].apply(lambda x: len(x) - x.count(' '))
+
+    # Find word count per line
+    data['word_count'] = data['line'].apply(lambda x: count_words(x))
+
+    # Tag each line with parts of speach
+    data['tagged_line'] = data['line'].apply(lambda x: nltk.pos_tag(nltk.word_tokenize(x)))
+
+    # Find the percentage of verbs in each line
+    data['verb_percentage'] = data['tagged_line'].apply(lambda x: count_verbs(x))
+
+    # Find the percentage of adjectives in each line
+    data['adj_percentage'] = data['tagged_line'].apply(lambda x: count_adj(x))
+
+    # Find the percentage of stop words in each line
+    data['stopword_percentage'] = data['line'].apply(lambda x: count_stopwords(x))
+
+    # Find the percentage of punctuation in each line
+    data['punctuation_percentage'] = data['line'].apply(lambda x: count_punct(x))
+
+    # Find the percentage of numbers in each line
+    data['number_percentage'] = data['tagged_line'].apply(lambda x: count_nums(x))
+
+    # Find the percentage of numbers in each line
+    data['proper_noun_percentage'] = data['tagged_line'].apply(lambda x: count_proper_nouns(x))
+
+    # Count symbols in each line
+    data['symbol_count'] = data['tagged_line'].apply(lambda x: count_symbols(x))
+
+    # Count list item markers in each line
+    data['list_markers_count'] = data['tagged_line'].apply(lambda x: count_list_item_markers(x))
+
+    # Count determiners in each line
+    data['determiners_count'] = data['tagged_line'].apply(lambda x: count_determiners(x))
+
+    # Count names in each line
+    data['name_count'] = data['line_nostop'].apply(lambda x: count_names(x))
+
+    data['line_length_trans'] = data['line_length'].apply(lambda x: x ** (1 / 5))
+
+    data['word_count_trans'] = data['word_count'].apply(lambda x: x ** (1 / 3))
+
+    data['verb_percentage_trans'] = data['verb_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['adj_percentage_trans'] = data['adj_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['stopword_percentage_trans'] = data['stopword_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['punctuation_percentage_trans'] = data['punctuation_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['number_percentage_trans'] = data['number_percentage'].apply(lambda x: x ** (1 / 1))
+
+    data['proper_noun_percentage_trans'] = data['proper_noun_percentage'].apply(lambda x: x ** (1 / 1))
+
+    # Count company names in each line
+    data['company_count'] = data['line_nostop'].apply(lambda x: count_companies(x))
+
+    return data
+
+
+# MAIN FUNCTION CALL
 # move the call from views.py to here, so that it can be called in asnyc_task
 def read_resume(name: str, path_name: str, resume_id: int) -> object:
     """Reads a resume.
@@ -548,28 +690,11 @@ def read_resume(name: str, path_name: str, resume_id: int) -> object:
 
     # Read data back in (??)
     partial = pd.read_csv(parser.resume_out_path + parser.name + '_labeled_data.csv', sep=',')
-
-    # Start Stanford NLP Server
-    print('La Maquina needs more input!...\t(starting server for Stanford ner tagger)\n')
-    parser.server.start()
-    print('La Maquina is connected to the network...\t(server started)')
-
-    # Instantiate a NER tagger
-    print('La Maquina is learning more...\t(instantiating a Stanford ner tagger)')
-    parser.ner_tagger = CoreNLPParser(url='http://localhost:9000',
-                                      tagtype='ner')
-    print('La Maquina is ready to read more of your resume...')
-    # Rename unnamed column
-    print('La Maquina is labeling data...')
     partial.rename({'Unnamed: 0': 'doc_line'}, axis=1, inplace=True)
 
     # Label Named Entities using Stanford NER tagger
     partial['label'] = partial.apply(lambda x: parser.labeler(x), axis=1)
-    print('Data has been labeled.\nShutting down server...')
-
-    # Shutdown server
-    parser.server.stop()
-    print('Server shut down.')
+    # print('Data has been labeled.\nShutting down server...')
 
     # Count named entities.
     # Rationale:
@@ -578,10 +703,6 @@ def read_resume(name: str, path_name: str, resume_id: int) -> object:
     # if there are multiple tags, more processing is needed
     partial['ents'] = partial['label'].apply(lambda x: parser.count_named_ents(x))
     partial['label'] = partial.apply(lambda x: parser.relabeler(x), axis=1)
-
-    # Write out the data for reference
-    ner_labeled_data = parser.resume_out_path + parser.name + '_ner_labeled_data.csv'
-    partial.to_csv(ner_labeled_data)
 
     print('La Maquina is cleaning things up a bit more...')
     # Break apart the lines with multiple NER tags, by filtering
@@ -607,25 +728,25 @@ def read_resume(name: str, path_name: str, resume_id: int) -> object:
     loosies = parser.get_loosies(new_df)
 
     # Append the newly made DataFrame to the main DataFrame
-    main = pd.concat([partial, loosies], axis=0)
+    main_df = pd.concat([partial, loosies], axis=0)
 
     # Reset the index, so that the newly added rows have higher numbers
-    main.reset_index(drop=True, inplace=True)
+    main_df.reset_index(drop=True, inplace=True)
     # Since 'doc_line' reflects the line from the original document,
     # it can be used to reconstruct the order of the lines. Sorting
     # by it first brings the newly created rows to the proper place
     # on the page. Sorting next by 'm_index', which is the arbitrary
     # name given to the previously unnamed index, will then put the
     # lines in order with their local page neighbors.
-    main = main.rename_axis('m_index').sort_values(by=['doc_line', 'm_index'], ascending=[True, True])
+    main_df = main_df.rename_axis('m_index').sort_values(by=['doc_line', 'm_index'], ascending=[True, True])
     # Reset the index back to the original, and drop the old index
     # Now that the lines are in order locally how they were on the original page,
     # the index needs to be in normal order, or else the
     # resulting json will have illogical keys.
-    main.reset_index(drop=True, inplace=True)
+    main_df.reset_index(drop=True, inplace=True)
     # Write out the fully labeled data
     final_labeled_data = parser.resume_out_path + parser.name + '_final_labeled_data.csv'
-    main.to_csv(final_labeled_data)
+    main_df.to_csv(final_labeled_data)
 
     # Print confirmation message, and report how long the process took
     print('La Maquina has printed your results.')
@@ -633,8 +754,8 @@ def read_resume(name: str, path_name: str, resume_id: int) -> object:
     lifespan = parser.death - parser.birth
     print('La Maquina read your resume in {} seconds.'.format(lifespan))
     print('You\'re welcome for my service.')
-    main = main.to_json(orient='index')
-    return main
+    main_df = main_df.to_json(orient='index')
+    return main_df
 
 
 # make a hook for django_q to call after the task is finished

@@ -137,6 +137,3 @@ uploads/
 *.csv
 *.pdf
 output/
-
-# Pycharm stuff
-.idea/

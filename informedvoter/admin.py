@@ -56,7 +56,7 @@ class CommitteeAdmin(admin.ModelAdmin):
 
 
 class DealAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
+    list_display = ('title','date', 'description', 'organization', 'representative', 'rep_role')
     list_filter = ('title', 'description')
     search_fields = ('title', 'description')
 
@@ -74,9 +74,8 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 
 class RepresentativeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'party')
-    list_filter = ('name', 'party')
-    search_fields = ('name', 'party')
+    list_filter = ('name', 'party', 'offices')
+    search_fields = ('name', 'party', 'offices')
 
 
 admin.site.register(FileUpload, FileUploadAdmin)

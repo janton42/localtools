@@ -139,4 +139,4 @@ class Representative(models.Model):
 
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.party.abbreviation)
+        return '{} ({}) {}'.format(self.name, self.party.abbreviation, self.offices.all()[0].name)

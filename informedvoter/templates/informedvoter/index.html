@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
     <div class="container-fluid">
@@ -11,11 +13,10 @@
             <li><a href="#">Export</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="{% url 'informedvoter:voter_info' %}">Voter Info</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
+            <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
+            <li><a href="">Federal</a></li>
+            <li><a href="">State</a></li>
+            <li><a href="">Local</a></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li><a href="">Nav item again</a></li>
@@ -24,28 +25,28 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
+          <h1 class="page-header">District Dashboard</h1>
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
+              <h4>Picklejuice Pepperidge</h4>
+              <span class="text-muted">Senator</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <img src="{{ STATIC_PREFIX }}images/ap.png"  width="200" height="200" class="img-responsive">
+              <h4>Muffin Top Hopkins</h4>
+              <span class="text-muted">Senator</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
+              <h4>Giggleberry Goodnight</h4>
+              <span class="text-muted">Congressman</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <img src="{{ STATIC_PREFIX }}images/bd.png"  width="200" height="200" class="img-responsive">
+              <h4>Puddingskin Pancake</h4>
+              <span class="text-muted">State Senator</span>
             </div>
           </div>
 

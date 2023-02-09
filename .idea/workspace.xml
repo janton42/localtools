@@ -6,7 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="28f5224e-6a62-4b0d-927a-9ed8e14c96c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/templates/informedvoter/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/templates/informedvoter/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/templates/informedvoter/voter_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/templates/informedvoter/voter_info.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +95,7 @@
       <workItem from="1675839071477" duration="5654000" />
       <workItem from="1675872004551" duration="156000" />
       <workItem from="1675872178950" duration="11715000" />
-      <workItem from="1675895561747" duration="861000" />
+      <workItem from="1675895561747" duration="24726000" />
     </task>
     <servers />
   </component>

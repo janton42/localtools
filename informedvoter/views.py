@@ -1,9 +1,13 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
+
+from django.utils import timezone
+from django.views.generic.detail import DetailView
 
 from .forms import UploadFileForm
 
@@ -18,6 +22,7 @@ from .models import Representative, Office, Party, District, Committee, FileUplo
 
 # These pages are accessible without a login.
 @login_required
+@permission_required('informedvoter.view_representative', raise_exception=True)
 def index(request):
     offices = Office.objects.all()
     contributions = Deal.objects.all().filter(type='C')
@@ -36,6 +41,7 @@ def index(request):
 
 # Upload a file
 @login_required
+@permission_required('informedvoter.add_fileupload', raise_exception=True)
 def upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -53,6 +59,7 @@ def upload(request):
 
 
 @login_required
+@permission_required('informedvoter.view_representative', raise_exception=True)
 def federal(request):
     offices = Office.objects.all().filter(level='F')
     parties = Party.objects.all()
@@ -70,6 +77,7 @@ def federal(request):
 
 
 @login_required
+@permission_required('informedvoter.view_representative', raise_exception=True)
 def state(request):
     offices = Office.objects.all().filter(level='S')
     parties = Party.objects.all()
@@ -87,6 +95,7 @@ def state(request):
 
 
 @login_required
+@permission_required('informedvoter.view_representative', raise_exception=True)
 def local(request):
     offices = Office.objects.all().filter(level='L')
     parties = Party.objects.all()
@@ -104,5 +113,20 @@ def local(request):
 
 
 @login_required
+@permission_required('informedvoter.view_representative', raise_exception=True)
 def voter_info(request):
     return render(request, 'informedvoter/voter_info.html')
+
+
+class RepresentativeDetailView(DetailView, LoginRequiredMixin):
+    model = Representative
+    template_name = 'informedvoter/representative_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['contributions'] = Deal.objects.all().filter(type='C')
+        context['other_deals'] = Deal.objects.all().exclude(type='C')
+        context['committees'] = Committee.objects.all()
+        context['now'] = timezone.now()
+
+        return context

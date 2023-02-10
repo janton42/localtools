@@ -9,4 +9,5 @@ urlpatterns = [
     path('federal/', views.federal, name='federal'),
     path('state/', views.state, name='state'),
     path('local/', views.local, name='local'),
+    path('representative/<int:pk>/', views.RepresentativeDetailView.as_view(), name='representative_detail'),
 ]

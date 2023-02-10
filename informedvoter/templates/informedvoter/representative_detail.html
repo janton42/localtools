@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ object.name }}</h1>
+
+    <h3>{{ object.urls }}</h3>
+
+    <p>Date: {{ now|date }}</p>
+{% endblock %}

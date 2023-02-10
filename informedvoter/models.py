@@ -12,8 +12,15 @@ class FileUpload(models.Model):
         return '{}: {}'.format(self.user, self.title)
 
 
+class Zipcode(models.Model):
+    zipcode = models.CharField(max_length=5, unique=True)
+
+    def __str__(self):
+        return '{}'.format(self.zipcode)
+
 class District(models.Model):
-    name = models.CharField(max_length=50)\
+    name = models.CharField(max_length=50)
+    zipcode = models.ManyToManyField('Zipcode', blank=True, default=None)
 
     def __str__(self):
         return f'{self.name}'

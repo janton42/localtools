@@ -68,6 +68,24 @@ def federal(request):
     }
     return render(request, 'informedvoter/federal.html', context)
 
+
+@login_required
+def state(request):
+    offices = Office.objects.all().filter(level='S')
+    parties = Party.objects.all()
+    contributions = Deal.objects.all().filter(type='C')
+    other_deals = Deal.objects.all().exclude(type='C')
+    committees = Committee.objects.all()
+    context = {
+        'offices': offices,
+        'parties': parties,
+        'contributions': contributions,
+        'other_deals': other_deals,
+        'committees': committees,
+    }
+    return render(request, 'informedvoter/state.html', context)
+
+
 @login_required
 def voter_info(request):
     return render(request, 'informedvoter/voter_info.html')

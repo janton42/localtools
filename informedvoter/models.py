@@ -92,7 +92,7 @@ class Deal(models.Model):
         ('O', 'Other'),
     )
     date = models.DateField()
-    amount = models.DecimalField(max_digits=17, decimal_places=2)
+    amount = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     representative = models.ForeignKey('Representative', on_delete=models.CASCADE, blank=True, default=None)
@@ -139,4 +139,5 @@ class Representative(models.Model):
 
 
     def __str__(self):
-        return '{} ({}) {}'.format(self.name, self.party.abbreviation, self.offices.all()[0].name)
+        return '{} ({}) {}'.format(self.name, self.party.abbreviation, self.offices.all()[0].name
+                                   )

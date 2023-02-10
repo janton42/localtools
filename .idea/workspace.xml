@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="28f5224e-6a62-4b0d-927a-9ed8e14c96c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/informedvoter/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/informedvoter/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/templates/informedvoter/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/templates/informedvoter/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tasktron/templates/tasktron/view_tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/tasktron/templates/tasktron/view_tasks.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +96,9 @@
       <workItem from="1675839071477" duration="5654000" />
       <workItem from="1675872004551" duration="156000" />
       <workItem from="1675872178950" duration="11715000" />
-      <workItem from="1675895561747" duration="27170000" />
+      <workItem from="1675895561747" duration="32075000" />
+      <workItem from="1675982737434" duration="109000" />
+      <workItem from="1675982873236" duration="12956000" />
     </task>
     <servers />
   </component>

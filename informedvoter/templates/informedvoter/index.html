@@ -7,178 +7,250 @@
       <div class="row">
         <div class="col-sm-2 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
-            <li><a href="">Federal</a></li>
+            <li><a href="#Already+There+Genius">Overview</a></li>
+            <li><a href="{% url 'informedvoter:federal' %}">Federal</a></li>
             <li><a href="">State</a></li>
             <li><a href="">Local</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
+            <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
             <li><a href="">One more nav</a></li>
             <li><a href="">Another nav item</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">District Dashboard</h1>
+          <h1 class="page-header">Overview Dashboard</h1>
 
-          <div class="row placeholders">
+            <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
-              <h4>Picklejuice Pepperidge</h4>
-              <span class="text-muted">Senator</span>
-            </div>
+             {% for office in offices %}
+                {% if office.name == 'President of the United States' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                               ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+             {% endfor %}
+             </div>
+
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="{{ STATIC_PREFIX }}images/ap.png"  width="200" height="200" class="img-responsive">
-              <h4>Muffin Top Hopkins</h4>
-              <span class="text-muted">Senator</span>
+                {% for office in offices %}
+                {% if office.name == 'Vice President of the United States' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
-              <h4>Giggleberry Goodnight</h4>
-              <span class="text-muted">Congressman</span>
+                {% for office in offices %}
+                {% if office.name == 'U.S. Senator' %}
+                   <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/bd.png"  width="200" height="200" class="img-responsive">
-              <h4>Puddingskin Pancake</h4>
-              <span class="text-muted">State Senator</span>
+              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
+                {% for office in offices %}
+                {% if office.name == 'U.S. Senator' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
             </div>
           </div>
 
-          <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
+            <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
+             {% for office in offices %}
+                {% if office.name == 'U.S. Representative' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
+             </div>
+
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="{{ STATIC_PREFIX }}images/ap.png"  width="200" height="200" class="img-responsive">
+                {% for office in offices %}
+                {% if office.name == 'Governor of California' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
+                {% for office in offices %}
+                {% if office.name == 'Lieutenant Governor of California' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="{{ STATIC_PREFIX }}images/bd.png"  width="200" height="200" class="img-responsive">
+                {% for office in offices %}
+                {% if office.name == 'San Mateo County Sheriff' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                                ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}</h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+
+                {% endfor %}
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm col-sm-offset-2">
+            <h2 class="sub-header">Contributions</h2>
+            <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Contributor</th>
+                  <th>Beneficiary</th>
+                  <th>Title</th>
                 </tr>
               </thead>
               <tbody>
+              {% for contrib in contributions %}
                 <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
+                  <td> {{ contrib.date }} </td>
+                  <td>{{ contrib.amount }}</td>
+                    {% if contrib.rep_role == 'G' %}
+                       <td>{{ contrib.representative.name }}</td>
+                        <td>{{ contrib.organization.name }}</td>
+                        {% else %}
+                        <td>{{ contrib.organization.name }}</td>
+                        <td>{{ contrib.representative.name }}</td>
+                    {% endif %}
+                  <td>{{ contrib.title }}</td>
                 </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
+              {% endfor %}
               </tbody>
             </table>
-          </div>
+            </div>
         </div>
-      </div>
+    </div>
+    <div class="row">
+          <div class="col-sm col-sm-offset-2">
+            <h2 class="sub-header">Other Deals</h2>
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Contributor</th>
+                  <th>Beneficiary</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for deal in other_deals %}
+                <tr>
+                  <td> {{ deal.date }} </td>
+                  <td>{{ deal.amount }}</td>
+                    {% if deal.rep_role == 'G' %}
+                       <td>{{ deal.representative.name }}</td>
+                        <td>{{ deal.organization.name }}</td>
+                        {% else %}
+                        <td>{{ deal.organization.name }}</td>
+                        <td>{{ deal.representative.name }}</td>
+                    {% endif %}
+                  <td>{{ deal.title }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+          <div class="col-sm col-sm-offset-2">
+            <h2 class="sub-header">Committees</h2>
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Members</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for committee in committees %}
+                <tr>
+                  <td> {{ committee.name }} </td>
+                  <td>{{ committee.type }}</td>
+                    <td>
+                           {% for rep in committee.representative_set.all %}
+                                {{ rep.name }},
+                            {% endfor %}
+                    </td>
+                  <td>{{ deal.title }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            </div>
+        </div>
     </div>
 {% endblock %}

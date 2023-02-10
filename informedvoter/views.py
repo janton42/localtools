@@ -5,10 +5,11 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 
-# from .forms import
+from .forms import UploadFileForm
 
 # Import any models needed for views. Note: all views accessing db should require login
-# from .models import
+from .models import Representative, Office, Party, District, Committee, FileUpload, Deal
+
 
 # Import other python packages, includes ones you wrote. "script_name" is the name of the .py file
 # containing ClassName, which is the desired import
@@ -18,7 +19,20 @@ from django.urls import reverse
 # These pages are accessible without a login.
 @login_required
 def index(request):
-    return render(request, 'informedvoter/index.html')
+    offices = Office.objects.all()
+    contributions = Deal.objects.all().filter(type='C')
+    other_deals = Deal.objects.all().exclude(type='C')
+    parties = Party.objects.all()
+    committees = Committee.objects.all()
+    context = {
+        'offices': offices,
+        'contributions': contributions,
+        'parties': parties,
+        'other_deals': other_deals,
+        'committees': committees,
+    }
+    return render(request, 'informedvoter/index.html', context)
+
 
 # Upload a file
 @login_required
@@ -34,8 +48,25 @@ def upload(request):
             print(form.errors)
     else:
         form = UploadFileForm()
-    context = { 'form': form }
+    context = {'form': form}
     return render(request, 'informedvoter/upload.html', context)
+
+
+@login_required
+def federal(request):
+    offices = Office.objects.all().filter(level='F')
+    parties = Party.objects.all()
+    contributions = Deal.objects.all().filter(type='C')
+    other_deals = Deal.objects.all().exclude(type='C')
+    committees = Committee.objects.all()
+    context = {
+        'offices': offices,
+        'parties': parties,
+        'contributions': contributions,
+        'other_deals': other_deals,
+        'committees': committees,
+    }
+    return render(request, 'informedvoter/federal.html', context)
 
 @login_required
 def voter_info(request):

@@ -6,4 +6,5 @@ app_name = 'informedvoter'
 urlpatterns = [
     path('', views.index, name='index'),
     path('voter_info/', views.voter_info, name='voter_info'),
+    path('federal/', views.federal, name='federal'),
 ]

@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/informedvoter/templates/informedvoter/federal.html" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/templates/informedvoter/federal.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/informedvoter/templates/informedvoter/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/templates/informedvoter/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/informedvoter/templates/informedvoter/state.html" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/templates/informedvoter/state.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/informedvoter/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/informedvoter/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/informedvoter/views.py" afterDir="false" />
     </list>
@@ -96,7 +97,7 @@
       <workItem from="1675872178950" duration="11715000" />
       <workItem from="1675895561747" duration="32075000" />
       <workItem from="1675982737434" duration="109000" />
-      <workItem from="1675982873236" duration="14481000" />
+      <workItem from="1675982873236" duration="14994000" />
     </task>
     <servers />
   </component>

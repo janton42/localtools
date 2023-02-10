@@ -8,4 +8,5 @@ urlpatterns = [
     path('voter_info/', views.voter_info, name='voter_info'),
     path('federal/', views.federal, name='federal'),
     path('state/', views.state, name='state'),
+    path('local/', views.local, name='local'),
 ]

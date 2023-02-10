@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="{% url 'informedvoter:index' %}">Overview</a></li>
+            <li><a href="{% url 'informedvoter:federal' %}">Federal</a></li>
+            <li><a href="{% url 'informedvoter:state' %}">State</a></li>
+            <li><a href="">Local</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Overview Dashboard</h1>
+
+            <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="{{ STATIC_PREFIX }}images/bd.png" width="200" height="200" class="img-responsive">
+             {% for office in offices %}
+                {% if office.name == 'San Mateo County Sheriff' %}
+                    <h4>{{ office.representative_set.values.0.name }}
+                        {% for party in parties %}
+                            {% if party.id == office.representative_set.values.0.party_id %}
+                               ({{ party.abbreviation }})
+                            {% endif %}
+                        {% endfor %}
+                        </h4>
+                     <span class="text-muted">{{ office.name }}</span>
+                {% endif %}
+             {% endfor %}
+             </div>
+            </div>
+            </div>
+      </div>
+
+      <div class="row">
+          <div class="col-sm col-sm-offset-2">
+            <h2 class="sub-header">Contributions</h2>
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Contributor</th>
+                  <th>Beneficiary</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for contrib in contributions %}
+                  {% for office in offices %}
+                      {% if office.representative_set.values.0.name == contrib.representative.name %}
+                        <tr>
+                  <td> {{ contrib.date }} </td>
+                  <td>{{ contrib.amount }}</td>
+                    {% if contrib.rep_role == 'G' %}
+                       <td>{{ contrib.representative.name }}</td>
+                        <td>{{ contrib.organization.name }}</td>
+                        {% else %}
+                        <td>{{ contrib.organization.name }}</td>
+                        <td>{{ contrib.representative.name }}</td>
+                    {% endif %}
+                  <td>{{ contrib.title }}</td>
+                </tr>
+                      {% endif %}
+                  {% endfor %}
+             {% endfor %}
+              </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+          <div class="col-sm col-sm-offset-2">
+            <h2 class="sub-header">Other Deals</h2>
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Contributor</th>
+                  <th>Beneficiary</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for deal in other_deals %}
+                  {% for office in offices %}
+                  {% if office.representative_set.values.0.name == deal.representative.name %}
+                <tr>
+                  <td> {{ deal.date }} </td>
+                  <td>{{ deal.amount }}</td>
+                    {% if deal.rep_role == 'G' %}
+                       <td>{{ deal.representative.name }}</td>
+                        <td>{{ deal.organization.name }}</td>
+                        {% else %}
+                        <td>{{ deal.organization.name }}</td>
+                        <td>{{ deal.representative.name }}</td>
+                    {% endif %}
+                  <td>{{ deal.title }}</td>
+                </tr>
+                  {% endif %}
+                  {% endfor %}
+              {% endfor %}
+              </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+          <div class="col-sm col-sm-offset-2">
+            <h2 class="sub-header">Committees</h2>
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Members</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for committee in committees %}
+                  {% for office in offices %}
+                      {% for rep in committee.representative_set.all %}
+                          {% if office.representative_set.values.0.name in rep.name %}
+                <tr>
+                  <td> {{ committee.name }} </td>
+                  <td>{{ committee.type }}</td>
+                    <td>
+                           {% for rep in committee.representative_set.all %}
+                                {{ rep.name }},
+                            {% endfor %}
+                    </td>
+                  <td>{{ deal.title }}</td>
+                </tr>
+                            {% endif %}
+                      {% endfor %}
+                  {% endfor %}
+              {% endfor %}
+              </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

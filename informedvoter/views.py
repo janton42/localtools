@@ -87,5 +87,22 @@ def state(request):
 
 
 @login_required
+def local(request):
+    offices = Office.objects.all().filter(level='L')
+    parties = Party.objects.all()
+    contributions = Deal.objects.all().filter(type='C')
+    other_deals = Deal.objects.all().exclude(type='C')
+    committees = Committee.objects.all()
+    context = {
+        'offices': offices,
+        'parties': parties,
+        'contributions': contributions,
+        'other_deals': other_deals,
+        'committees': committees,
+    }
+    return render(request, 'informedvoter/local.html', context)
+
+
+@login_required
 def voter_info(request):
     return render(request, 'informedvoter/voter_info.html')

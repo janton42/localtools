@@ -199,5 +199,6 @@ class RepresentativeDetailView(DetailView, LoginRequiredMixin):
         context['other_deals'] = Deal.objects.all().exclude(type='C')
         context['committees'] = Committee.objects.all()
         context['now'] = timezone.now()
+        context['zipcode'] = self.request.session['zipcode']
 
         return context

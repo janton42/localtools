@@ -41,7 +41,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -57,7 +57,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -73,7 +73,7 @@
                    <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -89,7 +89,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -108,7 +108,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -125,7 +125,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -141,7 +141,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -157,7 +157,7 @@
                     <h4>
                         {% for rep in reps %}
                             {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
+                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
                             {% endif %}
                         {% endfor %}
                     </h4>
@@ -169,112 +169,105 @@
           </div>
       </div>
     </div>
-      <div id="contributions" class="row">
-          <div class="col-sm">
-            <h2 class="sub-header">Contributions</h2>
-            <div class="table-responsive">
+    <div id="contributions" class="row">
+        <h2 class="sub-header">Contributions</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Contributor</th>
-                  <th>Beneficiary</th>
-                  <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Contributor</th>
+                    <th>Beneficiary</th>
+                    <th>Title</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for contrib in contributions %}
-                <tr>
-                  <td> {{ contrib.date }} </td>
-                  <td>{{ contrib.amount }}</td>
-                    {% if contrib.rep_role == 'G' %}
-                       <td>{{ contrib.representative.name }}</td>
-                        <td>{{ contrib.organization.name }}</td>
+                </thead>
+                <tbody>
+                {% for contrib in contributions %}
+                    <tr>
+                        <td> {{ contrib.date }} </td>
+                        <td>{{ contrib.amount }}</td>
+                        {% if contrib.rep_role == 'G' %}
+                            <td>{{ contrib.representative.name }}</td>
+                            <td>{{ contrib.organization.name }}</td>
                         {% else %}
-                        <td>{{ contrib.organization.name }}</td>
-                        <td>{{ contrib.representative.name }}</td>
-                    {% endif %}
-                  <td>{{ contrib.title }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                            <td>{{ contrib.organization.name }}</td>
+                            <td>{{ contrib.representative.name }}</td>
+                        {% endif %}
+                        <td>{{ contrib.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            </div>
         </div>
     </div>
     <div id="other-details" class="row">
-          <div class="col-sm col-sm-offset-2">
-            <h2 class="sub-header">Other Deals</h2>
-            <div class="table-responsive">
+        <h2 class="sub-header">Other Deals</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Contributor</th>
-                  <th>Beneficiary</th>
-                  <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Contributor</th>
+                    <th>Beneficiary</th>
+                    <th>Title</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for deal in other_deals %}
-                <tr>
-                  <td> {{ deal.date }} </td>
-                  <td>{{ deal.amount }}</td>
-                    {% if deal.rep_role == 'G' %}
-                       <td>{{ deal.representative.name }}</td>
-                        <td>{{ deal.organization.name }}</td>
+                </thead>
+                <tbody>
+                {% for deal in other_deals %}
+                    <tr>
+                        <td> {{ deal.date }} </td>
+                        <td>{{ deal.amount }}</td>
+                        {% if deal.rep_role == 'G' %}
+                            <td>{{ deal.representative.name }}</td>
+                            <td>{{ deal.organization.name }}</td>
                         {% else %}
-                        <td>{{ deal.organization.name }}</td>
-                        <td>{{ deal.representative.name }}</td>
-                    {% endif %}
-                  <td>{{ deal.title }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                            <td>{{ deal.organization.name }}</td>
+                            <td>{{ deal.representative.name }}</td>
+                        {% endif %}
+                        <td>{{ deal.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            </div>
         </div>
     </div>
     <div id="committees" class="row">
-          <div class="col-sm col-sm-offset-2">
-            <h2 class="sub-header">Committees</h2>
-            <div class="table-responsive">
+        <h2 class="sub-header">Committees</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Members</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Members</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for committee in committees %}
-                <tr>
-                  <td> {{ committee.name }} </td>
-                  <td>{{ committee.type }}</td>
-                    <td>
-                           {% for rep in committee.representative_set.all %}
+                </thead>
+                <tbody>
+                {% for committee in committees %}
+                    <tr>
+                        <td> {{ committee.name }} </td>
+                        <td>{{ committee.type }}</td>
+                        <td>
+                            {% for rep in committee.representative_set.all %}
                                 {{ rep.name }},
                             {% endfor %}
-                    </td>
-                  <td>{{ deal.title }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                        </td>
+                        <td>{{ deal.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            </div>
         </div>
     </div>
     <div id="other-info" class="row">
-          <div class="col-sm col-sm-offset-2">
-            <h2 class="sub-header">Other Info</h2>
-              <ul>
+        <h2 class="sub-header">Other Info</h2>
+        <ul>
             <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
             <li><a href="https://developers.google.com/civic-information">Google Civic</a></li>
             <li><a href="https://openstates.org/">Open States</a></li>
-              </ul>
-        </div>
+        </ul>
+    </div>
     </div>
 {% endblock %}

@@ -1,10 +1,146 @@
 {% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
+    <div class="container-fluid">
+      <div class="row">
+          <h1 class="page-header">{{ object.name }}</h1>
+          <p>Date: {{ now|date }}</p>
+          <p>Time: {{ now|time }}</p>
+          <br>
+          <br>
+          <br>
+      </div>
+      <div class="row placeholders">
+          <div class="col-xs-3 col-sm-3 placeholder">
+              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
+                  <h4>
+                      Current office: {{ office.name }}
+                  </h4>
+                   <span class="text-muted">{{ district.name }}</span>
+          </div>
+          </div>
+      <div id="contributions" class="row">
+          <h2 class="sub-header">Contributions</h2>
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                  <tr>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Contributor</th>
+                      <th>Beneficiary</th>
+                      <th>Title</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for contrib in contributions %}
+                      <tr>
+                          <td> {{ contrib.date }} </td>
+                          <td>{{ contrib.amount }}</td>
+                          {% if contrib.rep_role == 'G' %}
+                              <td>{{ contrib.representative.name }}</td>
+                              <td>{{ contrib.organization.name }}</td>
+                          {% else %}
+                              <td>{{ contrib.organization.name }}</td>
+                              <td>{{ contrib.representative.name }}</td>
+                          {% endif %}
+                          <td>{{ contrib.title }}</td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      <div id="other-details" class="row">
+          <h2 class="sub-header">Other Deals</h2>
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                  <tr>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Contributor</th>
+                      <th>Beneficiary</th>
+                      <th>Title</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for deal in other_deals %}
+                      <tr>
+                          <td> {{ deal.date }} </td>
+                          <td>{{ deal.amount }}</td>
+                          {% if deal.rep_role == 'G' %}
+                              <td>{{ deal.representative.name }}</td>
+                              <td>{{ deal.organization.name }}</td>
+                          {% else %}
+                              <td>{{ deal.organization.name }}</td>
+                              <td>{{ deal.representative.name }}</td>
+                          {% endif %}
+                          <td>{{ deal.title }}</td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      <div id="committees" class="row">
+          <h2 class="sub-header">Committees</h2>
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Members</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for committee in committees %}
+                      <tr>
+                          <td> {{ committee.name }} </td>
+                          <td>{{ committee.type }}</td>
+                          <td>
+                              {% for rep in committee.representative_set.all %}
+                                  {{ rep.name }},
+                              {% endfor %}
+                          </td>
+                          <td>{{ deal.title }}</td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      <div id="other-info" class="row">
+          <h2 class="sub-header">Other Info</h2>
+          <ul>
+              <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
+              <li><a href="https://developers.google.com/civic-information">Google Civic</a></li>
+              <li><a href="https://openstates.org/">Open States</a></li>
+          </ul>
+      </div>
+      <div class="row">
+        <a class="btn btn-default" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
+        (Current: {{ zipcode }})
+          <br>
+        <br>
+          <div class="row">
+              <div class="col-sm-3 col-xs-3">
+              <a class="btn btn-primary" href="{% url 'informedvoter:overview' %}">All</a><br>
+                </div>
+              <div class="col-sm-3 col-xs-3">
+              <a class="btn btn-primary" href="{% url 'informedvoter:federal' %}">Federal</a><br>
+                </div>
+                <div class="col-sm-3 col-xs-3">
+                  <a class="btn btn-primary" href="{% url 'informedvoter:state' %}">State</a><br>
+                </div>
+                <div class="col-sm-3 col-xs-3">
+                    <a class="btn btn-primary" href="{% url 'informedvoter:local' %}">Local</a><br>
+                </div>
+              </div>
+        </div>
+    </div>
 
-<h1>{{ object.name }}</h1>
-
-    <h3>{{ object.urls }}</h3>
-
-    <p>Date: {{ now|date }}</p>
 {% endblock %}

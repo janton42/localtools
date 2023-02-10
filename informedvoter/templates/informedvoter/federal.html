@@ -58,9 +58,9 @@
               <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
                 {% for office in offices %}
                 {% if office.name == 'U.S. Senator' %}
-                   <h4>{{ office.representative_set.values.0.name }}
+                   <h4>{{ office.representative_set.values.1.name }}
                         {% for party in parties %}
-                            {% if party.id == office.representative_set.values.0.party_id %}
+                            {% if party.id == office.representative_set.values.1.party_id %}
                                 ({{ party.abbreviation }})
                             {% endif %}
                         {% endfor %}

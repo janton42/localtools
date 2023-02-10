@@ -10,4 +10,5 @@ urlpatterns = [
     path('state/', views.state, name='state'),
     path('local/', views.local, name='local'),
     path('representative/<int:pk>/', views.RepresentativeDetailView.as_view(), name='representative_detail'),
+    path('Overview/', views.overview, name='overview'),
 ]

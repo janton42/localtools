@@ -8,5 +8,9 @@ class UploadFileForm(forms.ModelForm):
         model = FileUpload
         fields = ['title', 'file']
 
+class ZipcodeForm(forms.Form):
+    zipcode = forms.CharField(max_length=5)
 
+class RepLookupForm(forms.Form):
+    rep = forms.CharField(max_length=100)
 

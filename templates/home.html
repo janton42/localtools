@@ -35,7 +35,7 @@
         {% if perms.informedvoter %}
             <div class="col-sm-3">
             <div class="card">
-            <img class="card-img-top" src="{% static '/images/informedvoter_logo.svg' %}">
+            <a href="{% url 'informedvoter:index' %}"><img class="card-img-top" src="{% static '/images/informedvoter_logo.svg' %}"></a>
               <div class="card-body">
                 <h5 class="card-title">Informed Voter</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Your civic duty.</h6>

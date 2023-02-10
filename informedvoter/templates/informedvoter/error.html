@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <h1>Error</h1>
+        <p>I'm disappointed in you, us, and the whole system...</p>
+        <p>But I'm not going to tell you what you did wrong.</p>
+        <p>That's for you to figure out.</p>
+        <p>But I will tell you that you're not supposed to be here.</p>
+        <p>So, please, go away.</p>
+        <p>{{ error }}</p>
+        <p>{{ explanation }}</p>
+    {% endif %}
+
+{% endblock %}

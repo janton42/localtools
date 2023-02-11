@@ -35,10 +35,12 @@
         </div>
 
         <div id="reps" class="row">
+
             {% for rep in reps %}
-                <div class="col-sm-3">
-                    <div class="card">
-                        <img src="{{ STATIC_PREFIX }}images/{{ rep.pic }}.png" height="auto" class="card-img-top">
+                <div class="col-xs col-sm-2">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                        <img src="{{ STATIC_PREFIX }}images/{{ rep.pic }}.png" style="max-width: 100px; max-height: 100px; padding: 2px;" class="card-img-top">
                         <div class="card-body">
                             <a href="{% url 'informedvoter:representative_detail' rep.id %}">
                                 <h5 class="card-title">{{ rep.name }}</h5>
@@ -49,9 +51,11 @@
                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}" class="btn btn-primary">View</a>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
+
         </div>
 
 

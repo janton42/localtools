@@ -3,18 +3,10 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
-    <div class="container-fluid">
-      <div class="row">
-          <h1 class="page-header">{{ object.name }}</h1>
-          <p>Date: {{ now|date }}</p>
-          <p>Time: {{ now|time }}</p>
-          <br>
-          <br>
-          <br>
-      </div>
-      <div class="col-sm-4">
-                    <div class="card">
-                        <img src="{{ STATIC_PREFIX }}images/{{ object.pic }}.png" height="auto" class="card-img-top">
+       <div class="col-xs col-sm-2">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                        <img src="{{ STATIC_PREFIX }}images/{{ object.pic }}.png" style="max-height: 100px; max-width: 100px;" class="card-img-top">
                         <div class="card-body">
                                 <h5 class="card-title">{{ object.name }}</h5>
 
@@ -26,7 +18,9 @@
 
                             <p class="card-text">{{ object.party.name }}
                             <div class="card-footer">
+                            <p> <small>Data Retreived on {{ now|date }} at {{ now|time }}</p>
                             </div>
+                        </div>
                         </div>
                     </div>
       </div>

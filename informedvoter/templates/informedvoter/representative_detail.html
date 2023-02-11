@@ -14,7 +14,7 @@
       </div>
       <div class="col-sm-4">
                     <div class="card">
-                        <img src="{{ STATIC_PREFIX }}images/df.png" height="auto" class="card-img-top">
+                        <img src="{{ STATIC_PREFIX }}images/{{ object.pic }}.png" height="auto" class="card-img-top">
                         <div class="card-body">
                                 <h5 class="card-title">{{ object.name }}</h5>
 
@@ -139,7 +139,7 @@
           </ul>
       </div>
       <div class="row">
-        <a class="btn btn-default" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
+        <a class="btn btn-primary" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
         (Current: {{ zipcode }})
           <br>
         <br>

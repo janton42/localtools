@@ -38,7 +38,7 @@
             {% for rep in reps %}
                 <div class="col-sm-3">
                     <div class="card">
-                        <img src="{{ STATIC_PREFIX }}images/df.png" height="auto" class="card-img-top">
+                        <img src="{{ STATIC_PREFIX }}images/{{ rep.pic }}.png" height="auto" class="card-img-top">
                         <div class="card-body">
                             <a href="{% url 'informedvoter:representative_detail' rep.id %}">
                                 <h5 class="card-title">{{ rep.name }}</h5>

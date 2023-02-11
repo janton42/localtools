@@ -143,6 +143,7 @@ class Representative(models.Model):
     channels = models.ManyToManyField('Channel', blank=True, default=None)
     offices = models.ManyToManyField('Office', blank=True, default=None)
     committees = models.ManyToManyField('Committee', blank=True, default=None)
+    pic = models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):

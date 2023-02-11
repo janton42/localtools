@@ -18,7 +18,7 @@
         {% if perms.tasktron %}
             <div class="col-sm-3">
             <div class="card">
-            <img class="card-img-top" src="{% static '/images/tasktron_logo.svg' %}">
+            <a href="{% url 'tasktron:view_tasks' %}"><img class="card-img-top" src="{% static '/images/tasktron_logo.svg' %}"></a>
               <div class="card-block">
                 <div class="card-body">
                 <h5 class="card-title">Tasktron</h5>
@@ -52,7 +52,7 @@
         {% if perms.rates %}
             <div class="col-sm-3">
             <div class="card" >
-            <img class="card-img-top" src="{% static '/images/rate_recommender_logo.svg' %}" >
+            <a href="{% url 'rates:index' %}"><img class="card-img-top" src="{% static '/images/rate_recommender_logo.svg' %}"></a>
               <div class="card-body">
                 <h5 class="card-title">Rate Recommender</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Global pay equity.</h6>
@@ -68,10 +68,10 @@
             </div>
             </div>
         {% endif %}
-        {% if perms.ratresume_parser %}
+        {% if perms.resume_parser %}
             <div class="col-sm-3">
             <div class="card">
-            <img class="card-img-top" src="{% static '/images/resume_parser_logo.svg' %}">
+            <a href="{% url 'resume_parser:index' %}"> <img class="card-img-top" src="{% static '/images/resume_parser_logo.svg' %}"></a>
               <div class="card-body">
                 <h5 class="card-title">Tasktron</h5>
                 <h6 class="card-subtitle mb-2 text-muted">AI algorithm that reads resumes.</h6>

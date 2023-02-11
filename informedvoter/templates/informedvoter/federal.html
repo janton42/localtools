@@ -4,11 +4,11 @@
 
 {% block content %}
     <div class="container-fluid">
-      <div class="row">
+      <div id="top" class="row">
         <div class="col-sm col-md-10 main">
           {% if zipcode %}
-            <h1 class="page-header">Federal Reps for Zipcode {{ zipcode }}</h1>
-               <a class="btn btn-default" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
+            <h1 class="page-header">All Reps for Zipcode {{ zipcode }}</h1>
+              <a class="btn btn-primary" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
         <br>
         <br>
               <div class="row">
@@ -32,200 +32,130 @@
             <h1 class="page-header">Dashboard</h1>
             <p class="lead">Please enter your zip code to get started.</p>
             {% endif %}
+        </div>
 
-            <div class="row placeholders">
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
-             {% for office in offices %}
-                {% if office.name == 'President of the United States' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-             {% endfor %}
-             </div>
+        <div id="reps" class="row">
+            {% for rep in reps %}
+                <div class="col-sm-3">
+                    <div class="card">
+                        <img src="{{ STATIC_PREFIX }}images/df.png" height="auto" class="card-img-top">
+                        <div class="card-body">
+                            <a href="{% url 'informedvoter:representative_detail' rep.id %}">
+                                <h5 class="card-title">{{ rep.name }}</h5>
+                            </a>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ rep.offices.values.0.name }}</h6>
+                            <p class="card-text">{{ rep.party.name }}
+                            <div class="card-footer">
+                                <a href="{% url 'informedvoter:representative_detail' rep.id %}" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/ap.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'Vice President of the United States' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
 
-                {% endfor %}
-            </div>
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'U.S. Senator' %}
-                   <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'U.S. Senator' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-          </div>
-
-            <div class="row placeholders">
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
-             {% for office in offices %}
-                {% if office.name == 'U.S. Representative' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                {{ rep.name }} ({{ rep.party.abbreviation }})
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-             </div>
-          </div>
-      </div>
-    </div>
-      <div id="contributions" class="row">
-          <div class="col-sm">
-            <h2 class="sub-header">Contributions</h2>
-            <div class="table-responsive">
+    <div id="contributions" class="row">
+        <h2 class="sub-header">Contributions</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Contributor</th>
-                  <th>Beneficiary</th>
-                  <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Contributor</th>
+                    <th>Beneficiary</th>
+                    <th>Title</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for contrib in contributions %}
-                <tr>
-                  <td> {{ contrib.date }} </td>
-                  <td>{{ contrib.amount }}</td>
-                    {% if contrib.rep_role == 'G' %}
-                       <td>{{ contrib.representative.name }}</td>
-                        <td>{{ contrib.organization.name }}</td>
+                </thead>
+                <tbody>
+                {% for contrib in contributions %}
+                    <tr>
+                        <td> {{ contrib.date }} </td>
+                        <td>{{ contrib.amount }}</td>
+                        {% if contrib.rep_role == 'G' %}
+                            <td>{{ contrib.representative.name }}</td>
+                            <td>{{ contrib.organization.name }}</td>
                         {% else %}
-                        <td>{{ contrib.organization.name }}</td>
-                        <td>{{ contrib.representative.name }}</td>
-                    {% endif %}
-                  <td>{{ contrib.title }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                            <td>{{ contrib.organization.name }}</td>
+                            <td>{{ contrib.representative.name }}</td>
+                        {% endif %}
+                        <td>{{ contrib.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            </div>
         </div>
     </div>
     <div id="other-details" class="row">
-          <div class="col-sm col-sm-offset-2">
-            <h2 class="sub-header">Other Deals</h2>
-            <div class="table-responsive">
+        <h2 class="sub-header">Other Deals</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Contributor</th>
-                  <th>Beneficiary</th>
-                  <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Contributor</th>
+                    <th>Beneficiary</th>
+                    <th>Title</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for deal in other_deals %}
-                <tr>
-                  <td> {{ deal.date }} </td>
-                  <td>{{ deal.amount }}</td>
-                    {% if deal.rep_role == 'G' %}
-                       <td>{{ deal.representative.name }}</td>
-                        <td>{{ deal.organization.name }}</td>
+                </thead>
+                <tbody>
+                {% for deal in other_deals %}
+                    <tr>
+                        <td> {{ deal.date }} </td>
+                        <td>{{ deal.amount }}</td>
+                        {% if deal.rep_role == 'G' %}
+                            <td>{{ deal.representative.name }}</td>
+                            <td>{{ deal.organization.name }}</td>
                         {% else %}
-                        <td>{{ deal.organization.name }}</td>
-                        <td>{{ deal.representative.name }}</td>
-                    {% endif %}
-                  <td>{{ deal.title }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                            <td>{{ deal.organization.name }}</td>
+                            <td>{{ deal.representative.name }}</td>
+                        {% endif %}
+                        <td>{{ deal.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            </div>
         </div>
     </div>
     <div id="committees" class="row">
-          <div class="col-sm col-sm-offset-2">
-            <h2 class="sub-header">Committees</h2>
-            <div class="table-responsive">
+        <h2 class="sub-header">Committees</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Members</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Members</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for committee in committees %}
-                <tr>
-                  <td> {{ committee.name }} </td>
-                  <td>{{ committee.type }}</td>
-                    <td>
-                           {% for rep in committee.representative_set.all %}
+                </thead>
+                <tbody>
+                {% for committee in committees %}
+                    <tr>
+                        <td> {{ committee.name }} </td>
+                        <td>{{ committee.type }}</td>
+                        <td>
+                            {% for rep in committee.representative_set.all %}
                                 {{ rep.name }},
                             {% endfor %}
-                    </td>
-                  <td>{{ deal.title }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                        </td>
+                        <td>{{ deal.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            </div>
         </div>
     </div>
+
     <div id="other-info" class="row">
-          <div class="col-sm col-sm-offset-2">
-            <h2 class="sub-header">Other Info</h2>
-              <ul>
+        <h2 class="sub-header">Other Info</h2>
+        <ul>
             <li><a href="{% url 'informedvoter:voter_info' %}">Election Info</a></li>
             <li><a href="https://developers.google.com/civic-information">Google Civic</a></li>
             <li><a href="https://openstates.org/">Open States</a></li>
-              </ul>
-        </div>
+        </ul>
+    </div>
+    </div>
     </div>
 {% endblock %}

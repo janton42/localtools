@@ -12,15 +12,24 @@
           <br>
           <br>
       </div>
-      <div class="row placeholders">
-          <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
-                  <h4>
-                      Current office: {{ office.name }}
-                  </h4>
-                   <span class="text-muted">{{ district.name }}</span>
-          </div>
-          </div>
+      <div class="col-sm-4">
+                    <div class="card">
+                        <img src="{{ STATIC_PREFIX }}images/df.png" height="auto" class="card-img-top">
+                        <div class="card-body">
+                                <h5 class="card-title">{{ object.name }}</h5>
+
+                                {% for office in object.offices.values %}
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        {{ office.name }}
+                                    </h6>
+                                {% endfor %}
+
+                            <p class="card-text">{{ object.party.name }}
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+      </div>
       <div id="contributions" class="row">
           <h2 class="sub-header">Contributions</h2>
           <div class="table-responsive">
@@ -36,6 +45,7 @@
                   </thead>
                   <tbody>
                   {% for contrib in contributions %}
+                      {% if contrib.representative.name == object.name %}
                       <tr>
                           <td> {{ contrib.date }} </td>
                           <td>{{ contrib.amount }}</td>
@@ -48,6 +58,7 @@
                           {% endif %}
                           <td>{{ contrib.title }}</td>
                       </tr>
+                      {% endif %}
                   {% endfor %}
                   </tbody>
               </table>
@@ -68,6 +79,7 @@
                   </thead>
                   <tbody>
                   {% for deal in other_deals %}
+                        {% if deal.representative.name == object.name %}
                       <tr>
                           <td> {{ deal.date }} </td>
                           <td>{{ deal.amount }}</td>
@@ -80,6 +92,7 @@
                           {% endif %}
                           <td>{{ deal.title }}</td>
                       </tr>
+                        {% endif %}
                   {% endfor %}
                   </tbody>
               </table>
@@ -98,6 +111,8 @@
                   </thead>
                   <tbody>
                   {% for committee in committees %}
+                      {% for rep in committee.representative_set.all %}
+                          {% if rep.name == object.name %}
                       <tr>
                           <td> {{ committee.name }} </td>
                           <td>{{ committee.type }}</td>
@@ -108,6 +123,8 @@
                           </td>
                           <td>{{ deal.title }}</td>
                       </tr>
+                            {% endif %}
+                          {% endfor %}
                   {% endfor %}
                   </tbody>
               </table>

@@ -4,11 +4,11 @@
 
 {% block content %}
     <div class="container-fluid">
-      <div class="row">
+      <div id="top" class="row">
         <div class="col-sm col-md-10 main">
           {% if zipcode %}
             <h1 class="page-header">All Reps for Zipcode {{ zipcode }}</h1>
-              <a class="btn btn-default" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
+              <a class="btn btn-primary" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
         <br>
         <br>
               <div class="row">
@@ -32,143 +32,29 @@
             <h1 class="page-header">Dashboard</h1>
             <p class="lead">Please enter your zip code to get started.</p>
             {% endif %}
+        </div>
 
-            <div class="row placeholders">
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
-             {% for office in offices %}
-                {% if office.name == 'President of the United States' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-             {% endfor %}
-             </div>
+        <div id="reps" class="row">
+            {% for rep in reps %}
+                <div class="col-sm-3">
+                    <div class="card">
+                        <img src="{{ STATIC_PREFIX }}images/df.png" height="auto" class="card-img-top">
+                        <div class="card-body">
+                            <a href="{% url 'informedvoter:representative_detail' rep.id %}">
+                                <h5 class="card-title">{{ rep.name }}</h5>
+                            </a>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ rep.offices.values.0.name }}</h6>
+                            <p class="card-text">{{ rep.party.name }}
+                            <div class="card-footer">
+                                <a href="{% url 'informedvoter:representative_detail' rep.id %}" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/ap.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'Vice President of the United States' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
 
-                {% endfor %}
-            </div>
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'U.S. Senator' %}
-                   <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'U.S. Senator' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-          </div>
-
-            <div class="row placeholders">
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/df.png" width="200" height="200" class="img-responsive">
-             {% for office in offices %}
-                {% if office.name == 'U.S. Representative' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-             </div>
-
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/ap.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'Governor of California' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/jg.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'Lieutenant Governor of California' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-            <div class="col-xs-3 col-sm-3 placeholder">
-              <img src="{{ STATIC_PREFIX }}images/bd.png"  width="200" height="200" class="img-responsive">
-                {% for office in offices %}
-                {% if office.name == 'San Mateo County Sheriff' %}
-                    <h4>
-                        {% for rep in reps %}
-                            {% if office.representative_set.values.0.name == rep.name %}
-                                 <a href="{% url 'informedvoter:representative_detail' rep.id %}">{{ rep.name }} ({{ rep.party.abbreviation }})</a>
-                            {% endif %}
-                        {% endfor %}
-                    </h4>
-                     <span class="text-muted">{{ office.name }}</span>
-                {% endif %}
-
-                {% endfor %}
-            </div>
-          </div>
-      </div>
-    </div>
     <div id="contributions" class="row">
         <h2 class="sub-header">Contributions</h2>
         <div class="table-responsive">
@@ -261,6 +147,7 @@
             </table>
         </div>
     </div>
+
     <div id="other-info" class="row">
         <h2 class="sub-header">Other Info</h2>
         <ul>
@@ -268,6 +155,7 @@
             <li><a href="https://developers.google.com/civic-information">Google Civic</a></li>
             <li><a href="https://openstates.org/">Open States</a></li>
         </ul>
+    </div>
     </div>
     </div>
 {% endblock %}

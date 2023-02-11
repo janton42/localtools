@@ -8,8 +8,10 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<title>Jeff Stock</title>
 {#  	<script src="https://use.fontawesome.com/382d19b8cb.js"></script>#}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/ie10-viewport-bug-workaround.css"/>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+{#    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css"/>#}
+{#    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/ie10-viewport-bug-workaround.css"/>#}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/>
     <link rel="apple-touch-icon" sizes="180x180" href="{{ STATIC_PREFIX }}images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_PREFIX }}images/favicon-32x32.png">
@@ -18,68 +20,60 @@
   </head>
 
   <body>
-      <nav class="navbar navbar-default navbar-static-top">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+          <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-brand" src="{{ STATIC_PREFIX }}images/favicon-16x16.png"> Home </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-expanded="false" aria-controls="navbarNav">
+              <span class="navbar-toggler-icon"></span>
           </button>
-             <img class="navbar-brand" src="{{ STATIC_PREFIX }}images/favicon-16x16.png">
-          <a class="navbar-brand" href="{% url 'home' %}">Home</a>
-
-        </div>
-
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            {% if user.is_authenticated %}
-            <li role="presentation" class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#"
-              role="button" aria-haspopup="true" aria-expanded="false">Toolbox
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-            {% if perms.tasktron %}
-              <li><a href="{% url 'tasktron:view_tasks' %}">Tasktron</a></li>
-            {% endif %}
-            {% if perms.informedvoter %}
-              <li><a href="{% url 'informedvoter:index' %}">Informed Voter</a></li>
-             {% endif %}
-            {% if perms.resume_parser %}
-              <li><a href="{% url 'resume_parser:index' %}">Resume Parser</a></li>
-            {% endif %}
-            {% if perms.rates %}
-              <li><a href="{% url 'rates:index' %}">Rate Recommender</a></li>
-            {% endif %}
-            {% if user.is_superuser %}
-               <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
-            {% endif %}
-            </ul>
-            </li>
-            <li role="presentation" class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Settings <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'userprofile:logout' %}">Logout</a></li>
-{#                <li><a href="{% url 'userprofile:profile_view' %}">View Profile</a></li>#}
-{#                  <li><a href="{% url 'userprofile:password_change' %}">Change Password</a></li>#}
+          <div class="collapse navbar-collapse" id="main-navbar">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  {% if user.is_authenticated %}
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" id="toolbox-dropdown"data-bs-toggle="dropdown" href="#"
+                             role="button" aria-haspopup="true" aria-expanded="false">Toolbox
+                          </a>
+                          <ul class="dropdown-menu">
+                              {% if perms.tasktron %}
+                                  <li><a class="dropdown-item" href="{% url 'tasktron:view_tasks' %}">Tasktron</a></li>
+                              {% endif %}
+                              {% if perms.informedvoter %}
+                                  <li><a class="dropdown-item" href="{% url 'informedvoter:index' %}">Informed Voter</a></li>
+                              {% endif %}
+                              {% if perms.resume_parser %}
+                                  <li><a class="dropdown-item" href="{% url 'resume_parser:index' %}">Resume Parser</a></li>
+                              {% endif %}
+                              {% if perms.rates %}
+                                  <li><a class="dropdown-item" href="{% url 'rates:index' %}">Rate Recommender</a></li>
+                              {% endif %}
+                              {% if user.is_superuser %}
+                                  <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a></li>
+                              {% endif %}
+                          </ul>
+                      </li>
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" id="toolbox-dropdown"data-bs-toggle="dropdown" href="#"
+                             role="button" aria-haspopup="true" aria-expanded="false">Settings
+                          </a>
+                          <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="{% url 'userprofile:logout' %}">Logout</a></li>
+                              {#                <li><a href="{% url 'userprofile:profile_view' %}">View Profile</a></li>#}
+                              {#                  <li><a href="{% url 'userprofile:password_change' %}">Change Password</a></li>#}
+                          </ul>
+                      </li>
+                  {% else %}
+                      <li><a href="{% url 'userprofile:login' %}">Login</a></li>
+                  {% endif %}
               </ul>
-            </li>
-          {% else %}
-          <li><a href="{% url 'userprofile:login' %}">Login</a></li>
-          {% endif %}
-          </ul>
-          <form class="navbar-form navbar-right">
-{#            <input type="text" class="form-control" placeholder="Search...">#}
-          </form>
+              <form class="navbar-form navbar-right">
+                  {#            <input type="text" class="form-control" placeholder="Search...">#}
+              </form>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+ <div class="container">
 
-    <div class="container">
             {% block content %}
             {% endblock %}
             {% block header %}

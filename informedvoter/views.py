@@ -195,7 +195,7 @@ class RepresentativeDetailView(DetailView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['contributions'] = Deal.objects.all().filter(type='C')
+        context['contributions'] = Deal.objects.all().filter().filter(type='C')
         context['other_deals'] = Deal.objects.all().exclude(type='C')
         context['committees'] = Committee.objects.all()
         context['now'] = timezone.now()

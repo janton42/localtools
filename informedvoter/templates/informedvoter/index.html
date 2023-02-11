@@ -6,22 +6,22 @@
 
     {% if links %}
         <h1>Info for {{ zipcode }}</h1>
-        <a class="btn btn-default" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
+        <a class="btn btn-primary" href="{% url 'informedvoter:index' %}">Change Zipcode</a><br>
         <br>
         <br>
         <p>Where would you like to start?</p>
         <div class="row">
-              <div class="col-sm-3 col-xs-3">
-              <a class="btn btn-default" href="{% url 'informedvoter:overview' %}">All</a><br>
+              <div class="col-xs col-sm-3">
+              <a class="btn btn-primary" href="{% url 'informedvoter:overview' %}">All</a><br>
                 </div>
-              <div class="col-sm-3 col-xs-3">
-              <a class="btn btn-default" href="{% url 'informedvoter:federal' %}">Federal</a><br>
+              <div class="col-xs col-sm-3">
+              <a class="btn btn-primary" href="{% url 'informedvoter:federal' %}">Federal</a><br>
                 </div>
-                <div class="col-sm-3 col-xs-3">
-                  <a class="btn btn-default" href="{% url 'informedvoter:state' %}">State</a><br>
+                <div class="col-xs col-sm-3">
+                  <a class="btn btn-primary" href="{% url 'informedvoter:state' %}">State</a><br>
                 </div>
-                <div class="col-sm-3 col-xs-3">
-                    <a class="btn btn-default" href="{% url 'informedvoter:local' %}">Local</a><br>
+                <div class="col-xs col-sm-3">
+                    <a class="btn btn-primary" href="{% url 'informedvoter:local' %}">Local</a><br>
                 </div>
               <br>
               <br>

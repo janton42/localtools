@@ -19,8 +19,13 @@ class Country(models.Model):
     hdi = models.CharField(max_length=10, default=None, null=True, choices=HDI)
     zone = models.CharField(max_length=1, default=None, null=True, choices=ZONES)
 
+    class Meta:
+        verbose_name_plural = 'Countries'
+        ordering = ['name']
     def __str__(self):
         return f'{self.name}'
+
+
 
 
 class RateRequest(models.Model):

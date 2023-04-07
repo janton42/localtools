@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load l10n %}
 
 
 
@@ -7,7 +8,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input class="btn btn-primary" type="submit" value="Save">
+        <input class="btn btn-primary" type="submit" value="Submit">
     </form>
 {#    <a class="btn btn-primary" onclick=refreshWindow()>Refresh This Page</a>#}
     <br>
@@ -32,12 +33,14 @@
                 <tr>
                     <td>{{ rec.rate_request.worker_country.name }}</td>
                     <td>{{ rec.rate_request.worker_country.zone }}</td>
-                    <td>${{ rec.rate_request.rate }}</td>
+                    <td>${{ rec.rate_request.rate|localize }}</td>
                     <td>{{ rec.rate_request.skill }}</td>
                     <td>{{ rec.rate_request.level }}</td>
-                    <td>${{ rec.highest_rate }}</td>
-                    <td>${{ rec.median_rate }}</td>
-                    <td>${{ rec.lowest_rate }}</td>
+                    {% localize on %}
+                        <td>${{ rec.highest_rate }}</td>
+                        <td>${{ rec.median_rate }}</td>
+                        <td>${{ rec.lowest_rate }}</td>
+                    {% endlocalize %}
                     <td>{{ rec.rate_request.time_stamp|date }}</td>
                 </tr>
             {% endfor %}

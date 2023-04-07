@@ -6,7 +6,7 @@ from .choices import ZONES, LEVELS, HDI, SKILL_CODES
 
 class Skill(models.Model):
     name = models.CharField(max_length=50)
-    code = models.IntegerField(default=None, null=True, choices=SKILL_CODES)
+    base = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f'{self.name}'

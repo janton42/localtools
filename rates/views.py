@@ -45,7 +45,7 @@ def world_rates(request):
 class RecommendationCreateView(LoginRequiredMixin, CreateView):
     model = RateRequest
     template_name = 'rates/recommendation.html'
-    fields = ['skill', 'level', 'worker_country', 'rate']
+    fields = ['skill', 'level', 'worker_country']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -57,6 +57,7 @@ class RecommendationCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.rate = form.instance.skill.base
         rec = recommend(title=form.instance.skill, level=form.instance.level, zone=form.instance.worker_country.zone,rate=form.instance.rate)
         form.save()
         hook_after_recommendation(rec, form.instance.id)

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    <h3>Rate Recommendations</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-primary" type="submit" value="Save">
+    </form>
+{#    <a class="btn btn-primary" onclick=refreshWindow()>Refresh This Page</a>#}
+    <br>
+    <br>
+    {% if rate_responses %}
+        <h4>Rate Recommendations</h4>
+        <table class="table table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>Work Country</th>
+                <th>Zone</th>
+                <th>Ref. Rate</th>
+                <th>Title</th>
+                <th>Level</th>
+                <th>High</th>
+                <th>Median</th>
+                <th>Low</th>
+                <th>Request Date</th>
+            </tr>
+        </thead>
+            {% for rec in rate_responses %}
+                <tr>
+                    <td>{{ rec.rate_request.worker_country.name }}</td>
+                    <td>{{ rec.rate_request.worker_country.zone }}</td>
+                    <td>${{ rec.rate_request.rate }}</td>
+                    <td>{{ rec.rate_request.skill }}</td>
+                    <td>{{ rec.rate_request.level }}</td>
+                    <td>${{ rec.highest_rate }}</td>
+                    <td>${{ rec.median_rate }}</td>
+                    <td>${{ rec.lowest_rate }}</td>
+                    <td>{{ rec.rate_request.time_stamp|date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No rate recommendations</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+
+    <script type="text/javascript">
+        function refreshWindow() {
+            location.reload();
+        }
+    </script>
+{% endblock %}

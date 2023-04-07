@@ -10,9 +10,9 @@ class RateRequestAdmin(admin.ModelAdmin):
 
 
 class RateResponseAdmin(admin.ModelAdmin):
-    list_display = ('rate_request', 'lowest_rate', 'time_stamp')
-    list_filter = ('rate_request', 'lowest_rate', 'time_stamp')
-    search_fields = ('rate_request', 'lowest_rate', 'time_stamp')
+    list_display = ('rate_request', 'lowest_rate')
+    list_filter = ('rate_request', 'lowest_rate')
+    search_fields = ('rate_request', 'lowest_rate')
 
 
 class SkillAdmin(admin.ModelAdmin):

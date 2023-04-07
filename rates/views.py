@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .forms import RateRequestForm
 
-from .models import RateRequest
+from .models import RateRequest, RateResponse
+
+from rates.static.scripts.rate_core.main import recommend, hook_after_recommendation
 
 
 class RateRequestListView(LoginRequiredMixin, ListView):
@@ -38,3 +40,25 @@ def world_rates(request):
         form = RateRequestForm()
     context = {'form': form}
     return render(request, 'rates/world_rates.html', context)
+
+
+class RecommendationCreateView(LoginRequiredMixin, CreateView):
+    model = RateRequest
+    template_name = 'rates/recommendation.html'
+    fields = ['skill', 'level', 'worker_country', 'rate']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Add Recommendation'
+        context['rate_responses'] = RateResponse.objects.all().filter(rate_request__user=self.request.user)\
+            .order_by('-rate_request_id')
+
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        rec = recommend(title=form.instance.skill, level=form.instance.level, zone=form.instance.worker_country.zone,rate=form.instance.rate)
+        form.save()
+        hook_after_recommendation(rec, form.instance.id)
+        return redirect(reverse('rates:index'))
+        return super().form_valid(form)

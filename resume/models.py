@@ -57,7 +57,7 @@ class Experience(models.Model):
         ('Leadership', 'Leadership'),
     ]
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     label = models.CharField(max_length=20, choices=EXP_LABELS)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)

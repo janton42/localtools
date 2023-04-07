@@ -24,28 +24,28 @@ class RateRequestListView(LoginRequiredMixin, ListView):
         }
         return context
 
-
-@login_required
-def world_rates(request):
-    if request.method == 'POST':
-        form: RateRequestForm = RateRequestForm(request.POST)
-        if form.is_valid():
-            file: object = form.save(commit=False)
-            file.user = request.user
-            file.save()
-            return redirect(reverse('rates:index'))
-        else:
-            print(form.errors)
-    else:
-        form = RateRequestForm()
-    context = {'form': form}
-    return render(request, 'rates/world_rates.html', context)
+#
+# @login_required
+# def world_rates(request):
+#     if request.method == 'POST':
+#         form: RateRequestForm = RateRequestForm(request.POST)
+#         if form.is_valid():
+#             file: object = form.save(commit=False)
+#             file.user = request.user
+#             file.save()
+#             return redirect(reverse('rates:index'))
+#         else:
+#             print(form.errors)
+#     else:
+#         form = RateRequestForm()
+#     context = {'form': form}
+#     return render(request, 'rates/world_rates.html', context)
 
 
 class RecommendationCreateView(LoginRequiredMixin, CreateView):
     model = RateRequest
     template_name = 'rates/recommendation.html'
-    fields = ['skill', 'level', 'worker_country']
+    fields = ['level', 'skill', 'worker_country']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,3 +63,7 @@ class RecommendationCreateView(LoginRequiredMixin, CreateView):
         hook_after_recommendation(rec, form.instance.id)
         return redirect(reverse('rates:index'))
         return super().form_valid(form)
+
+@login_required
+def world_rates(request):
+    return render(request, 'rates/world_rates.html', {'title': 'Process'})

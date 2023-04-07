@@ -41,7 +41,12 @@
               {% if job.org.name == org.name %}
                 <h5>{{ job.position }}</h5>
                 <h6>
-                  {{ job.start_date }} - {{ job.end_date }}
+                  {{ job.start_date }} -
+                    {% if job.end_date == None %}
+                        Present
+                    {% else %}
+                        {{ job.end_date }}
+                    {% endif %}
                 </h6>
                 {% if bullets %}
                   <ul>

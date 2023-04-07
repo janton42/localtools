@@ -11,6 +11,10 @@ class Skill(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    class Meta:
+        verbose_name_plural = 'Skills'
+        ordering = ['name']
+
 
 class Country(models.Model):
     rank = models.IntegerField(default=None, null=True)

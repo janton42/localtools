@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'userprofile.apps.UserprofileConfig',
     'resume_parser.apps.ResumeParserConfig',
     'rates.apps.RatesConfig',
+    'resume.apps.ResumeConfig',
     'django_q',
-    'resume',
 ]
 
 MIDDLEWARE = [

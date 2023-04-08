@@ -150,7 +150,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Format nubmers with thousand separators
+# Format nubmers with thousands separators
 USE_THOUSAND_SEPARATOR = True
 
 # Static files (CSS, JavaScript, Images)

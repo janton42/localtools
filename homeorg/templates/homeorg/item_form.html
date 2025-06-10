@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>{% if form.instance.pk %}Edit Item{% else %}Add Item{% endif %}</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="id_name" class="form-label">Name</label>
+        {{ form.name }}
+        <div class="form-text">{{ form.name.help_text }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="id_description" class="form-label">Description</label>
+        {{ form.description }}
+        <div class="form-text">{{ form.description.help_text }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="id_container" class="form-label">Container (optional)</label>
+        {{ form.container }}
+        <div class="form-text">{{ form.container.help_text }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="id_room" class="form-label">Room</label>
+        <select name="room" id="id_room" class="form-select">
+          <option value="">---------</option>
+          {% for room in form.fields.room.queryset %}
+            <option value="{{ room.pk }}" {% if form.initial.room == room.pk or form.data.room|stringformat:'s' == room.pk|stringformat:'s' %}selected{% endif %}>{{ room }}</option>
+          {% endfor %}
+        </select>
+        <div class="form-text">{{ form.room.help_text }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="id_category" class="form-label">Category</label>
+        <select name="category" id="id_category" class="form-select">
+          <option value="">---------</option>
+          {% for value, label in form.fields.category.choices %}
+            <option value="{{ value }}" {% if form.initial.category == value or form.data.category == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <div class="form-text">{{ form.category.help_text }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="id_owner" class="form-label">Owner</label>
+        <select name="owner" id="id_owner" class="form-select">
+          <option value="">---------</option>
+          {% for value, label in form.fields.owner.choices %}
+            <option value="{{ value }}" {% if form.initial.owner == value or form.data.owner == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <div class="form-text">{{ form.owner.help_text }}</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href="{% url 'homeorg:item-list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

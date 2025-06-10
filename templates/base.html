@@ -49,6 +49,9 @@
                               {% if perms.rates %}
                                   <li><a class="dropdown-item" href="{% url 'rates:index' %}">Rate Recommender</a></li>
                               {% endif %}
+                              {% if perms.homeorg %}
+                                  <li><a class="dropdown-item" href="{% url 'homeorg:index' %}">Home Organizer</a></li>
+                              {% endif %}
                               {% if user.is_superuser %}
                                   <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a></li>
                               {% endif %}

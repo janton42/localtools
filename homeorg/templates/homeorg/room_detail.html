@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>{{ object.name }}</h2>
+    <p class="text-muted">{{ object.description }}</p>
+    <div class="mb-3">
+      <a href="{% url 'homeorg:room-update' object.pk %}" class="btn btn-secondary">Edit Room</a>
+      <a href="{% url 'homeorg:container-create' %}?room={{ object.pk }}" class="btn btn-primary">Add Container</a>
+      <a href="{% url 'homeorg:item-create' %}?room={{ object.pk }}" class="btn btn-primary">Add Item</a>
+    </div>
+    <h4>Containers</h4>
+    {% if object.containers.all %}
+      <ul class="list-group mb-3">
+        {% for container in object.containers.all %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'homeorg:container-detail' container.pk %}">{{ container.name }}</a>
+            <span class="text-muted">{{ container.description }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No containers in this room.</p>
+    {% endif %}
+    <h4>Items (not in containers)</h4>
+    {% with items=object.containers.none %}
+      {% for item in object.items.all %}
+        {% if not item.container.parent_container %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'homeorg:item-detail' item.pk %}">{{ item.name }}</a>
+            <span class="text-muted">{{ item.description }}</span>
+          </li>
+        {% endif %}
+      {% empty %}
+        <p>No loose items in this room.</p>
+      {% endfor %}
+    {% endwith %}
+  </div>
+{% endblock %}
+

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'resume_parser.apps.ResumeParserConfig',
     'rates.apps.RatesConfig',
     'resume.apps.ResumeConfig',
+    'homeorg.apps.HomeorgConfig',
     # 'django_q',
 ]
 

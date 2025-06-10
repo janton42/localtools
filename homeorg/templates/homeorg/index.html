@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    {% if object_list %}
+      <h2>Select a Room</h2>
+      <ul class="list-group mb-3">
+        {% for room in object_list %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <a href="{% url 'homeorg:room-detail' room.pk %}">{{ room.name }}</a>
+              <span class="text-muted">{{ room.description }}</span>
+            </div>
+            <form method="post" action="{% url 'homeorg:room-delete' room.pk %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h2>There are no rooms</h2>
+    {% endif %}
+    <a href="{% url 'homeorg:room-create' %}" class="btn btn-primary">Add a Room</a>
+  </div>
+{% endblock %}

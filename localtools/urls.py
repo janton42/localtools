@@ -22,6 +22,7 @@ from userprofile import views as userprofile_views
 
 urlpatterns = [
     path('', userprofile_views.home, name='home'),
+    path('home-org/', include('homeorg.urls')),
     path('resume/', include('resume.urls')),
     path('userprofile/', include('userprofile.urls')),
     path('informedvoter/', include('informedvoter.urls')),

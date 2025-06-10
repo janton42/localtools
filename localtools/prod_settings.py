@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'resume_parser.apps.ResumeParserConfig',
     'rates.apps.RatesConfig',
     'resume.apps.ResumeConfig',
-    'django_q',
+    # 'django_q',
 ]
 
 MIDDLEWARE = [
@@ -104,16 +104,16 @@ CACHES = {
 # Queing
 # https://django-q.readthedocs.io/en/latest/configure.html#orm
 
-Q_CLUSTER = {
-    'name': 'localtools',
-    'max_attempts': 3,
-    'workers': 4,
-    'timeout': 600,
-    'retry': 615,
-    'queue_limit': 50,
-    'bulk': 10,
-    'orm': 'default',
-}
+# Q_CLUSTER = {
+#     'name': 'localtools',
+#     'max_attempts': 3,
+#     'workers': 4,
+#     'timeout': 600,
+#     'retry': 615,
+#     'queue_limit': 50,
+#     'bulk': 10,
+#     'orm': 'default',
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

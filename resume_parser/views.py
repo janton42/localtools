@@ -5,10 +5,10 @@ from django.contrib import messages
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 # For async tasks
-from django_q.tasks import async_task, result
-
-# Fetch Django Q models for async tasks
-from django_q.models import Success, Failure, Schedule
+# from django_q.tasks import async_task, result
+#
+# # Fetch Django Q models for async tasks
+# from django_q.models import Success, Failure, Schedule
 
 # Local imports
 from .forms import UploadFileForm
@@ -68,12 +68,12 @@ def parse_resume(request, resume_id):
     else:
         resume = ResumeUpload.objects.all().filter(id=resume_id).values()
 
-        for r in resume:
-            parse_name = request.user.id
-            parse_path = r['resume']
-            la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
-                                    name=parse_name, path_name=parse_path, resume_id=resume_id,
-                                    hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
+        # for r in resume:
+        #     parse_name = request.user.id
+        #     parse_path = r['resume']
+        #     # la_maquina = async_task('resume_parser.static.scripts.resume_parser.parser.read_resume',
+        #     #                         name=parse_name, path_name=parse_path, resume_id=resume_id,
+        #     #                         hook='resume_parser.static.scripts.resume_parser.parser.hook_after_reading')
         context['resume'] = resume
 
         return render(request, 'resume_parser/confirm_parse.html', context)

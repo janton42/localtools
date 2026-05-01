@@ -4,7 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+asgiref = "*"
 django = "*"
+django-environ = "*"
+sqlparse = "*"
+mysqlclient = "*"
+requests = "*"
+joblib = "*"
+nltk = "*"
+pandas = "*"
+striprtf = "*"
+scikit-learn = "*"
+#django-q = "*"
 
 [dev-packages]
 

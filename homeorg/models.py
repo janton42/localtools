@@ -1,25 +1,5 @@
 from django.db import models
 
-# Rooms:
-# bedroom_master
-# bedroom_kids
-# bathroom_master
-# bathroom_kids
-# closet_marina
-# closet_jeff
-# closet_kids
-# front_stairs
-# closet_hall
-# closet_living
-# living
-# family
-# kitchen
-# laundry
-# balcony_garage
-
-# Container
-
-# Item
 CATEGORIES = [
     ('furniture', 'furniture'),
     ('clothes', 'clothes'),
@@ -34,7 +14,7 @@ OWNERS = [
     ('Marina', 'Marina'),
     ('Alex', 'Alex'),
     ('Lucas', 'Lucas'),
-    ('Max', 'Maz'),
+    ('Max', 'Max'),
     ('Anton', 'Anton'),
 ]
 

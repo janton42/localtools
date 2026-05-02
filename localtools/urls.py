@@ -24,7 +24,7 @@ urlpatterns = [
     path('', userprofile_views.home, name='home'),
     path('home-org/', include('homeorg.urls')),
     path('resume/', include('resume.urls')),
-    path('userprofile/', include('userprofile.urls')),
+    path('userprofile/', include(('userprofile.urls', 'userprofile'), namespace='userprofile')),
     path('informedvoter/', include('informedvoter.urls')),
     path('rates/', include('rates.urls')),
     path('resume_parser/', include('resume_parser.urls')),

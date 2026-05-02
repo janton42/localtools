@@ -171,7 +171,7 @@ RESUME_OUT_PATH = os.path.join(BASE_DIR, 'resume_parser/static/output/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = 'jantonstock@gmail.com'
 LOGIN_REDIRECT_URL = 'home'
-LOGIN_URL = 'login'
+LOGIN_URL = 'userprofile:login'
 
 # Comment out the lines below for dev, uncomment them in prod
 # SECURE_HSTS_SECONDS = 25

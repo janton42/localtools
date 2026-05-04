@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 {% load static %}
 {% get_static_prefix as STATIC_PREFIX %}
+{% load static tailwind_tags %}
+
 <html lang="en-US">
   <head>
+      {% tailwind_css %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,64 +22,49 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_PREFIX }}images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ STATIC_PREFIX }}images/favicon-16x16.png">
     <link rel="manifest" href="{{ STATIC_PREFIX }}images/site.webmanifest">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
   </head>
 
   <body>
+<el-dropdown class="inline-block">
+  <button class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">
+    Options
+    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+      <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+    </svg>
+  </button>
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-          <a class="navbar-brand" href="{% url 'home' %}"><img class="navbar-brand" src="{{ STATIC_PREFIX }}images/favicon-16x16.png"> Home </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-expanded="false" aria-controls="navbarNav">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="main-navbar">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  {% if user.is_authenticated %}
-                      <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" id="toolbox-dropdown"data-bs-toggle="dropdown" href="#"
-                             role="button" aria-haspopup="true" aria-expanded="false">Toolbox
-                          </a>
-                          <ul class="dropdown-menu">
-                              {% if perms.tasktron %}
-                                  <li><a class="dropdown-item" href="{% url 'tasktron:view_tasks' %}">Tasktron</a></li>
-                              {% endif %}
-                              {% if perms.informedvoter %}
-                                  <li><a class="dropdown-item" href="{% url 'informedvoter:index' %}">Informed Voter</a></li>
-                              {% endif %}
-                              {% if perms.resume_parser %}
-                                  <li><a class="dropdown-item" href="{% url 'resume_parser:index' %}">Resume Parser</a></li>
-                              {% endif %}
-                              {% if perms.rates %}
-                                  <li><a class="dropdown-item" href="{% url 'rates:index' %}">Rate Recommender</a></li>
-                              {% endif %}
-                              {% if perms.homeorg %}
-                                  <li><a class="dropdown-item" href="{% url 'homeorg:index' %}">Home Organizer</a></li>
-                              {% endif %}
-                              {% if user.is_superuser %}
-                                  <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a></li>
-                              {% endif %}
-                          </ul>
-                      </li>
-                      <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" id="toolbox-dropdown"data-bs-toggle="dropdown" href="#"
-                             role="button" aria-haspopup="true" aria-expanded="false">Settings
-                          </a>
-                          <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="{% url 'userprofile:logout' %}">Logout</a></li>
-                              {#                <li><a href="{% url 'userprofile:profile_view' %}">View Profile</a></li>#}
-                              {#                  <li><a href="{% url 'userprofile:password_change' %}">Change Password</a></li>#}
-                          </ul>
-                      </li>
-                  {% else %}
-                      <li><a href="{% url 'userprofile:login' %}">Login</a></li>
-                  {% endif %}
-              </ul>
-              <form class="navbar-form navbar-right">
-                  {#            <input type="text" class="form-control" placeholder="Search...">#}
-              </form>
-          </div>
-        </div>
-      </nav>
+  <el-menu anchor="bottom end" popover class="w-56 origin-top-right rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+    <div class="py-1">
+      <a href="{% url 'home' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Home</a>
+        {% if user.is_authenticated %}
+            {% if perms.tasktron %}
+                <a href="{% url 'tasktron:view_tasks' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Tasktron</a>
+            {% endif %}
+            {% if perms.informedvoter %}
+                <a href="{% url 'informedvoter:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Informed Voter</a>
+            {% endif %}
+            {% if perms.resume_parser %}
+                <a href="{% url 'resume_parser:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Resume Parser</a>
+            {% endif %}
+            {% if perms.rates %}
+                <a href="{% url 'rates:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Rate Recommender</a>
+            {% endif %}
+            {% if perms.homeorg %}
+                <a href="{% url 'homeorg:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Home Organizer</a>
+            {% endif %}
+            {% if user.is_superuser %}
+                <a href="{% url 'admin:index' %}">Admin Panel</a>
+            {% endif %}
+
+            <a href="{% url 'userprofile:logout' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Sign Out</a>
+        {% else %}
+            <li><a href="{% url 'userprofile:login' %}">Login</a></li>
+        {% endif %}
+    </div>
+  </el-menu>
+</el-dropdown>
+
  <div class="container">
 
             {% block content %}

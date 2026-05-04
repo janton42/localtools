@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'homeorg.apps.HomeorgConfig',
     # 'django_q',
     'tailwind',
+    'theme',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = 'jantonstock@gmail.com'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'userprofile:login'
+
+# Tailwind stuff
+TAILWIND_APP_NAME = 'theme'

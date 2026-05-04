@@ -5,8 +5,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-INSTALLED_APPS += []
-MIDDLEWARE += []
+INSTALLED_APPS += ["django_browser_reload"]
+MIDDLEWARE += [
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

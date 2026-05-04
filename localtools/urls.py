@@ -30,4 +30,5 @@ urlpatterns = [
     path('resume_parser/', include('resume_parser.urls')),
     path('tasktron/', include('tasktron.urls')),
     path('admin/', admin.site.urls, name='admin'),
+    path("__reload__/", include("django_browser_reload.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

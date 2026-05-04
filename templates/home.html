@@ -4,9 +4,9 @@
 {% block content %}
 
 
-  <div class="container">
+  <div class="mx-auto flex items-center gap-x-1 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
     {% if user.is_authenticated %}
-      <h2>Welcome, {{ user.first_name }}!</h2>
+      <h2 class="text-gray-900 dark:text-white mt-5 text-base font-medium tracking-tight">Welcome, {{ user.first_name }}!</h2>
     {% if user.is_superuser %}
       <p>This is your personal homepage for internal tools. Have fun.</p>
 
@@ -18,7 +18,15 @@
         {% if perms.tasktron %}
             <div class="col-sm-3">
             <div class="card">
-            <a href="{% url 'tasktron:view_tasks' %}"><img class="card-img-top" src="{% static '/images/tasktron_logo.svg' %}"></a>
+{#            <a href="{% url 'tasktron:view_tasks' %}"><img class="card-img-top" src="{% static '/images/tasktron_logo.svg' %}"></a>#}
+                 <div>
+    <span class="inline-flex items-center justify-center rounded-md bg-indigo-500 p-2 shadow-lg">
+        <a href="{% url 'tasktron:view_tasks' %}">
+            <img class="h- w-6 stroke-white" src="{% static '/images/tasktron_logo.svg' %}"></a>
+        <!-- ... -->
+      </svg>
+    </span>
+  </div>
               <div class="card-block">
                 <div class="card-body">
                 <h5 class="card-title">Tasktron</h5>

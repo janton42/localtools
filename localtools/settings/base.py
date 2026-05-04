@@ -25,11 +25,6 @@ env.read_env(env_file='localtools/.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['www.jeffstock.us', 'jeffstock.us']
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +42,7 @@ INSTALLED_APPS = [
     'resume.apps.ResumeConfig',
     'homeorg.apps.HomeorgConfig',
     # 'django_q',
+    'tailwind',
 ]
 
 MIDDLEWARE = [
@@ -79,19 +75,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'localtools.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'janton42$localtools',
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': 'janton42.mysql.pythonanywhere-services.com',
-    }
-}
 
 # Caching
 # https://docs.djangoproject.com/en/4.1/topics/cache/#setting-up-the-cache
@@ -158,7 +141,6 @@ USE_THOUSAND_SEPARATOR = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files/")
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
 )
@@ -170,14 +152,6 @@ RESUME_OUT_PATH = os.path.join(BASE_DIR, 'resume_parser/static/output/')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+DEFAULT_FROM_EMAIL = 'jantonstock@gmail.com'
 LOGIN_REDIRECT_URL = 'home'
-LOGIN_URL = 'login'
-
-# Prod settings
-SECURE_HSTS_SECONDS = 25
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+LOGIN_URL = 'userprofile:login'

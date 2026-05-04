@@ -16,6 +16,7 @@ pandas = "*"
 striprtf = "*"
 scikit-learn = "*"
 #django-q = "*"
+django-tailwind = {extras = ["cookieutter", "honcho", "reload"], version = "*"}
 
 [dev-packages]
 

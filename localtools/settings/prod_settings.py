@@ -15,7 +15,7 @@ from environ import Env
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = Env()
 env.read_env(env_file='localtools/.env')

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d567b6766b5212fe69cc9a096a4bdc1ce74fbe6718f3e08bf88c16bf169b96c7"
+            "sha256": "7a82cbc376d5bd642ee3bbe91a903493912d1f7a0043e6d644be0a3e809e4f62"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -185,6 +185,13 @@
             "markers": "python_version >= '3.12'",
             "version": "==6.0.4"
         },
+        "django-browser-reload": {
+            "hashes": [
+                "sha256:0b2a86ab460774fa9bb142a121c70e75a72f18109f51a4f6de409cd633d3a70d",
+                "sha256:3335ad3d107eb657f623d1a8e680dfbcab8a83ae1f94df1895e069dddf5604ba"
+            ],
+            "version": "==1.21.0"
+        },
         "django-environ": {
             "hashes": [
                 "sha256:37799d14cd78222c6fd8298e48bfe17965ff8e586091ad66a463e52e0e7b799e",
@@ -193,6 +200,26 @@
             "index": "pypi",
             "markers": "python_version >= '3.9' and python_version < '4'",
             "version": "==0.13.0"
+        },
+        "django-tailwind": {
+            "extras": [
+                "cookieutter",
+                "honcho",
+                "reload"
+            ],
+            "hashes": [
+                "sha256:0e4a2836cb36e8952700457d049fadb8743583017cef80fa3a374f8597c289f4",
+                "sha256:b3a3eb2d22cbb8c17565898fb68ccedcf806542b04fe4107bdfec7035d582819"
+            ],
+            "markers": "python_version >= '3.11'",
+            "version": "==4.4.2"
+        },
+        "honcho": {
+            "hashes": [
+                "sha256:56dcd04fc72d362a4befb9303b1a1a812cba5da283526fbc6509be122918ddf3",
+                "sha256:af3815c03c634bf67d50f114253ea9fef72ecff26e4fd06b29234789ac5b8b2e"
+            ],
+            "version": "==2.0.0"
         },
         "idna": {
             "hashes": [
@@ -366,6 +393,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.11'",
             "version": "==3.0.2"
+        },
+        "pytailwindcss": {
+            "hashes": [
+                "sha256:1f71dd64020aacb40608dfe8725ca441c772016c344f757ccbc74b8b6143027d",
+                "sha256:a9b770ad3c0a0f40073052bcfe81a060b550fed38af614a472f5aa7bb85fa8aa"
+            ],
+            "markers": "python_version >= '3.11' and python_version < '4.0'",
+            "version": "==0.3.0"
         },
         "python-dateutil": {
             "hashes": [

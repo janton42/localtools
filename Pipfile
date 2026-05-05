@@ -15,11 +15,11 @@ nltk = "*"
 pandas = "*"
 striprtf = "*"
 scikit-learn = "*"
-django-q = "*"
-"pdfminer.six" = "*"
+#django-q = "*"
+django-tailwind = {extras = ["cookieutter", "honcho", "reload"], version = "*"}
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
-python_full_version = "3.8.10"
+python_version = "3.13"

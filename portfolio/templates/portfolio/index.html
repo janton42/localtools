@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="max-w-6xl mx-auto py-12">
+    <h1 class="text-3xl font-bold mb-6">Projects</h1>
+    {% include 'portfolio/_projects_list.html' with projects=projects %}
+  </div>
+{% endblock %}

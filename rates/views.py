@@ -8,7 +8,7 @@ from .forms import RateRequestForm
 
 from .models import RateRequest, RateResponse
 
-from rates.static.scripts.rate_core.main import recommend, hook_after_recommendation
+from .scripts.rate_core.main import recommend, hook_after_recommendation
 
 
 class RateRequestListView(LoginRequiredMixin, ListView):

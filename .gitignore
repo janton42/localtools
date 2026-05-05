@@ -10,7 +10,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -139,3 +138,4 @@ uploads/
 output/
 
 .idea/
+venv/

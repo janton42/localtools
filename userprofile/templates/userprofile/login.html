@@ -7,11 +7,31 @@
   {% else %}
   <form action="" method="POST">
     {% csrf_token %}
+    {# Show non-field errors (e.g., "Please enter a correct username and password") #}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {% for err in form.non_field_errors %}
+          <p>{{ err }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {# Preserve next parameter if present #}
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+
       {% for field in form %}
         <p>
           {{ field.label }}:
           <br>
           {{ field }}
+          {% if field.errors %}
+            <br>
+            <span class="text-danger">
+              {% for ferr in field.errors %}{{ ferr }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+            </span>
+          {% endif %}
         </p>
       {% endfor %}
     <button type="submit">Login</button>

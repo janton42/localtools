@@ -7,9 +7,11 @@
     <div class="p-4">
       <h3 class="text-lg font-semibold">{{ project.title }}</h3>
       <p class="text-sm text-gray-600 mt-2">{{ project.description|truncatechars:140 }}</p>
-      {% if project.link %}
-        <a href="{{ project.link }}" class="inline-block mt-3 text-indigo-600 text-sm">View</a>
-      {% endif %}
+     {% with url=project.get_project_url %}
+    {% if url %}
+        <a class="text text-gray-600 mt-2" href="{{ url }}">View Project</a>
+    {% endif %}
+{% endwith %}
     </div>
   </article>
   {% empty %}

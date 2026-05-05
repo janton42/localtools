@@ -28,12 +28,12 @@
           </a>
         </div>
 
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="{% url 'home' %}" class="text-sm font-medium hover:text-indigo-600">Home</a>
-          <a href="{% url 'rates:index' %}" class="text-sm font-medium hover:text-indigo-600">Rate Recommender</a>
-          <a href="{% url 'resume:index' %}" class="text-sm font-medium hover:text-indigo-600">Resume</a>
-          <a href="{% url 'homeorg:index' %}" class="text-sm font-medium hover:text-indigo-600">Home Organizer</a>
-        </nav>
+{#        <nav class="hidden md:flex items-center space-x-6">#}
+{#          <a href="{% url 'home' %}" class="text-sm font-medium hover:text-indigo-600">Home</a>#}
+{#          <a href="{% url 'rates:index' %}" class="text-sm font-medium hover:text-indigo-600">Rate Recommender</a>#}
+{#          <a href="{% url 'resume:index' %}" class="text-sm font-medium hover:text-indigo-600">Resume</a>#}
+{#          <a href="{% url 'homeorg:index' %}" class="text-sm font-medium hover:text-indigo-600">Home Organizer</a>#}
+{#        </nav>#}
 
         <div class="flex items-center gap-3">
           {% if user.is_authenticated %}
@@ -46,7 +46,6 @@
                  {% if user.is_superuser %}
                    <a href="{% url 'admin:index' %}" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Admin Panel</a>
                  {% endif %}
-                 <a href="{% url 'userprofile:profile_view' %}" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
                  <form method="post" action="{% url 'userprofile:logout' %}">
                    {% csrf_token %}
                    <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Sign Out</button>

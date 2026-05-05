@@ -67,10 +67,10 @@
     <!-- Mobile nav (hidden by default) -->
     <div id="mobile-menu" class="md:hidden hidden border-t border-gray-200 dark:border-gray-700">
       <div class="px-4 pt-2 pb-4 space-y-1">
-        <a href="{% url 'home' %}" class="block px-3 py-2 rounded-md text-base font-medium">Home</a>
-        <a href="{% url 'rates:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Rate Recommender</a>
-        <a href="{% url 'resume:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Resume</a>
-        <a href="{% url 'homeorg:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Home Organizer</a>
+{#        <a href="{% url 'home' %}" class="block px-3 py-2 rounded-md text-base font-medium">Home</a>#}
+{#        <a href="{% url 'rates:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Rate Recommender</a>#}
+{#        <a href="{% url 'resume:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Resume</a>#}
+{#        <a href="{% url 'homeorg:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Home Organizer</a>#}
         {% if user.is_authenticated %}
           <form method="post" action="{% url 'userprofile:logout' %}">{{ csrf_token }}<button type="submit" class="w-full text-left px-3 py-2">Sign Out</button></form>
         {% else %}

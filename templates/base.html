@@ -1,23 +1,14 @@
 <!DOCTYPE html>
-{% load static %}
-{% get_static_prefix as STATIC_PREFIX %}
 {% load static tailwind_tags %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 <html lang="en-US">
   <head>
       {% tailwind_css %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<title>Jeff Stock</title>
-{#  	<script src="https://use.fontawesome.com/382d19b8cb.js"></script>#}
-{#      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">#}
-{#      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>#}
-{#      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"#}
-{#        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>#}
-{#    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css"/>#}
-{#    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}bootstrap/css/ie10-viewport-bug-workaround.css"/>#}
-{#    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}styles/style.css"/>#}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jeff Stock</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{{ STATIC_PREFIX }}images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_PREFIX }}images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ STATIC_PREFIX }}images/favicon-16x16.png">
@@ -25,109 +16,76 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
   </head>
 
-  <body class="bg-white dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5">
-<el-dropdown class="inline-block">
-  <button class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">
-    Menu
-    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
-      <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
-    </svg>
-  </button>
+  <body class="min-h-screen font-sans bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-800 dark:bg-gray-900 dark:text-gray-100">
 
-  <el-menu anchor="bottom end" popover class="w-56 origin-top-right rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-    <div class="py-1">
-      <a href="{% url 'home' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Home</a>
-        {% if user.is_authenticated %}
-            {% if perms.tasktron %}
-                <a href="{% url 'tasktron:view_tasks' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Tasktron</a>
-            {% endif %}
-            {% if perms.informedvoter %}
-                <a href="{% url 'informedvoter:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Informed Voter</a>
-            {% endif %}
-            {% if perms.resume_parser %}
-                <a href="{% url 'resume_parser:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Resume Parser</a>
-            {% endif %}
-            {% if perms.rates %}
-                <a href="{% url 'rates:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Rate Recommender</a>
-            {% endif %}
-            {% if perms.homeorg %}
-                <a href="{% url 'homeorg:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Home Organizer</a>
-            {% endif %}
-            {% if user.is_superuser %}
-                <a href="{% url 'admin:index' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Admin Panel</a>
-            {% endif %}
+  <header class="shadow-sm bg-white/60 dark:bg-gray-800/60 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-4">
+          <a href="{% url 'home' %}" class="flex items-center gap-3">
+            <img src="{{ STATIC_PREFIX }}images/favicon-32x32.png" alt="logo" class="w-8 h-8 rounded" />
+            <span class="font-semibold text-lg">Jeff Stock</span>
+          </a>
+        </div>
 
-         <form method="post" action="{% url 'userprofile:logout' %}" class="m-0">
-           {% csrf_token %}
-             <button type="submit" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Sign Out</button>
-         </form>
-        {% else %}
-            <a href="{% url 'userprofile:login' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Login</a>
-        {% endif %}
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="{% url 'home' %}" class="text-sm font-medium hover:text-indigo-600">Home</a>
+          <a href="{% url 'rates:index' %}" class="text-sm font-medium hover:text-indigo-600">Rate Recommender</a>
+          <a href="{% url 'resume:index' %}" class="text-sm font-medium hover:text-indigo-600">Resume</a>
+          <a href="{% url 'homeorg:index' %}" class="text-sm font-medium hover:text-indigo-600">Home Organizer</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          {% if user.is_authenticated %}
+            <div class="relative" id="user-dropdown">
+              <button id="user-menu-button" type="button" aria-controls="user-menu" aria-expanded="false" class="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                <span class="text-sm">{{ user.username }}</span>
+                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+              </button>
+              <div id="user-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-md py-1">
+                 {% if user.is_superuser %}
+                   <a href="{% url 'admin:index' %}" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Admin Panel</a>
+                 {% endif %}
+                 <a href="{% url 'userprofile:profile_view' %}" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+                 <form method="post" action="{% url 'userprofile:logout' %}">
+                   {% csrf_token %}
+                   <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Sign Out</button>
+                 </form>
+               </div>
+             </div>
+           {% else %}
+            <a href="{% url 'userprofile:login' %}" class="text-sm font-medium px-3 py-1 rounded-md hover:bg-indigo-50 hover:text-indigo-600">Login</a>
+          {% endif %}
+
+          <!-- Mobile menu button -->
+          <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
-  </el-menu>
-</el-dropdown>
+
+    <!-- Mobile nav (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-gray-200 dark:border-gray-700">
+      <div class="px-4 pt-2 pb-4 space-y-1">
+        <a href="{% url 'home' %}" class="block px-3 py-2 rounded-md text-base font-medium">Home</a>
+        <a href="{% url 'rates:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Rate Recommender</a>
+        <a href="{% url 'resume:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Resume</a>
+        <a href="{% url 'homeorg:index' %}" class="block px-3 py-2 rounded-md text-base font-medium">Home Organizer</a>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'userprofile:logout' %}">{{ csrf_token }}<button type="submit" class="w-full text-left px-3 py-2">Sign Out</button></form>
+        {% else %}
+          <a href="{% url 'userprofile:login' %}" class="block px-3 py-2 rounded-md text-base font-medium">Login</a>
+        {% endif %}
+      </div>
+    </div>
+
+  </header>
 
 
-{#      <e1-dropdown class="inline-block">#}
-{#       <button class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">#}
-{#    Options#}
-{#    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">#}
-{#      <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />#}
-{#    </svg>#}
-{#  </button>#}
-{#      <e1-menu anchor="bottom end" popover class="w-56 origin-top-right rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">#}
-{#          <a class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"#}
-{#              href="{% url 'home' %}"><img src="{{ STATIC_PREFIX }}images/favicon-16x16.png">Home</a>#}
-{#          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-expanded="false" aria-controls="navbarNav">#}
-{#              <span class="navbar-toggler-icon"></span>#}
-{#          </button>#}
-{#          <div class="py-1">#}
-{#              {% if user.is_authenticated %}#}
-{#                  <li class="nav-item dropdown">#}
-{#                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Toolbox</a>#}
-{#                              {% if perms.tasktron %}#}
-{#                                  <li><a class="dropdown-item" href="{% url 'tasktron:view_tasks' %}">Tasktron</a></li>#}
-{#                              {% endif %}#}
-{#                              {% if perms.informedvoter %}#}
-{#                                  <li><a class="dropdown-item" href="{% url 'informedvoter:index' %}">Informed Voter</a></li>#}
-{#                              {% endif %}#}
-{#                              {% if perms.resume_parser %}#}
-{#                                  <li><a class="dropdown-item" href="{% url 'resume_parser:index' %}">Resume Parser</a></li>#}
-{#                              {% endif %}#}
-{#                              {% if perms.rates %}#}
-{#                                  <li><a class="dropdown-item" href="{% url 'rates:index' %}">Rate Recommender</a></li>#}
-{#                              {% endif %}#}
-{#                              {% if perms.homeorg %}#}
-{#                                  <li><a class="dropdown-item" href="{% url 'homeorg:index' %}">Home Organizer</a></li>#}
-{#                              {% endif %}#}
-{#                              {% if user.is_superuser %}#}
-{#                                  <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a></li>#}
-{#                              {% endif %}#}
-{#                          </ul>#}
-{#                      </li>#}
-{#                      <li class="nav-item dropdown">#}
-{#                          <a class="nav-link dropdown-toggle" id="toolbox-dropdown"data-bs-toggle="dropdown" href="#"#}
-{#                             role="button" aria-haspopup="true" aria-expanded="false">Settings#}
-{#                          </a>#}
-{#                          <ul class="dropdown-menu">#}
-{#                              <li><a class="dropdown-item" href="{% url 'userprofile:logout' %}">Logout</a></li>#}
-                              {#                <li><a href="{% url 'userprofile:profile_view' %}">View Profile</a></li>#}
-                              {#                  <li><a href="{% url 'userprofile:password_change' %}">Change Password</a></li>#}
-{#                          </ul>#}
-{#                      </li>#}
-{#                  {% else %}#}
-{#                      <li><a href="{% url 'userprofile:login' %}">Login</a></li>#}
-{#                  {% endif %}#}
-{#              </ul>#}
-{#              <form class="navbar-form navbar-right">#}
-                  {#            <input type="text" class="form-control" placeholder="Search...">#}
-{#              </form>#}
-{#          </div>#}
-{#      </e1-menu>#}
-{#      </e1-dropdown>#}
-
- <div class="bg-white dark:bg-gray-500 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5">
+  <main class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white/80 dark:bg-gray-800/70 rounded-xl shadow-md p-8">
 
             {% block content %}
             {% endblock %}
@@ -151,24 +109,46 @@
             {% endblock %}
             {% block scripts %}
             {% endblock %}
-    </div>
 
-    <footer class="footer">
-      <div class="container">
+      </div>
+    </div>
+  </main>
+
+    <footer class="mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-slate-500 dark:text-slate-400">
           {%  if user.is_authenticated %}
-    <p class="text-muted">Logged in as
-        {% if user.is_superuser %}
-        Superuser
-            {% endif %}
-            {{ user.username }}</p>
-            {% endif %}
-        <p class="text-muted"></p>
+    <span class="mr-4">Logged in as {% if user.is_superuser %}Superuser {% endif %}{{ user.username }}</span>
+          {% endif %}
+          <span>© {% now "Y" %} Jeff Stock</span>
       </div>
     </footer>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"/></script>
+
+    <!-- Scripts: keep jQuery/Bootstrap for legacy components, add small mobile toggling script -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-    <script>window.jQuery</script>
+    <script>
+      document.getElementById('mobile-menu-button')?.addEventListener('click', function(){
+        const menu = document.getElementById('mobile-menu');
+        if(!menu) return;
+        menu.classList.toggle('hidden');
+      });
+
+      // User menu toggle
+      const userMenuButton = document.getElementById('user-menu-button');
+      const userMenu = document.getElementById('user-menu');
+      if(userMenuButton && userMenu) {
+        userMenuButton.addEventListener('click', function() {
+          userMenu.classList.toggle('hidden');
+        });
+
+        // Close menu if clicked outside
+        document.addEventListener('click', function(event) {
+          if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+            userMenu.classList.add('hidden');
+          }
+        });
+      }
+    </script>
   </body>
 
 </html>

@@ -8,10 +8,10 @@
       <h3 class="text-lg font-semibold">{{ project.title }}</h3>
       <p class="text-sm text-gray-600 mt-2">{{ project.description|truncatechars:140 }}</p>
      {% with url=project.get_project_url %}
-    {% if url %}
-        <a class="text text-gray-600 mt-2" href="{{ url }}">View Project</a>
-    {% endif %}
-{% endwith %}
+	{% if url %}
+        	<a class="text text-gray-600 mt-2" href="{{ url }}">View Project</a>
+    	{% endif %}
+     {% endwith %}
     </div>
   </article>
   {% empty %}

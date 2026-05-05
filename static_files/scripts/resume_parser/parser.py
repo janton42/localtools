@@ -1,0 +1,775 @@
+#!/usr/bin/python3
+import json
+import os
+import re
+import string
+import warnings
+from datetime import datetime
+
+import joblib
+import nltk
+import pandas as pd
+from django.conf import settings
+from django.core import serializers
+from pdfminer.high_level import extract_text
+from striprtf.striprtf import rtf_to_text
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=UserWarning)
+
+# Constants and instantiations
+stopwords = nltk.corpus.stopwords.words('english')
+ps = nltk.PorterStemmer()
+wn = nltk.WordNetLemmatizer()
+verb_tags = ['VB', 'VBG', 'VBD', 'VBN', 'VBN-HL', 'VERB']
+adj_tags = ['JJ', 'JJR', 'JJS']
+symbol_tags = ['SYM']
+list_tags = ['LS']
+determiner_tags = ['DT']
+name_path = os.path.join(settings.ENTITIES_PATH, 'freq_names.csv')
+name_list = pd.read_csv(name_path)
+names = name_list.name.unique()
+company_path = os.path.join(settings.ENTITIES_PATH, 'companies.csv')
+company_list = pd.read_csv(company_path)
+companies = company_list.trimmed_name.unique()
+
+class ResumeParser(object):
+    """Parses a user-input resume.
+
+    Retrieves an uploaded resume file, checks the file type, converts the info
+    to text; applies machine learning models, Stanford's Named Entity
+    Recognition (NER) tagger, and other homegrown algorithms to label the
+    parts of the resume for further processing.
+
+    Attributes:
+        birth: Timestamp of when an instance is created.
+        name: The user name associated with the instance.
+        server: A CoreNLPServer instance needed for the NER tagger.
+        server.corenlp_options: A list of flags (strings) to be passed
+            in the Java command when starting the server. Include
+            '-preload', then list modules to load. This process only
+            requires 'ner', but others can be added.
+            ['-preload','ner']
+        server.java_options: A list of flags (strings) for Java.
+        server.url = A string containing the url for a user interface
+            with the tagger.
+        bullet_feature_headings: List of heading names needed for the
+        machine learning model. Must match the headings used when
+            training the model.
+        name_feature_headings: Same as 'bullet_feature_headings', but
+            for the 'name' label.
+        org_feature_headings: Same as 'bullet_feature_headings', but
+            for the 'org' label.
+        keepers: List of single-word tags from NER tagging.
+        resume_out_path: String with the destination for user-specific
+            output. The path is derived from the that in settings.py
+            and should be in /static/username/
+        resume_in_path: String with path to an uploaded file, which will
+            be in the applicaiton's /uploads/ directory.
+        resume_file_ext: String with the file type of the resume file.
+        death: Timestamp of when the parser returns the final output.
+
+    """
+
+    def __init__(self, name: str):
+        super(ResumeParser, self).__init__()
+        """Inits ResumeParser with birth, name, server,
+            server.corenlp_options, server.java_options, server.url,
+            bullet_feature_headings, name_feature_headings,
+            org_feature_headings, and keepers.
+
+        Args:
+            name: String of the username for the user requesting a
+                parsed resume.
+        """
+        print('La Maquina lives!!!\t(ResumeParser instantiated.)')
+        self.birth = datetime.now()
+        self.name = str(name)
+        self.death = None
+        self.resume_out_path = None
+        self.resume_file_ext = None
+        self.resume_in_path = None
+        self.resume_id = None
+        self.bullet_feature_headings = [
+            'stopword_percentage',
+            'word_count',
+            'proper_noun_percentage',
+            'verb_percentage'
+        ]
+        self.name_feature_headings = [
+            'line_length',
+            'word_count',
+            'verb_percentage',
+            'adj_percentage',
+            'stopword_percentage',
+            'punctuation_percentage',
+            'number_percentage',
+            'proper_noun_percentage',
+            'symbol_count',
+            'list_markers_count',
+            'determiners_count',
+            'name_count',
+            'line_length_trans',
+            'word_count_trans',
+            'verb_percentage_trans',
+            'adj_percentage_trans',
+            'stopword_percentage_trans',
+            'punctuation_percentage_trans',
+            'number_percentage_trans',
+            'proper_noun_percentage_trans'
+        ]
+        self.org_feature_headings = [
+            'line_length',
+            'word_count',
+            'verb_percentage',
+            'adj_percentage',
+            'stopword_percentage',
+            'punctuation_percentage',
+            'number_percentage',
+            'proper_noun_percentage',
+            'symbol_count',
+            'list_markers_count',
+            'determiners_count',
+            'name_count',
+            'company_count',
+            'line_length_trans',
+            'word_count_trans',
+            'verb_percentage_trans',
+            'adj_percentage_trans',
+            'stopword_percentage_trans',
+            'punctuation_percentage_trans',
+            'number_percentage_trans',
+            'proper_noun_percentage_trans'
+        ]
+        self.keepers = [
+            'Name',
+            'Organization',
+            'Date',
+            'Email',
+            'City',
+            'Location',
+            'Number',
+            'Person',
+            'Bullet',
+            'State_or_province',
+            'Title',
+            'Nationality',
+            'None',
+            'Country',
+            'Url',
+            'Misc',
+        ]
+
+    def get_resume_paths(self, resume_file: str):
+        """Retrieves relevant filepaths for handling input and output
+        files.
+
+        Args:
+            resume_file: String with filename of uploaded file.
+
+        Returns:
+            Sets the resume_out_path, resume_in_path, and
+            resume_file_ext attributes.
+        """
+        self.resume_out_path = os.path.join(settings.RESUME_OUT_PATH, self.name + '/')
+        os.makedirs(self.resume_out_path, exist_ok=True)
+        self.resume_in_path = os.path.join(settings.BASE_DIR, resume_file)
+        self.resume_file_ext = self.resume_in_path.split('.')[-1]
+
+    def introduce_self(self):
+        """Prints basic information about the class to stdout."""
+        print('***INFORMATION***\n\
+        Hi. I\'m a parser.\n\
+        My name is {}.\n\
+        I was born at {}\
+        Here are my paths: \n\
+        \tresume_in_path = "{}"\n\
+        \tresume_out_path = "{}"\n\
+        My resume file type is: {}'.format(
+            self.name, self.birth, self.resume_in_path, self.resume_out_path, self.resume_file_ext))
+
+    def text_compiler(self):
+        """Pulls text from different types of files.
+
+        Runs the proper text extraction function for the given file
+        extension, which is the resume_file_ext attribute.
+
+        Returns:
+        A text and a csv file containing the text extracted from the
+            input file. The files are saved in the user's output folder at
+            /static/output/username/
+        """
+        if self.resume_file_ext == 'pdf':
+            text = extract_text(self.resume_in_path)
+        elif self.resume_file_ext == 'rtf':
+            with open(self.resume_in_path, 'r') as file:
+                content = file.read()
+                text = rtf_to_text(content)
+        elif self.resume_file_ext == 'txt':
+            with open(self.resume_in_path, 'r') as file:
+                text = file.read()
+        # TODO: other file types (docx, odx, etc)
+        # print(text)
+        # Write resume out as a plain text doc, regardless of input type,
+        # with a standardized name.
+        resume_text_filename = self.resume_out_path + self.name + '_resume.txt'
+        with open(resume_text_filename, 'w') as f:
+            f.write(text)
+
+        df = pd.read_table(
+            resume_text_filename,
+            header=None,
+            on_bad_lines='skip',
+            skip_blank_lines=True,
+            lineterminator='\n'
+        )
+        raw_filename = self.resume_out_path + self.name + '_out.csv'
+        df.to_csv(raw_filename, header=['line'])
+
+    def clean_text(self):
+        """Removes unnamed column from csv.
+
+        Returns:
+            Pandas DataFrame.
+        """
+
+        filename = self.resume_out_path + self.name + '_out.csv'
+        df = pd.read_csv(filename)
+        df.drop('Unnamed: 0', axis=1, inplace=True)
+        return df
+
+    def classify_text(self, text):
+        """Homegrown ML models for classifying parts of a resume.
+
+        Classifies 'bullets', 'names', and 'orgs' using machine learning
+        models.
+
+        Args:
+            text: Pandas DataFrame with rows of unlabeled, raw text from
+                an uploaded resume file.
+
+        Returns:
+            A Pandas DataFrame with each line labeled as either a name,
+            organization, bullet statement, or none of those using 1's
+            and 0's for labels.
+
+        Also writes out the feature data into a csv in the user's
+            output folder: /static/output/username/
+        """
+
+        # Build paths to the ML models
+        bullet_model_path = os.path.join(settings.ML_MODELS_PATH, 'bullets.pkl')
+        name_model_path = os.path.join(settings.ML_MODELS_PATH, 'names.pkl')
+        org_model_path = os.path.join(settings.ML_MODELS_PATH, 'org.pkl')
+
+        # Import the model that has already been trained and tested
+        bullet_model = joblib.load(bullet_model_path)
+        name_model = joblib.load(name_model_path)
+        org_model = joblib.load(org_model_path)
+
+        # Group numerical features by removing categorical ones
+        cat_feat = ['line', 'line_nostop', 'line_stemmed', 'tagged_line']
+        numeric_only = text.drop(cat_feat, axis=1)
+        numeric_path = self.resume_out_path + self.name + '_numeric_only.csv'
+        numeric_only.to_csv(numeric_path)
+
+        # Get set of features used for the bullet_model. This MUST MATCH
+        # the headers passed to the model during training.
+
+        bullet_features = numeric_only[self.bullet_feature_headings]
+
+        # Get set of name features
+        name_features = numeric_only[self.name_feature_headings]
+
+        # Get set of company features
+        org_features = numeric_only[self.org_feature_headings]
+
+        # Classify each line of the text as either bullet or not
+        print('Reading resume...')
+        bullet_classification = bullet_model.predict(bullet_features)
+        name_classification = name_model.predict(name_features)
+        org_classification = org_model.predict(org_features)
+
+        # Add classification in binary (0,1) to main DataFrame
+        text['is_bullet'] = bullet_classification
+        text['is_name'] = name_classification
+        text['is_org'] = org_classification
+
+        # Return only the original line and the results of the automated
+        # classification
+        classified = text[[
+            'line',
+            'is_bullet',
+            'is_name',
+            'is_org'
+        ]]
+
+        return classified
+
+    def labeler(self, row):
+        """Labels named entities.
+        Gives final labels using Stanford's NLP Named Entity tagger to
+        supplement already tagged data. Fills in the non-bullet items,
+        giving the "None" label to anything remaining unidentified.
+
+        Args:
+            row: A Pandas DataFrame
+
+        Returns:
+        Either a one-word string label, or a list of tuples
+            containing individual words and their respective ner tags.
+            For example:
+            'Bullet' - or - [('word', 'TAG'),...]
+        """
+
+        if row['is_bullet'] == 1:
+            return 'Bullet'
+        elif row['is_name'] == 1:
+            return 'Name'
+        else:
+            return 'None'
+
+    @staticmethod
+    def count_named_ents(label: str) -> int:
+        """Sums the named entities in a row.
+
+        Takes in the list of tuples from 'label' column of a Pandas
+        DataFrame, and sums the total number of NER tags that are
+        not the general-purpose 'O' tag.
+
+        Args:
+            label: String or list of tuples.
+
+        Returns:
+            Integer sum of the named entities in a given row.
+
+        """
+
+        skips = ['Name', 'Bullet', 'None']
+        if label not in skips:
+            count = sum([1 for pair in label if pair[1] != 'O'])
+            return count
+        else:
+            return 0
+
+    @staticmethod
+    def relabeler(row):
+        """Applies a label to a row based on number of named entities.
+
+        Looks at the total number of named entities in a row, and applies
+        a single label as a string wherever possible.
+
+        Returns:
+            String or list of tuples. If there are multiple named entities
+            further processin is needed to parse them, so relabeler
+            returns the list of tuples untouched in such cases.
+        """
+        if row['ents'] == 0 and row['label'] == 'Bullet' or row['label'] == 'Name':
+            return row['label']
+        elif row['ents'] == 1:
+            label = [ent[1].capitalize() for ent in row['label'] if ent[1] != 'O']
+            if label[0] != '':
+                return label[0]
+        elif row['ents'] == 0 and row['is_bullet'] == 0:
+            return 'None'
+        else:
+            tags = list()
+            for tag in row['label']:
+                if tag[1] != 'O' and tag[1] not in tags:
+                    tags.append(tag[1])
+            if len(tags) == 1:
+                return tags[0].capitalize()
+            else:
+                return row['label']
+
+    @staticmethod
+    def tag_grouper(label: list) -> list:
+        """Groups words together by their common tag.
+
+        Takes in a list of word-tag tuples, and groups the words in the
+        list by tag.
+
+        Args:
+            label: list of tuples containing word and tag pairs in the
+                following format:
+                [(word, TAG), ...]
+        Returns:
+            List of dictionaries. Each dictionary represents a grouping
+            of words that have a common label and were in the same line
+            of the original document.The list contains the tag, a list,
+            and a single string containing the words associated with
+            that tag. For example:
+                [	{
+                        'label': 'Example',
+                        'words': ['Words', 'Associated', 'With', 'Label'],
+                        'phrase': 'Words Associated With Label'
+                    },
+                    {
+                        'label': 'Title',
+                        'words': ['Program', 'Manager'],
+                        'phrase': 'Program Manager'
+                    },
+                    ...]
+        """
+        locations = [
+            'City',
+            'STATE_OR_COUNTRY',
+            'Country'
+        ]
+        utags = list()
+        groups = list()
+        for x in label:
+            try:
+                tag = x[1]
+            except IndexError as e:
+                print(e)
+                tag = 'O'
+                pass
+            if tag not in utags:
+                utags.append(tag)
+        for tag in utags:
+            group = {
+                'label': tag,
+                'words': list()
+            }
+            for x in label:
+                word = x[0].strip()
+                tag = x[1]
+                if tag == group['label'] and word not in group['words']:
+                    if tag != 'Date' and tag != 'Number':
+                        word = word.capitalize()
+                    if word not in string.punctuation:
+                        group['words'].append(word)
+            group['phrase'] = ' '.join(group['words'])
+            group['label'] = group['label'].capitalize()
+            if group['label'] == 'O':
+                group['label'] = 'None'
+            elif group['label'] == 'Nationality':
+                group['label'] = 'Language (human)'
+            groups.append(group)
+        return groups
+
+    @staticmethod
+    def get_loosies(row):
+        """Compiles grouped words into a Pandas DataFrame
+
+        Gathers dictionaries from the 'grouped' column, and adds them to
+        a Pandas DataFrame.
+
+        Args:
+            row: Pandas DataFrame.
+
+        Returns:
+            A new Pandas DataFrame with 'doc_line' matching the original
+            'doc_line','line' matching the dictionary 'phrase',
+            'label' matching the dictionary 'label', and all other \
+            values set to zero (0.0).
+        """
+        looks = 0
+        detailed = pd.DataFrame(
+            {
+                'doc_line': [],
+                'line': [],
+                'is_bullet': [],
+                'is_name': [],
+                'is_org': [],
+                'label': [],
+                'ents': []
+            }
+        )
+        for dict_list in row.grouped:
+            dl = row.iloc[[looks]]['doc_line']
+            dl = dl[looks]
+            looks += 1
+            for phrase in dict_list:
+                line = phrase['phrase']
+                label = phrase['label']
+                detail_1 = pd.DataFrame(
+                    {
+                        'doc_line': [dl],
+                        'line': [line],
+                        'is_bullet': [0],
+                        'is_name': [0],
+                        'is_org': [0],
+                        'label': [label],
+                        'ents': [0]
+                    }
+                )
+                detailed = pd.concat([detailed, detail_1], axis=0)
+        detailed.reset_index(drop=True, inplace=True)
+        return detailed
+
+    @property
+    def say_status(self):
+        """Shows if DEBUG is True or False.
+
+        Returns:
+            Boolean.
+        """
+        status = settings.DEBUG
+        return status
+
+
+def remove_stopwords(text: object) -> object:
+    text = ''.join([word for word in text if word not in string.punctuation])
+    tokens = re.split(r'\W+', text)
+    text = [word for word in tokens if word not in stopwords]
+    return text
+
+
+def get_stems(tokenized_text):
+    text = [ps.stem(word) for word in tokenized_text]
+    return text
+
+
+def count_words(text):
+    text = ''.join([word for word in text if word not in string.punctuation])
+    tokens = re.split(r'\W+', text)
+    return len(tokens)
+
+
+def count_verbs(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] in verb_tags])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_adj(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] in adj_tags])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_nums(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] == 'CD'])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_proper_nouns(pos_tags: list) -> int:
+    count = sum([1 for pair in pos_tags if pair[1] == 'NNP'])
+    return round(count / (len(pos_tags)), 3) * 100 if len(pos_tags) > 0 else 0
+
+
+def count_stopwords(line: str) -> int:
+    count = sum([1 for word in nltk.word_tokenize(line) if word in nltk.corpus.stopwords.words('english')])
+    return round(count / (len(line) - line.count(' ')), 3) * 100 if len(line) > 0 else 0
+
+
+def count_punct(line: str) -> int:
+    count = sum([1 for char in line if char in string.punctuation])
+    return round(count / (len(line) - line.count(' ')), 3) * 100 if len(line) > 0 else 0
+
+
+def count_symbols(line: str) -> int:
+    count = sum([1 for pair in line if pair[1] in symbol_tags])
+    return round(count / (len(line)), 3) * 100 if len(line) > 0 else 0
+
+
+def count_list_item_markers(line: str) -> int:
+    count = sum([1 for pair in line if pair[1] in list_tags])
+    return round(count / (len(line)), 3) * 100 if len(line) > 0 else 0
+
+
+def count_determiners(line: str) -> int:
+    count = sum([1 for pair in line if pair[1] in determiner_tags])
+    return round(count / (len(line)), 3) * 100 if len(line) > 0 else 0
+
+
+def count_names(line: str) -> int:
+    count = sum([1 for name in line if name in names])
+    return count
+
+
+def count_companies(line: str) -> int:
+    count = sum([1 for company in line if company in companies])
+    return count
+
+
+def create_features(data):
+    # Remove stop words
+    data['line_nostop'] = data['line'].apply(lambda x: remove_stopwords(x.lower()))
+
+    # Collect the word stems
+    data['line_stemmed'] = data['line_nostop'].apply(lambda x: get_stems(x))
+
+    # Find line length
+    data['line_length'] = data['line'].apply(lambda x: len(x) - x.count(' '))
+
+    # Find word count per line
+    data['word_count'] = data['line'].apply(lambda x: count_words(x))
+
+    # Tag each line with parts of speach
+    data['tagged_line'] = data['line'].apply(lambda x: nltk.pos_tag(nltk.word_tokenize(x)))
+
+    # Find the percentage of verbs in each line
+    data['verb_percentage'] = data['tagged_line'].apply(lambda x: count_verbs(x))
+
+    # Find the percentage of adjectives in each line
+    data['adj_percentage'] = data['tagged_line'].apply(lambda x: count_adj(x))
+
+    # Find the percentage of stop words in each line
+    data['stopword_percentage'] = data['line'].apply(lambda x: count_stopwords(x))
+
+    # Find the percentage of punctuation in each line
+    data['punctuation_percentage'] = data['line'].apply(lambda x: count_punct(x))
+
+    # Find the percentage of numbers in each line
+    data['number_percentage'] = data['tagged_line'].apply(lambda x: count_nums(x))
+
+    # Find the percentage of numbers in each line
+    data['proper_noun_percentage'] = data['tagged_line'].apply(lambda x: count_proper_nouns(x))
+
+    # Count symbols in each line
+    data['symbol_count'] = data['tagged_line'].apply(lambda x: count_symbols(x))
+
+    # Count list item markers in each line
+    data['list_markers_count'] = data['tagged_line'].apply(lambda x: count_list_item_markers(x))
+
+    # Count determiners in each line
+    data['determiners_count'] = data['tagged_line'].apply(lambda x: count_determiners(x))
+
+    # Count names in each line
+    data['name_count'] = data['line_nostop'].apply(lambda x: count_names(x))
+
+    data['line_length_trans'] = data['line_length'].apply(lambda x: x ** (1 / 5))
+
+    data['word_count_trans'] = data['word_count'].apply(lambda x: x ** (1 / 3))
+
+    data['verb_percentage_trans'] = data['verb_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['adj_percentage_trans'] = data['adj_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['stopword_percentage_trans'] = data['stopword_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['punctuation_percentage_trans'] = data['punctuation_percentage'].apply(lambda x: x ** (1 / 2))
+
+    data['number_percentage_trans'] = data['number_percentage'].apply(lambda x: x ** (1 / 1))
+
+    data['proper_noun_percentage_trans'] = data['proper_noun_percentage'].apply(lambda x: x ** (1 / 1))
+
+    # Count company names in each line
+    data['company_count'] = data['line_nostop'].apply(lambda x: count_companies(x))
+
+    return data
+
+
+# MAIN FUNCTION CALL
+# move the call from views.py to here, so that it can be called in asnyc_task
+def read_resume(name: str, path_name: str, resume_id: int) -> object:
+    """Reads a resume.
+
+        Main class method for Resume.
+
+        Returns:
+            A csv file with each row labeled.
+
+        """
+    parser = ResumeParser(name)
+    parser.get_resume_paths(path_name)
+    # Compile text from several files of the same type in a given folder
+    print('La Maquina is getting your text...')
+    parser.text_compiler()
+    # Remove unecessary columns
+    print('La Maquina is cleaning things up a bit...')
+    data = parser.clean_text()
+
+    # Create features for use by the ML model
+    print('La Maquina is learning English...\t(creating features)')
+    data = create_features(data)
+
+    # Write out data for debugging, or for use elsewhere
+    print('Writing out clean(er) data with features')
+    working_data = parser.resume_out_path + parser.name + '_working_data.csv'
+    data.to_csv(working_data)
+
+    # Run ML model on input text with features included
+    print('La Maquina is reading your resume...')
+    labeled = parser.classify_text(data)
+
+    # Write out data for debugging, or for use elsewhere
+    labeled_data = parser.resume_out_path + parser.name + '_labeled_data.csv'
+    labeled.to_csv(labeled_data)
+
+    # Read data back in (??)
+    partial = pd.read_csv(parser.resume_out_path + parser.name + '_labeled_data.csv', sep=',')
+    partial.rename({'Unnamed: 0': 'doc_line'}, axis=1, inplace=True)
+
+    # Label Named Entities using Stanford NER tagger
+    partial['label'] = partial.apply(lambda x: parser.labeler(x), axis=1)
+    # print('Data has been labeled.\nShutting down server...')
+
+    # Count named entities.
+    # Rationale:
+    # if the only tag availible is "O", there are no useful tags,
+    # if there is only 1 non-"O" tag, than the line gets that tag
+    # if there are multiple tags, more processing is needed
+    partial['ents'] = partial['label'].apply(lambda x: parser.count_named_ents(x))
+    partial['label'] = partial.apply(lambda x: parser.relabeler(x), axis=1)
+
+    print('La Maquina is cleaning things up a bit more...')
+    # Break apart the lines with multiple NER tags, by filtering
+    # single-word labels from a list. The results are a list of tuples
+    # following the pattern [(word, tag), ...]
+
+    # Slice any row with a 'label' not listed in the ResumeParser.keepers
+    # attribute.
+    keep = partial[~partial['label'].isin(parser.keepers)]
+    keep.reset_index(drop=True, inplace=True)
+
+    # Make a working copy
+    new_df = keep.copy()
+
+    new_df['grouped'] = new_df.label.apply(lambda x: parser.tag_grouper(x))
+
+    # Remove the rows with lists of tuples for labels from the labeled
+    # DataFrame
+    trash = partial[partial['doc_line'].isin(keep.doc_line)].index
+    partial.drop(trash, inplace=True)
+
+    # Gather newly made rows into one DataFrame
+    loosies = parser.get_loosies(new_df)
+
+    # Append the newly made DataFrame to the main DataFrame
+    main_df = pd.concat([partial, loosies], axis=0)
+
+    # Reset the index, so that the newly added rows have higher numbers
+    main_df.reset_index(drop=True, inplace=True)
+    # Since 'doc_line' reflects the line from the original document,
+    # it can be used to reconstruct the order of the lines. Sorting
+    # by it first brings the newly created rows to the proper place
+    # on the page. Sorting next by 'm_index', which is the arbitrary
+    # name given to the previously unnamed index, will then put the
+    # lines in order with their local page neighbors.
+    main_df = main_df.rename_axis('m_index').sort_values(by=['doc_line', 'm_index'], ascending=[True, True])
+    # Reset the index back to the original, and drop the old index
+    # Now that the lines are in order locally how they were on the original page,
+    # the index needs to be in normal order, or else the
+    # resulting json will have illogical keys.
+    main_df.reset_index(drop=True, inplace=True)
+    # Write out the fully labeled data
+    final_labeled_data = parser.resume_out_path + parser.name + '_final_labeled_data.csv'
+    main_df.to_csv(final_labeled_data)
+
+    # Print confirmation message, and report how long the process took
+    print('La Maquina has printed your results.')
+    parser.death = datetime.now()
+    lifespan = parser.death - parser.birth
+    print('La Maquina read your resume in {} seconds.'.format(lifespan))
+    print('You\'re welcome for my service.')
+    main_df = main_df.to_json(orient='index')
+    return main_df
+
+
+# make a hook for django_q to call after the task is finished
+def hook_after_reading(task):
+    data = json.loads(task.result)
+    serialized = list()
+    for line in data:
+        data[line]['user'] = task.kwargs['name']
+        data[line]['upload'] = task.kwargs['resume_id']
+        formatted = dict(
+            model='resume_parser.parsedresume',
+            fields=data[line])
+        serialized.append(formatted)
+    result = json.dumps(serialized)
+    for obj in serializers.deserialize('json', result):
+        obj.save()
+    print('Hook completed successfully')

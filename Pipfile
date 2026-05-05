@@ -17,6 +17,7 @@ striprtf = "*"
 scikit-learn = "*"
 #django-q = "*"
 django-tailwind = {extras = ["cookieutter", "honcho", "reload"], version = "*"}
+pillow = "*"
 
 [dev-packages]
 

@@ -18,10 +18,10 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from userprofile import views as userprofile_views
+from portfolio import views as portfolio_views
 
 urlpatterns = [
-    path('', userprofile_views.home, name='home'),
+    path('', portfolio_views.index, name='home'),
     path('home-org/', include('homeorg.urls')),
     path('resume/', include('resume.urls')),
     path('userprofile/', include(('userprofile.urls', 'userprofile'), namespace='userprofile')),

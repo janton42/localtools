@@ -62,7 +62,7 @@
              <button type="submit" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Sign Out</button>
          </form>
         {% else %}
-            <li><a href="{% url 'userprofile:login' %}">Login</a></li>
+            <a href="{% url 'userprofile:login' %}" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Login</a>
         {% endif %}
     </div>
   </el-menu>

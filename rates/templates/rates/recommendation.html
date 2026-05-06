@@ -5,66 +5,75 @@
 
 {% block content %}
   <div class="max-w-4xl mx-auto py-8">
-    <h2 class="text-2xl font-semibold mb-4">Rate Recommendations</h2>
-    <p class="mb-2">Provides a rate range (high, mid, low) recommendation for a given skill, at a given experience level, in a given country.</p>
-    <p class="mb-4">Select a skill, level, and country to generate a rate recommendation.</p>
+    <h2 class="text-2xl font-semibold mb-4 text-[#e6edf3]">Rate Recommendations</h2>
+    <p class="mb-2 text-[#8b949e]">Provides a rate range (high, mid, low) recommendation for a given skill, at a given experience level, in a given country.</p>
+    <p class="mb-4 text-[#8b949e]">Select a skill, level, and country to generate a rate recommendation.</p>
 
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
+    <div class="bg-[#0d1117] border border-[#30363d] rounded-lg shadow p-4 mb-6">
       <form method="post" class="space-y-4">
         {% csrf_token %}
         {{ form.as_p }}
         <div>
-          <input class="px-4 py-2 bg-indigo-600 text-white rounded" type="submit" value="Submit">
+          <input class="px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded hover:bg-[#7dd3fc] cursor-pointer" type="submit" value="Submit">
         </div>
       </form>
     </div>
 
     {% if rate_responses %}
-      <div class="mb-2"><h3 class="text-lg font-medium">Rate Recommendations</h3></div>
-      <div class="mb-4"><a class="text-indigo-600 hover:underline" href="{% url 'rates:world_rates' %}">How are these calculated?</a></div>
+      <div class="mb-2"><h3 class="text-lg font-medium text-[#e6edf3]">Rate Recommendations</h3></div>
+      <div class="mb-4"><a class="text-[#38bdf8] hover:underline" href="{% url 'rates:world_rates' %}">How are these calculated?</a></div>
 
-      <div class="overflow-auto bg-white rounded-lg shadow">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+      <div class="overflow-auto bg-[#0d1117] border border-[#30363d] rounded-lg shadow">
+        <table class="min-w-full divide-y divide-[#30363d]">
+          <thead class="bg-[#21262d]">
             <tr>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Work Country</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Zone</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Ref. Rate</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Level</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">High</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Mid</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Low</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold">Request Date</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Work Country</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Zone</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Ref. Rate</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Level</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">High</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Mid</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Low</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Request Date</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
             {% for rec in rate_responses %}
               <tr>
-                <td class="px-3 py-2">{{ rec.rate_request.worker_country.name }}</td>
-                <td class="px-3 py-2">{{ rec.rate_request.worker_country.zone }}</td>
-                <td class="px-3 py-2">${{ rec.rate_request.rate|localize }}</td>
-                <td class="px-3 py-2">{{ rec.rate_request.skill }}</td>
-                <td class="px-3 py-2">{{ rec.rate_request.level }}</td>
+                <td class="px-3 py-2 text-[#e6edf3]">{{ rec.rate_request.worker_country.name }}</td>
+                <td class="px-3 py-2 text-[#8b949e]">{{ rec.rate_request.worker_country.zone }}</td>
+                <td class="px-3 py-2 text-[#8b949e]">${{ rec.rate_request.rate|localize }}</td>
+                <td class="px-3 py-2 text-[#e6edf3]">{{ rec.rate_request.skill }}</td>
+                <td class="px-3 py-2 text-[#8b949e]">{{ rec.rate_request.level }}</td>
                 {% localize on %}
-                  <td class="px-3 py-2">${{ rec.highest_rate }}</td>
-                  <td class="px-3 py-2">${{ rec.median_rate }}</td>
-                  <td class="px-3 py-2">${{ rec.lowest_rate }}</td>
+                  <td class="px-3 py-2 text-[#4ade80]">${{ rec.highest_rate }}</td>
+                  <td class="px-3 py-2 text-[#4ade80]">${{ rec.median_rate }}</td>
+                  <td class="px-3 py-2 text-[#4ade80]">${{ rec.lowest_rate }}</td>
                 {% endlocalize %}
-                <td class="px-3 py-2">{{ rec.rate_request.time_stamp|date }}</td>
+                <td class="px-3 py-2 text-[#8b949e]">{{ rec.rate_request.time_stamp|date }}</td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
     {% else %}
-      <p class="text-gray-600">No rate recommendations - get crackin', chief!</p>
+      <p class="text-[#8b949e]">No rate recommendations - get crackin', chief!</p>
     {% endif %}
   </div>
 {% endblock %}
 
 {% block scripts %}
-
+    <style>
+      form select, form input:not([type=submit]) {
+        background-color: #0d1117;
+        color: #e6edf3;
+        border: 1px solid #30363d;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+      }
+      form select option { background-color: #0d1117; color: #e6edf3; }
+    </style>
     <script type="text/javascript">
         function refreshWindow() {
             location.reload();

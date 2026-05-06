@@ -1,16 +1,16 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   {% for project in projects %}
-  <article class="bg-white rounded-lg shadow hover:shadow-md overflow-hidden">
+  <article class="bg-[#0d1117] border border-[#30363d] rounded-lg shadow hover:border-[#38bdf8] overflow-hidden transition-colors">
     {% if project.image %}
       <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-48 object-cover">
     {% endif %}
     <div class="p-4">
-      <h3 class="text-lg font-semibold">{{ project.title }}</h3>
-      <p class="text-sm text-gray-600 mt-2">{{ project.description|truncatechars:"140" }}</p>
-      <a class="inline-block mt-3 text-sm font-medium text-indigo-600 hover:text-indigo-800" href="{{ project.get_absolute_url }}">View Project</a>
+      <h3 class="text-lg font-semibold text-[#e6edf3]">{{ project.title }}</h3>
+      <p class="text-sm text-[#8b949e] mt-2">{{ project.description|truncatechars:"140" }}</p>
+      <a class="inline-block mt-3 text-sm font-medium text-[#38bdf8] hover:text-[#7dd3fc]" href="{{ project.get_absolute_url }}">View Project</a>
     </div>
   </article>
   {% empty %}
-    <p class="text-gray-600">No projects to display.</p>
+    <p class="text-[#8b949e]">No projects to display.</p>
   {% endfor %}
 </div>

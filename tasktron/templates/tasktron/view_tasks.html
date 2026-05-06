@@ -2,197 +2,191 @@
 
 {% block content %}
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-2xl font-semibold mb-4">Tasktron</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-[#e6edf3]">Tasktron</h2>
 
-    <p class="mb-4">A basic todo list, representing the fundamental database operations: create, read, update, and delete.</p>
-    <a class="inline-block px-4 py-2 bg-indigo-600 text-white rounded mb-4" href="{% url 'tasktron:create_task' %}">Add a Task</a>
+    <p class="mb-4 text-[#8b949e]">A basic todo list, representing the fundamental database operations: create, read, update, and delete.</p>
+    <a class="inline-block px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded mb-4 hover:bg-[#7dd3fc]" href="{% url 'tasktron:create_task' %}">Add a Task</a>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <h3 class="text-lg font-medium">Completed Today</h3>
+        <h3 class="text-lg font-medium text-[#e6edf3]">Completed Today</h3>
         {% if tc_tasks %}
           <div class="overflow-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-[#30363d]">
+              <thead class="bg-[#21262d]">
                 <tr>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Due</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Status</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Due</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Status</th>
                   <th class="px-3 py-2"></th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
                 {% for task in tc_tasks %}
                 <tr>
-                  <td class="px-3 py-2">{{ task.title }}</td>
-                  <td class="px-3 py-2">{{ task.due }}</td>
-                  <td class="px-3 py-2">{{ task.status }}</td>
-                  <td class="px-3 py-2"><a class="text-indigo-600 hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-600 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+                  <td class="px-3 py-2 text-[#e6edf3]">{{ task.title }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.due }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.status }}</td>
+                  <td class="px-3 py-2"><a class="text-[#38bdf8] hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-400 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         {% else %}
-          <p class="text-gray-600">You haven't completed anything today.</p>
+          <p class="text-[#8b949e]">You haven't completed anything today.</p>
         {% endif %}
       </div>
 
       <div>
-        <h3 class="text-lg font-medium">Due Today</h3>
+        <h3 class="text-lg font-medium text-[#e6edf3]">Due Today</h3>
         {% if td_tasks %}
           <div class="overflow-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-[#30363d]">
+              <thead class="bg-[#21262d]">
                 <tr>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Due</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Status</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Due</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Status</th>
                   <th class="px-3 py-2"></th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
                 {% for task in td_tasks %}
                 <tr>
-                  <td class="px-3 py-2">{{ task.title }}</td>
-                  <td class="px-3 py-2">{{ task.due }}</td>
-                  <td class="px-3 py-2">{{ task.status }}</td>
-                  <td class="px-3 py-2"><a class="text-indigo-600 hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-600 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+                  <td class="px-3 py-2 text-[#e6edf3]">{{ task.title }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.due }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.status }}</td>
+                  <td class="px-3 py-2"><a class="text-[#38bdf8] hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-400 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         {% else %}
-          <p class="text-gray-600">You have no tasks due today.</p>
+          <p class="text-[#8b949e]">You have no tasks due today.</p>
         {% endif %}
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <div>
-        <h3 class="text-lg font-medium">In Progress</h3>
+        <h3 class="text-lg font-medium text-[#e6edf3]">In Progress</h3>
         {% if ip_tasks %}
           <div class="overflow-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-[#30363d]">
+              <thead class="bg-[#21262d]">
                 <tr>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Due</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Status</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Due</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Status</th>
                   <th class="px-3 py-2"></th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
                 {% for task in ip_tasks %}
                 <tr>
-                  <td class="px-3 py-2">{{ task.title }}</td>
-                  <td class="px-3 py-2">{{ task.due }}</td>
-                  <td class="px-3 py-2">{{ task.status }}</td>
-                  <td class="px-3 py-2"><a class="text-indigo-600 hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-600 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+                  <td class="px-3 py-2 text-[#e6edf3]">{{ task.title }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.due }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.status }}</td>
+                  <td class="px-3 py-2"><a class="text-[#38bdf8] hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-400 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         {% else %}
-          <p class="text-gray-600">You have no tasks in progress.</p>
+          <p class="text-[#8b949e]">You have no tasks in progress.</p>
         {% endif %}
       </div>
 
       <div>
-        <h3 class="text-lg font-medium">Not Started</h3>
+        <h3 class="text-lg font-medium text-[#e6edf3]">Not Started</h3>
         {% if ns_tasks %}
-
           <div class="overflow-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-[#30363d]">
+              <thead class="bg-[#21262d]">
                 <tr>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Due</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Status</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Due</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Status</th>
                   <th class="px-3 py-2"></th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
                 {% for task in ns_tasks %}
                 <tr>
-                  <td class="px-3 py-2">{{ task.title }}</td>
-                  <td class="px-3 py-2">{{ task.due }}</td>
-                  <td class="px-3 py-2">{{ task.status }}</td>
-                  <td class="px-3 py-2"><a class="text-indigo-600 hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-600 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+                  <td class="px-3 py-2 text-[#e6edf3]">{{ task.title }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.due }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.status }}</td>
+                  <td class="px-3 py-2"><a class="text-[#38bdf8] hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-400 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
-
         {% else %}
-          <p class="text-gray-600">You have no pending tasks.</p>
+          <p class="text-[#8b949e]">You have no pending tasks.</p>
         {% endif %}
       </div>
 
       <div>
-        <h3 class="text-lg font-medium">On Hold</h3>
+        <h3 class="text-lg font-medium text-[#e6edf3]">On Hold</h3>
         {% if oh_tasks %}
-
           <div class="overflow-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-[#30363d]">
+              <thead class="bg-[#21262d]">
                 <tr>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Due</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Status</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Due</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Status</th>
                   <th class="px-3 py-2"></th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
                 {% for task in oh_tasks %}
                 <tr>
-                  <td class="px-3 py-2">{{ task.title }}</td>
-                  <td class="px-3 py-2">{{ task.due }}</td>
-                  <td class="px-3 py-2">{{ task.status }}</td>
-                  <td class="px-3 py-2"><a class="text-indigo-600 hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-600 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+                  <td class="px-3 py-2 text-[#e6edf3]">{{ task.title }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.due }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.status }}</td>
+                  <td class="px-3 py-2"><a class="text-[#38bdf8] hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-400 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
-
         {% else %}
-          <p class="text-gray-600">You have no tasks on hold.</p>
+          <p class="text-[#8b949e]">You have no tasks on hold.</p>
         {% endif %}
       </div>
 
       <div>
-        <h3 class="text-lg font-medium">Completed</h3>
+        <h3 class="text-lg font-medium text-[#e6edf3]">Completed</h3>
         {% if completed_tasks %}
-
           <div class="overflow-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-[#30363d]">
+              <thead class="bg-[#21262d]">
                 <tr>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Title</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Due</th>
-                  <th class="px-3 py-2 text-left text-sm font-semibold">Status</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Title</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Due</th>
+                  <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Status</th>
                   <th class="px-3 py-2"></th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
                 {% for task in completed_tasks %}
                 <tr>
-                  <td class="px-3 py-2">{{ task.title }}</td>
-                  <td class="px-3 py-2">{{ task.due }}</td>
-                  <td class="px-3 py-2">{{ task.status }}</td>
-                  <td class="px-3 py-2"><a class="text-indigo-600 hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-600 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
+                  <td class="px-3 py-2 text-[#e6edf3]">{{ task.title }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.due }}</td>
+                  <td class="px-3 py-2 text-[#8b949e]">{{ task.status }}</td>
+                  <td class="px-3 py-2"><a class="text-[#38bdf8] hover:underline" href="{% url 'tasktron:update_task' task.id %}">Edit</a> | <a class="text-red-400 hover:underline" href="{% url 'tasktron:delete_task' task.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
-
         {% else %}
-          <p class="text-gray-600">You have no completed tasks.</p>
+          <p class="text-[#8b949e]">You have no completed tasks.</p>
         {% endif %}
       </div>
     </div>

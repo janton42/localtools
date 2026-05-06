@@ -4,6 +4,28 @@
 {% block content %}
   <div class="max-w-6xl mx-auto py-12">
     <h1 class="text-3xl font-bold mb-6">Projects</h1>
+
+    <form method="get" class="flex gap-3 items-end mb-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Tag</label>
+        <select name="tag" class="mt-1 block rounded-md border-gray-300 shadow-sm">
+          <option value="">All</option>
+          {% for tag in tags %}
+            <option value="{{ tag.slug }}" {% if tag.slug == selected_tag %}selected{% endif %}>{{ tag.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Project Date</label>
+        <input type="date" name="date" value="{{ selected_date }}" class="mt-1 block rounded-md border-gray-300 shadow-sm">
+      </div>
+
+      <div>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Filter</button>
+      </div>
+    </form>
+
     {% include 'portfolio/_projects_list.html' with projects=projects %}
   </div>
 {% endblock %}

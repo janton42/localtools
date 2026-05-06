@@ -1,69 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="centered-content">
-  <h2>International Pay Rates</h2>
-</div>
+<div class="max-w-4xl mx-auto">
+  <h2 class="text-2xl font-semibold mb-4">International Pay Rates</h2>
 
-<div class="container">
-  <p>Tool to translate pay rates from one country to another.
-  </p>
-  <a href="{% url 'rates:world_rates' %}">New Rate Estimate</a>
-  <br>
-  <br>
-  <div class="row">
-    <div class="col-lg-12">
-      <h3>Rate Requests</h3>
-      {% if rate_estimates %}
-      <div class="table-responsive-sm">
-        <table class="table table-hover">
+  <p class="mb-4">Tool to translate pay rates from one country to another.</p>
+  <a class="inline-block px-4 py-2 bg-indigo-600 text-white rounded mb-4" href="{% url 'rates:world_rates' %}">New Rate Estimate</a>
+
+  <div>
+    <h3 class="text-lg font-medium">Rate Requests</h3>
+    {% if rate_estimates %}
+    <div class="overflow-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
           <tr>
-              <th>ID</th>
-              <th>Employer Country</th>
-              <th>Worker Country</th>
-              <th>Skill Level</th>
-              <th>Lowest Rate</th>
-              <th>Median Rate</th>
-              <th>Highest Rate</th>
-              <th>Created</th>
-{#            <th colspan="2">Update</th>#}
+              <th class="px-3 py-2 text-left text-sm font-semibold">ID</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Employer Country</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Worker Country</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Skill Level</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Lowest Rate</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Median Rate</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Highest Rate</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold">Created</th>
           </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
           {% for estimate in rate_estimates %}
           <tr>
-            <td>
-                <p>{{ estimate.id }}</p>
-            </td>
-            <td>
-                <p>{{ estimate.rate_request.employer_country }}</p>
-            </td>
-            <td>
-                <p>{{ estimate.rate_request.worker_country }}</p>
-            </td>
-            <td>
-                <p>{{ estimate.skill_level }}</p>
-            </td>
-            <td>
-                <p>{{ estimate.lowest_rate }}</p>
-            </td>
-            <td>
-                <p>{{ estimate.median_rate }}</p>
-              </td>
-            <td>
-                <p>{{ estimate.highest_rate }}</p>
-            </td>
-            <td>
-                <p>{{ estimate.time_stamp }}</p>
-            </td>
+            <td class="px-3 py-2">{{ estimate.id }}</td>
+            <td class="px-3 py-2">{{ estimate.rate_request.employer_country }}</td>
+            <td class="px-3 py-2">{{ estimate.rate_request.worker_country }}</td>
+            <td class="px-3 py-2">{{ estimate.skill_level }}</td>
+            <td class="px-3 py-2">{{ estimate.lowest_rate }}</td>
+            <td class="px-3 py-2">{{ estimate.median_rate }}</td>
+            <td class="px-3 py-2">{{ estimate.highest_rate }}</td>
+            <td class="px-3 py-2">{{ estimate.time_stamp }}</td>
           </tr>
           {% endfor %}
-        </table>
-      </div>
-
-      {% else %}
-        <p>You don't have any previous rate recommendations.</p>
-      {% endif %}
-      </div>
+        </tbody>
+      </table>
     </div>
+
+    {% else %}
+      <p class="text-gray-600">You don't have any previous rate recommendations.</p>
+    {% endif %}
+  </div>
 
 </div>
 

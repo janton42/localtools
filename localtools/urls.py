@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 from portfolio import views as portfolio_views
 
 urlpatterns = [
-    path('', portfolio_views.index, name='home'),
     path('home-org/', include('homeorg.urls')),
     path('resume/', include('resume.urls')),
     path('userprofile/', include(('userprofile.urls', 'userprofile'), namespace='userprofile')),
@@ -31,4 +30,6 @@ urlpatterns = [
     path('tasktron/', include('tasktron.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path("__reload__/", include("django_browser_reload.urls")),
+    # Portfolio last — its <slug:slug>/ pattern must not shadow the routes above
+    path('', include(('portfolio.urls', 'portfolio'), namespace='portfolio')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

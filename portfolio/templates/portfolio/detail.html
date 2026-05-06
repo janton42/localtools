@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="max-w-4xl mx-auto py-12">
+    <div class="bg-black rounded-lg shadow p-6">
+      <div class="mb-4">
+        <h1 class="text-2xl font-bold">{{ project.title }}</h1>
+        {% if project.project_date %}<p class="text-sm text-gray-500">Created: {{ project.project_date }}</p>{% endif %}
+      </div>
+
+      {% if project.image %}
+        <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-64 object-cover rounded mb-4">
+      {% endif %}
+
+      <div class="prose prose-invert mb-4">{{ project.description|linebreaks }}</div>
+
+      <div class="flex gap-4 items-center">
+        {% with url=project.get_project_url %}
+          {% if url %}
+            <a href="{{ url }}" target="_blank" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500">Open Project</a>
+          {% endif %}
+        {% endwith %}
+
+        {% if project.github_url %}
+          <a href="{{ project.github_url }}" target="_blank" class="px-4 py-2 bg-indigo-600 rounded hover:bg-indigo-500">View on GitHub</a>
+        {% endif %}
+      </div>
+
+      {% if project.tags.all %}
+        <div class="mt-4">
+          <h4 class="text-sm font-semibold">Tags</h4>
+          <div class="flex gap-2 mt-2">
+            {% for tag in project.tags.all %}
+              <span class="text-xs px-2 py-1 bg-green-800 rounded">{{ tag.name }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

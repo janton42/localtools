@@ -6,12 +6,8 @@
     {% endif %}
     <div class="p-4">
       <h3 class="text-lg font-semibold">{{ project.title }}</h3>
-      <p class="text-sm text-gray-600 mt-2">{{ project.description|truncatechars:140 }}</p>
-     {% with url=project.get_project_url %}
-	{% if url %}
-        	<a class="text text-gray-600 mt-2" href="{{ url }}">View Project</a>
-    	{% endif %}
-     {% endwith %}
+      <p class="text-sm text-gray-600 mt-2">{{ project.description|truncatechars:"140" }}</p>
+      <a class="inline-block mt-3 text-sm font-medium text-indigo-600 hover:text-indigo-800" href="{{ project.get_absolute_url }}">View Project</a>
     </div>
   </article>
   {% empty %}

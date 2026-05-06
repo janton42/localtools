@@ -2,39 +2,39 @@
 
 {% block content %}
 <div class="max-w-4xl mx-auto">
-  <h2 class="text-2xl font-semibold mb-4">International Pay Rates</h2>
+  <h2 class="text-2xl font-semibold mb-4 text-[#e6edf3]">International Pay Rates</h2>
 
-  <p class="mb-4">Tool to translate pay rates from one country to another.</p>
-  <a class="inline-block px-4 py-2 bg-indigo-600 text-white rounded mb-4" href="{% url 'rates:world_rates' %}">New Rate Estimate</a>
+  <p class="mb-4 text-[#8b949e]">Tool to translate pay rates from one country to another.</p>
+  <a class="inline-block px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded mb-4 hover:bg-[#7dd3fc]" href="{% url 'rates:world_rates' %}">New Rate Estimate</a>
 
   <div>
-    <h3 class="text-lg font-medium">Rate Requests</h3>
+    <h3 class="text-lg font-medium text-[#e6edf3]">Rate Requests</h3>
     {% if rate_estimates %}
     <div class="overflow-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+      <table class="min-w-full divide-y divide-[#30363d]">
+        <thead class="bg-[#21262d]">
           <tr>
-              <th class="px-3 py-2 text-left text-sm font-semibold">ID</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Employer Country</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Worker Country</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Skill Level</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Lowest Rate</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Median Rate</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Highest Rate</th>
-              <th class="px-3 py-2 text-left text-sm font-semibold">Created</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">ID</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Employer Country</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Worker Country</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Skill Level</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Lowest Rate</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Median Rate</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Highest Rate</th>
+              <th class="px-3 py-2 text-left text-sm font-semibold text-[#e6edf3]">Created</th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-[#0d1117] divide-y divide-[#30363d]">
           {% for estimate in rate_estimates %}
           <tr>
-            <td class="px-3 py-2">{{ estimate.id }}</td>
-            <td class="px-3 py-2">{{ estimate.rate_request.employer_country }}</td>
-            <td class="px-3 py-2">{{ estimate.rate_request.worker_country }}</td>
-            <td class="px-3 py-2">{{ estimate.skill_level }}</td>
-            <td class="px-3 py-2">{{ estimate.lowest_rate }}</td>
-            <td class="px-3 py-2">{{ estimate.median_rate }}</td>
-            <td class="px-3 py-2">{{ estimate.highest_rate }}</td>
-            <td class="px-3 py-2">{{ estimate.time_stamp }}</td>
+            <td class="px-3 py-2 text-[#e6edf3]">{{ estimate.id }}</td>
+            <td class="px-3 py-2 text-[#8b949e]">{{ estimate.rate_request.employer_country }}</td>
+            <td class="px-3 py-2 text-[#8b949e]">{{ estimate.rate_request.worker_country }}</td>
+            <td class="px-3 py-2 text-[#8b949e]">{{ estimate.skill_level }}</td>
+            <td class="px-3 py-2 text-[#4ade80]">{{ estimate.lowest_rate }}</td>
+            <td class="px-3 py-2 text-[#4ade80]">{{ estimate.median_rate }}</td>
+            <td class="px-3 py-2 text-[#4ade80]">{{ estimate.highest_rate }}</td>
+            <td class="px-3 py-2 text-[#8b949e]">{{ estimate.time_stamp }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -42,7 +42,7 @@
     </div>
 
     {% else %}
-      <p class="text-gray-600">You don't have any previous rate recommendations.</p>
+      <p class="text-[#8b949e]">You don't have any previous rate recommendations.</p>
     {% endif %}
   </div>
 

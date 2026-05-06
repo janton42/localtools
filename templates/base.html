@@ -49,25 +49,9 @@
             <a href="{% url 'userprofile:login' %}" class="text-sm font-medium px-3 py-1 rounded-md text-[#38bdf8] hover:bg-[#21262d]">Login</a>
           {% endif %}
 
-          <!-- Mobile menu button -->
-          <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-[#21262d]">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
         </div>
       </div>
     </div>
-
-    <!-- Mobile nav (hidden by default) -->
-    <div id="mobile-menu" class="md:hidden hidden border-t border-[#30363d]">
-      <div class="px-4 pt-2 pb-4 space-y-1">
-        {% if user.is_authenticated %}
-          <form method="post" action="{% url 'userprofile:logout' %}">{{ csrf_token }}<button type="submit" class="w-full text-left px-3 py-2 text-[#e6edf3] hover:bg-[#21262d] rounded-md">Sign Out</button></form>
-        {% else %}
-          <a href="{% url 'userprofile:login' %}" class="block px-3 py-2 rounded-md text-[#38bdf8]">Login</a>
-        {% endif %}
-      </div>
-    </div>
-
   </header>
 
 

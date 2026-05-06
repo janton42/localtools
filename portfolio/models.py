@@ -21,6 +21,7 @@ class Project(models.Model):
     link = models.CharField(max_length=2000, blank=True)
     internal_url_name = models.CharField(max_length=100, blank=True)
     is_published = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField('Tag', blank=True)

@@ -17,12 +17,12 @@
 
       <div class="flex gap-4 items-center">
         {% with url=project.get_project_url %}
-          {% if url %}
+          {% if url and project.public or url and user.is_authenticated %}
             <a href="{{ url }}" target="_blank" class="px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded hover:bg-[#7dd3fc]">Open Project</a>
           {% endif %}
         {% endwith %}
 
-        {% if project.github_url %}
+        {% if project.github_url and project.public or project.github_url and user.is_authenticated %}
           <a href="{{ project.github_url }}" target="_blank" class="px-4 py-2 bg-[#21262d] border border-[#30363d] text-[#e6edf3] rounded hover:bg-[#30363d]">View on GitHub</a>
         {% endif %}
       </div>

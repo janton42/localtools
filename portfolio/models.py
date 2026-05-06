@@ -18,7 +18,7 @@ class Project(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='portfolio/images/', blank=True, null=True)
-    link = models.URLField(blank=True)
+    link = models.CharField(max_length=2000, blank=True)
     internal_url_name = models.CharField(max_length=100, blank=True)
     is_published = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)

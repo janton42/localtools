@@ -1,22 +1,36 @@
 {% extends 'base.html' %}
 
+{% block scripts %}
+<style>
+  form select, form input:not([type=submit]), form textarea {
+    background-color: #0d1117;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+  }
+  form select option { background-color: #0d1117; color: #e6edf3; }
+</style>
+{% endblock %}
+
 {% block content %}
-    <h2>New Task</h2>
-  <form class="post-form" action="" method="POST">
+    <h2 class="text-xl font-semibold mb-4 text-[#e6edf3]">New Task</h2>
+  <form class="post-form space-y-4" action="" method="POST">
     {% csrf_token %}
     {% for field in form %}
     <div>
-      <p>
+      <p class="text-[#8b949e]">
         {{ field.label }}: <br> {{ field }}
       </p>
-
       {% for error in field.errors %}
-        <<small style="color: red">{{ error }}</small>
+        <small class="text-red-400">{{ error }}</small>
       {% endfor %}
     </div>
     {% endfor %}
-    <button type="submit">Submit</button>
-    <button type="reset">Reset</button>
-    <a href="{% url 'tasktron:view_tasks' %}">Cancel</a>
+    <div class="flex gap-3">
+      <button type="submit" class="px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded hover:bg-[#7dd3fc]">Submit</button>
+      <button type="reset" class="px-4 py-2 bg-[#21262d] border border-[#30363d] text-[#e6edf3] rounded hover:bg-[#30363d]">Reset</button>
+      <a href="{% url 'tasktron:view_tasks' %}" class="px-4 py-2 text-[#8b949e] hover:text-[#e6edf3]">Cancel</a>
+    </div>
   </form>
 {% endblock %}

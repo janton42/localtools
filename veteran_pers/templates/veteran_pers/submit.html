@@ -3,7 +3,7 @@
 <div class="min-h-screen bg-[#f8f7f4] text-[#1c1c1e] -m-8 rounded-xl overflow-hidden">
 
   <div class="bg-[#2d4a6e] text-white px-8 py-10">
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-5xl mx-auto">
       <h1 class="text-3xl font-bold">Submit a Work</h1>
       <p class="text-[#c8d8e8] mt-2 text-sm">
         Fill out the form below to submit your academic work for review. Approved works will appear in the public database.
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="max-w-2xl mx-auto px-8 py-10">
+  <div class="max-w-5xl mx-auto px-8 py-10">
     <form method="post" class="bg-white border border-[#d1cfc9] rounded-xl p-8 shadow-sm space-y-6">
       {% csrf_token %}
 
@@ -54,10 +54,16 @@
         {% endfor %}
       </fieldset>
 
-      <button type="submit"
-              class="w-full bg-[#c17f3a] hover:bg-[#a86c2c] text-white font-semibold py-3 rounded-lg transition-colors">
-        Submit for Review
-      </button>
+      <div class="flex gap-4">
+        <button type="submit"
+                class="flex-1 bg-[#c17f3a] hover:bg-[#a86c2c] text-white font-semibold py-3 rounded-lg transition-colors">
+          Submit for Review
+        </button>
+        <a href="{% url 'veteran_pers:index' %}"
+           class="flex-1 text-center bg-[#e0ddd8] hover:bg-[#d0cdc8] text-[#1c1c1e] font-semibold py-3 rounded-lg transition-colors">
+          Cancel
+        </a>
+      </div>
     </form>
   </div>
 

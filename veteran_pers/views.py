@@ -45,25 +45,36 @@ def submit_success(request):
 
 @reviewer_required
 def review_queue(request):
-    applicants = Applicant.objects.filter(status=ReviewStatus.PENDING).select_related('work')
-    return render(request, 'veteran_pers/review_queue.html', {'applicants': applicants})
+    pending = Applicant.objects.filter(status=ReviewStatus.PENDING).select_related('work')
+    approved = Applicant.objects.filter(status=ReviewStatus.APPROVED).select_related('work')
+    denied = Applicant.objects.filter(status=ReviewStatus.DENIED).select_related('work')
+    return render(request, 'veteran_pers/review_queue.html', {
+        'pending': pending,
+        'approved': approved,
+        'denied': denied,
+    })
 
 
 @reviewer_required
 def review_applicant(request, pk):
-    applicant = get_object_or_404(Applicant, pk=pk, status=ReviewStatus.PENDING)
+    applicant = get_object_or_404(Applicant, pk=pk)
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
+            old_status = applicant.status
             applicant.status = form.cleaned_data['decision']
             applicant.reviewer_notes = form.cleaned_data['justification']
-            if applicant.status == ReviewStatus.APPROVED:
-                applicant.work.is_approved = True
-                applicant.work.save()
+            # Sync is_approved on the work
+            applicant.work.is_approved = (applicant.status == ReviewStatus.APPROVED)
+            applicant.work.save()
             applicant.save()
             return redirect('veteran_pers:review_queue')
     else:
-        form = ReviewForm()
+        # Pre-populate form if already reviewed
+        initial = {}
+        if applicant.status != ReviewStatus.PENDING:
+            initial = {'decision': applicant.status, 'justification': applicant.reviewer_notes}
+        form = ReviewForm(initial=initial)
     return render(request, 'veteran_pers/review_applicant.html', {'applicant': applicant, 'form': form})
 
 

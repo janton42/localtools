@@ -3,37 +3,61 @@
 <div class="min-h-screen bg-[#f8f7f4] text-[#1c1c1e] -m-8 rounded-xl overflow-hidden">
 
   <div class="bg-[#2d4a6e] text-white px-8 py-12 text-center">
+    <a href="{% url 'veteran_pers:index' %}" class="inline-block text-[#c8d8e8] hover:text-white text-sm mb-3 transition-colors">&larr; Veteran Perspectives</a>
     <h1 class="text-3xl font-bold tracking-tight">Reviewer Queue</h1>
-    <p class="mt-2 text-[#c8d8e8]">Pending submissions awaiting review</p>
+    <p class="mt-2 text-[#c8d8e8]">All submissions grouped by review status</p>
   </div>
 
-  <div class="max-w-4xl mx-auto px-8 py-12">
-    {% if applicants %}
-      <div class="space-y-4">
-        {% for applicant in applicants %}
-          <div class="bg-white rounded-xl border border-[#e0ddd8] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
-            <div>
-              <p class="text-lg font-semibold text-[#2d4a6e]">{{ applicant.work.title }}</p>
-              <p class="text-sm text-[#5a5a5e]">
-                {{ applicant.work.get_work_type_display }} &mdash;
-                {{ applicant.first_name }} {{ applicant.last_name }}
-              </p>
-              <p class="text-xs text-[#8a8a8e] mt-1">Submitted {{ applicant.submitted_at|date:"N j, Y" }}</p>
-            </div>
-            <a href="{% url 'veteran_pers:review_applicant' applicant.pk %}"
-               class="inline-block bg-[#2d4a6e] hover:bg-[#1e3352] text-white font-semibold px-6 py-2 rounded-lg transition-colors text-sm whitespace-nowrap">
-              Review
-            </a>
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="text-center py-20 text-[#5a5a5e]">
-        <p class="text-xl font-medium">No pending submissions.</p>
-        <p class="mt-2 text-sm">Check back later.</p>
-      </div>
-    {% endif %}
-  </div>
+  <div class="max-w-4xl mx-auto px-8 py-12 space-y-14">
 
+    <!-- Pending -->
+    <section>
+      <h2 class="text-xl font-semibold text-[#2d4a6e] mb-4 border-b border-[#d1cfc9] pb-2">
+        Pending <span class="text-[#8a8a8e] font-normal text-base">({{ pending|length }})</span>
+      </h2>
+      {% if pending %}
+        <div class="space-y-4">
+          {% for applicant in pending %}
+            {% include "veteran_pers/_review_card.html" with applicant=applicant badge_color="bg-[#c17f3a]" badge_label="Pending" %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-[#5a5a5e] text-sm">No pending submissions.</p>
+      {% endif %}
+    </section>
+
+    <!-- Approved -->
+    <section>
+      <h2 class="text-xl font-semibold text-[#2d4a6e] mb-4 border-b border-[#d1cfc9] pb-2">
+        Approved <span class="text-[#8a8a8e] font-normal text-base">({{ approved|length }})</span>
+      </h2>
+      {% if approved %}
+        <div class="space-y-4">
+          {% for applicant in approved %}
+            {% include "veteran_pers/_review_card.html" with applicant=applicant badge_color="bg-[#5a7a5c]" badge_label="Approved" %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-[#5a5a5e] text-sm">No approved submissions.</p>
+      {% endif %}
+    </section>
+
+    <!-- Denied -->
+    <section>
+      <h2 class="text-xl font-semibold text-[#2d4a6e] mb-4 border-b border-[#d1cfc9] pb-2">
+        Denied <span class="text-[#8a8a8e] font-normal text-base">({{ denied|length }})</span>
+      </h2>
+      {% if denied %}
+        <div class="space-y-4">
+          {% for applicant in denied %}
+            {% include "veteran_pers/_review_card.html" with applicant=applicant badge_color="bg-red-700" badge_label="Denied" %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-[#5a5a5e] text-sm">No denied submissions.</p>
+      {% endif %}
+    </section>
+
+  </div>
 </div>
 {% endblock %}

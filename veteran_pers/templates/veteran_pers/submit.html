@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-[#f8f7f4] text-[#1c1c1e] -m-8 rounded-xl overflow-hidden">
+
+  <div class="bg-[#2d4a6e] text-white px-8 py-10">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-3xl font-bold">Submit a Work</h1>
+      <p class="text-[#c8d8e8] mt-2 text-sm">
+        Fill out the form below to submit your academic work for review. Approved works will appear in the public database.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-8 py-10">
+    <form method="post" class="bg-white border border-[#d1cfc9] rounded-xl p-8 shadow-sm space-y-6">
+      {% csrf_token %}
+
+      <fieldset class="space-y-4">
+        <legend class="text-lg font-semibold text-[#2d4a6e] border-b border-[#d1cfc9] pb-2 w-full">Your Information</legend>
+        {% for field in form %}
+          {% if field.name in "first_name,last_name,email,institution" %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-[#3a3a3c] mb-1">{{ field.label }}</label>
+            <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
+                   value="{{ field.value|default_if_none:'' }}"
+                   class="w-full border border-[#d1cfc9] rounded-lg px-3 py-2 text-[#1c1c1e] bg-[#f8f7f4] focus:outline-none focus:ring-2 focus:ring-[#2d4a6e]">
+            {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors|join:", " }}</p>{% endif %}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </fieldset>
+
+      <fieldset class="space-y-4">
+        <legend class="text-lg font-semibold text-[#2d4a6e] border-b border-[#d1cfc9] pb-2 w-full">Work Details</legend>
+        {% for field in form %}
+          {% if field.name in "title,work_type,link" %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-[#3a3a3c] mb-1">{{ field.label }}</label>
+            {% if field.name == "work_type" %}
+              <select name="{{ field.html_name }}" id="{{ field.id_for_label }}"
+                      class="w-full border border-[#d1cfc9] rounded-lg px-3 py-2 text-[#1c1c1e] bg-[#f8f7f4] focus:outline-none focus:ring-2 focus:ring-[#2d4a6e]">
+                {% for val, label in field.field.choices %}
+                  <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            {% else %}
+              <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
+                     value="{{ field.value|default_if_none:'' }}"
+                     class="w-full border border-[#d1cfc9] rounded-lg px-3 py-2 text-[#1c1c1e] bg-[#f8f7f4] focus:outline-none focus:ring-2 focus:ring-[#2d4a6e]">
+            {% endif %}
+            {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors|join:", " }}</p>{% endif %}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </fieldset>
+
+      <button type="submit"
+              class="w-full bg-[#c17f3a] hover:bg-[#a86c2c] text-white font-semibold py-3 rounded-lg transition-colors">
+        Submit for Review
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

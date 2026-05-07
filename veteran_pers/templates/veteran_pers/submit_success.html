@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-[#f8f7f4] text-[#1c1c1e] -m-8 rounded-xl overflow-hidden flex items-center justify-center py-20">
+  <div class="text-center max-w-md mx-auto px-8">
+    <div class="text-5xl mb-6">✅</div>
+    <h1 class="text-2xl font-bold text-[#2d4a6e] mb-3">Submission Received</h1>
+    <p class="text-[#5a5a5e] leading-relaxed mb-8">
+      Thank you for submitting your work. It will be reviewed and, if approved, added to the public database.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="{% url 'veteran_pers:works_list' %}"
+         class="inline-block bg-[#2d4a6e] hover:bg-[#1e3450] text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+        Browse the Database
+      </a>
+      <a href="{% url 'veteran_pers:index' %}"
+         class="inline-block border border-[#2d4a6e] text-[#2d4a6e] hover:bg-[#edeae4] font-semibold px-6 py-3 rounded-lg transition-colors">
+        Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

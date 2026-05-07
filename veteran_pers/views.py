@@ -8,11 +8,12 @@ from .forms import WorkSubmissionForm, ReviewForm
 def reviewer_required(view_func):
     @login_required
     def wrapper(request, *args, **kwargs):
-        try:
-            if not request.user.profile.is_reviewer:
+        if not request.user.is_superuser:
+            try:
+                if not request.user.profile.is_reviewer:
+                    raise PermissionDenied
+            except AttributeError:
                 raise PermissionDenied
-        except AttributeError:
-            raise PermissionDenied
         return view_func(request, *args, **kwargs)
     wrapper.__name__ = view_func.__name__
     return wrapper

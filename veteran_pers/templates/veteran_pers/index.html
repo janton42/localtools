@@ -19,6 +19,12 @@
          class="inline-block bg-[#5a7a5c] hover:bg-[#4a6a4c] text-white font-semibold px-8 py-3 rounded-lg transition-colors">
         Submit a Work
       </a>
+      {% if request.user.is_authenticated and request.user.is_superuser or request.user.is_authenticated and request.user.profile.is_reviewer %}
+      <a href="{% url 'veteran_pers:review_queue' %}"
+         class="inline-block bg-white/20 hover:bg-white/30 text-white font-semibold px-8 py-3 rounded-lg transition-colors border border-white/40">
+        Review Submissions
+      </a>
+      {% endif %}
     </div>
   </div>
 

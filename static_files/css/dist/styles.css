@@ -42,6 +42,7 @@
     --text-4xl--line-height: calc(2.5 / 2.25);
     --text-5xl: 3rem;
     --text-5xl--line-height: 1;
+    --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
@@ -461,6 +462,9 @@
   .resize {
     resize: both;
   }
+  .resize-none {
+    resize: none;
+  }
   .list-inside {
     list-style-position: inside;
   }
@@ -499,6 +503,11 @@
   }
   .gap-6 {
     gap: calc(var(--spacing) * 6);
+  }
+  :where(.space-y-1 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 1) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-y-reverse)));
   }
   :where(.space-y-3 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
@@ -568,8 +577,22 @@
   .border-\[\#30363d\] {
     border-color: #30363d;
   }
+  .border-\[\#c0bdb8\] {
+    border-color: #c0bdb8;
+  }
   .border-\[\#d1cfc9\] {
     border-color: #d1cfc9;
+  }
+  .border-\[\#e0ddd8\] {
+    border-color: #e0ddd8;
+  }
+  .border-white\/40 {
+    border-color: color-mix(in srgb, #fff 40%, transparent);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-white\/40 {
+      border-color: color-mix(in oklab, var(--color-white) 40%, transparent);
+    }
   }
   .bg-\[\#0d1117\] {
     background-color: #0d1117;
@@ -595,6 +618,9 @@
   .bg-\[\#c17f3a\] {
     background-color: #c17f3a;
   }
+  .bg-\[\#e0ddd8\] {
+    background-color: #e0ddd8;
+  }
   .bg-\[\#f8f7f4\] {
     background-color: #f8f7f4;
   }
@@ -606,6 +632,14 @@
   }
   .bg-white {
     background-color: var(--color-white);
+  }
+  .bg-white\/20 {
+    background-color: color-mix(in srgb, #fff 20%, transparent);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-white\/20 {
+      background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+    }
   }
   .stroke-white {
     stroke: var(--color-white);
@@ -740,6 +774,10 @@
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
   }
+  .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
@@ -751,6 +789,9 @@
   .tracking-tight {
     --tw-tracking: var(--tracking-tight);
     letter-spacing: var(--tracking-tight);
+  }
+  .whitespace-nowrap {
+    white-space: nowrap;
   }
   .text-\[\#0d1117\] {
     color: #0d1117;
@@ -814,6 +855,9 @@
   }
   .italic {
     font-style: italic;
+  }
+  .underline {
+    text-decoration-line: underline;
   }
   .shadow {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
@@ -883,6 +927,11 @@
     }
   }
   @media (hover: hover) {
+    .hover\:bg-\[\#1e3352\]:hover {
+      background-color: #1e3352;
+    }
+  }
+  @media (hover: hover) {
     .hover\:bg-\[\#1e3450\]:hover {
       background-color: #1e3450;
     }
@@ -913,13 +962,33 @@
     }
   }
   @media (hover: hover) {
+    .hover\:bg-\[\#d0cdc8\]:hover {
+      background-color: #d0cdc8;
+    }
+  }
+  @media (hover: hover) {
     .hover\:bg-\[\#edeae4\]:hover {
       background-color: #edeae4;
     }
   }
   @media (hover: hover) {
+    .hover\:bg-white\/30:hover {
+      background-color: color-mix(in srgb, #fff 30%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-white\/30:hover {
+        background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
+      }
+    }
+  }
+  @media (hover: hover) {
     .hover\:text-\[\#7dd3fc\]:hover {
       color: #7dd3fc;
+    }
+  }
+  @media (hover: hover) {
+    .hover\:text-\[\#a86c2c\]:hover {
+      color: #a86c2c;
     }
   }
   @media (hover: hover) {
@@ -982,6 +1051,11 @@
   @media (width >= 40rem) {
     .sm\:items-start {
       align-items: flex-start;
+    }
+  }
+  @media (width >= 40rem) {
+    .sm\:justify-between {
+      justify-content: space-between;
     }
   }
   @media (width >= 40rem) {

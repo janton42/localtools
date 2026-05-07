@@ -76,5 +76,3 @@ def review_applicant(request, pk):
             initial = {'decision': applicant.status, 'justification': applicant.reviewer_notes}
         form = ReviewForm(initial=initial)
     return render(request, 'veteran_pers/review_applicant.html', {'applicant': applicant, 'form': form})
-
-

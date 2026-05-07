@@ -11,6 +11,7 @@ def validate_min_words(value, min_words=20):
 
 class ReviewForm(forms.Form):
     DECISION_CHOICES = [
+        ('pending', 'Set to Pending'),
         ('approved', 'Approve'),
         ('denied', 'Deny'),
     ]

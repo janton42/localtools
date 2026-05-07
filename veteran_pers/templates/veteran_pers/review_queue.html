@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-[#f8f7f4] text-[#1c1c1e] -m-8 rounded-xl overflow-hidden">
+
+  <div class="bg-[#2d4a6e] text-white px-8 py-12 text-center">
+    <h1 class="text-3xl font-bold tracking-tight">Reviewer Queue</h1>
+    <p class="mt-2 text-[#c8d8e8]">Pending submissions awaiting review</p>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-8 py-12">
+    {% if applicants %}
+      <div class="space-y-4">
+        {% for applicant in applicants %}
+          <div class="bg-white rounded-xl border border-[#e0ddd8] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
+            <div>
+              <p class="text-lg font-semibold text-[#2d4a6e]">{{ applicant.work.title }}</p>
+              <p class="text-sm text-[#5a5a5e]">
+                {{ applicant.work.get_work_type_display }} &mdash;
+                {{ applicant.first_name }} {{ applicant.last_name }}
+              </p>
+              <p class="text-xs text-[#8a8a8e] mt-1">Submitted {{ applicant.submitted_at|date:"N j, Y" }}</p>
+            </div>
+            <a href="{% url 'veteran_pers:review_applicant' applicant.pk %}"
+               class="inline-block bg-[#2d4a6e] hover:bg-[#1e3352] text-white font-semibold px-6 py-2 rounded-lg transition-colors text-sm whitespace-nowrap">
+              Review
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-20 text-[#5a5a5e]">
+        <p class="text-xl font-medium">No pending submissions.</p>
+        <p class="mt-2 text-sm">Check back later.</p>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

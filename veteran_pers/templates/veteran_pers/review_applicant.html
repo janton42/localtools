@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-[#f8f7f4] text-[#1c1c1e] -m-8 rounded-xl overflow-hidden">
+
+  <div class="bg-[#2d4a6e] text-white px-8 py-12 text-center">
+    <h1 class="text-3xl font-bold tracking-tight">Review Submission</h1>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-8 py-12">
+
+    <!-- Submission summary -->
+    <div class="bg-white rounded-xl border border-[#e0ddd8] p-6 mb-8 shadow-sm">
+      <h2 class="text-lg font-semibold text-[#2d4a6e] mb-3">{{ applicant.work.title }}</h2>
+      <dl class="text-sm text-[#3a3a3c] space-y-1">
+        <div><span class="font-medium">Type:</span> {{ applicant.work.get_work_type_display }}</div>
+        <div><span class="font-medium">Author:</span> {{ applicant.first_name }} {{ applicant.last_name }}</div>
+        <div><span class="font-medium">Institution:</span> {{ applicant.institution|default:"Not provided" }}</div>
+        <div><span class="font-medium">Email:</span> {{ applicant.email }}</div>
+        {% if applicant.work.link %}
+          <div>
+            <span class="font-medium">Link:</span>
+            <a href="{{ applicant.work.link }}" target="_blank" class="text-[#c17f3a] underline hover:text-[#a86c2c]">{{ applicant.work.link }}</a>
+          </div>
+        {% endif %}
+        <div><span class="font-medium">Submitted:</span> {{ applicant.submitted_at|date:"N j, Y" }}</div>
+      </dl>
+    </div>
+
+    <!-- Review form -->
+    <form method="post" class="bg-white rounded-xl border border-[#e0ddd8] p-6 shadow-sm space-y-6">
+      {% csrf_token %}
+
+      <!-- Decision -->
+      <div>
+        <p class="font-semibold text-[#2d4a6e] mb-3">Decision</p>
+        <div class="flex gap-6">
+          {% for choice in form.decision %}
+            <label class="flex items-center gap-2 cursor-pointer">
+              {{ choice.tag }}
+              <span class="text-[#1c1c1e] font-medium">{{ choice.choice_label }}</span>
+            </label>
+          {% endfor %}
+        </div>
+        {% if form.decision.errors %}
+          <p class="text-red-600 text-sm mt-1">{{ form.decision.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Justification -->
+      <div>
+        <label for="{{ form.justification.id_for_label }}" class="block font-semibold text-[#2d4a6e] mb-2">
+          Justification <span class="text-[#8a8a8e] font-normal text-sm">(minimum 20 words)</span>
+        </label>
+        <textarea name="{{ form.justification.html_name }}"
+                  id="{{ form.justification.id_for_label }}"
+                  rows="5"
+                  placeholder="Provide a justification of at least 20 words…"
+                  class="w-full border border-[#c0bdb8] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d4a6e] resize-none bg-[#f8f7f4]">{{ form.justification.value|default:"" }}</textarea>
+        {% if form.justification.errors %}
+          <p class="text-red-600 text-sm mt-1">{{ form.justification.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="flex gap-4">
+        <button type="submit"
+                class="bg-[#2d4a6e] hover:bg-[#1e3352] text-white font-semibold px-8 py-3 rounded-lg transition-colors">
+          Submit Review
+        </button>
+        <a href="{% url 'veteran_pers:review_queue' %}"
+           class="bg-[#e0ddd8] hover:bg-[#d0cdc8] text-[#1c1c1e] font-semibold px-8 py-3 rounded-lg transition-colors">
+          Cancel
+        </a>
+      </div>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

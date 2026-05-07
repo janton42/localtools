@@ -1,5 +1,31 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Work, Applicant, WorkType
+
+
+def validate_min_words(value, min_words=20):
+    word_count = len(value.split())
+    if word_count < min_words:
+        raise ValidationError(f'Please provide at least {min_words} words. You entered {word_count}.')
+
+
+class ReviewForm(forms.Form):
+    DECISION_CHOICES = [
+        ('approved', 'Approve'),
+        ('denied', 'Deny'),
+    ]
+    decision = forms.ChoiceField(
+        choices=DECISION_CHOICES,
+        widget=forms.RadioSelect,
+        label='Decision',
+    )
+    justification = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 5, 'placeholder': 'Provide a justification of at least 20 words…'}),
+        label='Justification',
+        validators=[validate_min_words],
+    )
+
+
 
 
 class WorkSubmissionForm(forms.Form):

@@ -28,6 +28,12 @@ class Work(models.Model):
         return f"{self.title} — {self.author_last_name}, {self.author_first_name}"
 
 
+class ReviewStatus(models.TextChoices):
+    PENDING = 'pending', 'Pending'
+    APPROVED = 'approved', 'Approved'
+    DENIED = 'denied', 'Denied'
+
+
 class Applicant(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -35,6 +41,8 @@ class Applicant(models.Model):
     institution = models.CharField(max_length=200, blank=True)
     work = models.OneToOneField(Work, on_delete=models.CASCADE, related_name='applicant')
     submitted_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=ReviewStatus.choices, default=ReviewStatus.PENDING)
+    reviewer_notes = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name} ({self.email})"

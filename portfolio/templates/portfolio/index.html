@@ -5,10 +5,10 @@
   <div class="max-w-6xl mx-auto py-12">
     <h1 class="text-3xl font-bold mb-6 text-[#e6edf3]">Projects</h1>
 
-    <form method="get" class="flex gap-3 items-end mb-6">
-      <div>
+    <form method="get" class="flex flex-col sm:flex-row sm:items-end gap-3 mb-6">
+      <div class="flex-1">
         <label class="block text-sm font-medium text-[#8b949e]">Tag</label>
-        <select name="tag" class="mt-1 block rounded-md border border-[#30363d] bg-[#0d1117] text-[#e6edf3] shadow-sm">
+        <select name="tag" class="mt-1 w-full rounded-md border border-[#30363d] bg-[#0d1117] text-[#e6edf3] shadow-sm px-2 py-1">
           <option value="">All</option>
           {% for tag in tags %}
             <option value="{{ tag.slug }}" {% if tag.slug == selected_tag %}selected{% endif %}>{{ tag.name }}</option>
@@ -16,13 +16,13 @@
         </select>
       </div>
 
-      <div>
+      <div class="flex-1">
         <label class="block text-sm font-medium text-[#8b949e]">Project Date</label>
-        <input type="date" name="date" value="{{ selected_date }}" class="mt-1 block rounded-md border border-[#30363d] bg-[#0d1117] text-[#e6edf3] shadow-sm">
+        <input type="date" name="date" value="{{ selected_date }}" class="mt-1 w-full rounded-md border border-[#30363d] bg-[#0d1117] text-[#e6edf3] shadow-sm px-2 py-1">
       </div>
 
-      <div>
-        <button type="submit" class="px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded hover:bg-[#7dd3fc]">Filter</button>
+      <div class="sm:flex-none">
+        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-[#38bdf8] text-[#0d1117] font-semibold rounded hover:bg-[#7dd3fc]">Filter</button>
       </div>
     </form>
 

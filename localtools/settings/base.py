@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'resume.apps.ResumeConfig',
     'homeorg.apps.HomeorgConfig',
     'portfolio.apps.PortfolioConfig',
+    'veteran_pers.apps.VeteranPersConfig',
     # 'django_q',
     'tailwind',
     'theme',

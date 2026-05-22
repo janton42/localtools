@@ -28,6 +28,7 @@ urlpatterns = [
     path('rates/', include('rates.urls')),
     path('resume_parser/', include('resume_parser.urls')),
     path('tasktron/', include('tasktron.urls')),
+    path('veteran-pers/', include(('veteran_pers.urls', 'veteran_pers'), namespace='veteran_pers')),
     path('admin/', admin.site.urls, name='admin'),
     path("__reload__/", include("django_browser_reload.urls")),
     # Portfolio last — its <slug:slug>/ pattern must not shadow the routes above

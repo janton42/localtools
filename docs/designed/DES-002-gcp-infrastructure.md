@@ -61,7 +61,7 @@ us-west1 (see Open Questions).
 
 | Piece | Stage | Notes |
 |---|---|---|
-| Project | `home-stage-514419` | Already created. Billing must be linked (bootstrap) |
+| Project | `home-stage-514419` | Already created with billing attached. |
 | Cloud Run web | `home-stage-web` | Public. Scales from zero to a small maximum. Starts on a placeholder image; Terraform ignores later image changes because Cloud Build owns the image |
 | Cloud Run jobs | `home-stage-migrate`, `home-stage-manage` | The first runs database migrations on every deploy. The second runs any management command, with the command given at execution time |
 | Database | `home-stage-sql` | Cloud SQL, smallest shared-core tier, small disk, single zone, one retained backup, no deletion protection. Engine is an open question. Terraform creates the instance and the database; the user and password are created by hand so they stay out of state |
@@ -164,7 +164,7 @@ Each step is its own branch and pull request unless marked as done by hand.
 
 - [ ] Settle the open questions below and update this doc.
 - [ ] Design and build the app contract items (DES-003 to DES-008) and CI (DES-009).
-- [ ] Bootstrap by hand, following `infra/BOOTSTRAP.md`: billing, state bucket, GitHub connection, `staging` branch, local credentials.
+- [ ] Bootstrap by hand, following `infra/BOOTSTRAP.md`: state bucket, GitHub connection, `staging` branch, local credentials.
 - [ ] Write `terraform/shared`: project-wide APIs and the image repository.
 - [ ] Write `terraform/modules/home-env` and `terraform/envs/stage`.
 - [ ] Write the Cloud Build pipeline in `infra/cloudbuild/`.
@@ -184,21 +184,13 @@ Each step is its own branch and pull request unless marked as done by hand.
   contains no password or secret value.
 
 ## Open Questions
-
-- **Database engine.** Postgres or MySQL. MySQL is what the site runs today,
-  so the data moves with an ordinary dump and restore and the app needs no
-  driver change. Postgres matches the patterns and runbooks already in use on
-  hl_vae, and is the more common pairing with Django, but the data has to be
-  moved through Django's own export and import, and any MySQL-specific
-  behaviour in the apps has to be found and fixed. Both run on the same
-  smallest Cloud SQL tier at a similar price.
-- **Region.** us-west1 is proposed. Any reason to prefer another?
-- **Stopping the database when idle.** hl_vae stops its stage database every
-  night and lets deploys start it, which saves most of the cost but makes the
-  first request after a stop fail until someone starts it. Worth it here?
-- **GitHub connection.** Use the Cloud Build GitHub App (first generation, as
-  on hl_vae) or a second-generation repository connection?
-- **Media bucket name.** Bucket names are global; `home-stage-media` may be taken.
+All answered below
+- **Database engine.** Postgres
+- **Region.** us-west1
+- **Stopping the database when idle.** yes, stop when idle, just like hl_vae
+- **GitHub connection.** Use the Cloud Build GitHub App first generation, as
+  on hl_vae
+- **Media bucket name.** `home-stage-media-4269`
 
 ## Changelog
 

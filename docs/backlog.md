@@ -22,6 +22,13 @@ tracked separately in [buglog.md](buglog.md).
   into `designed/`, fill it in, and link it from the row (changing its status to *Designed*).
 - **Changing phase:** `git mv` the doc into the new phase's directory, update its
   `Status:` line, update the row's status and link — all in one commit.
+- **Dependencies.** When one design needs another to be finished first, the
+  dependency goes in the doc's `Depends on:` line and Dependencies section,
+  and in the row's *Depends on* column here. The steps it blocks are marked
+  as gated; before starting one, check that every listed design is *Done*.
+  Another design is never written as a step of a plan. For ideas without a
+  doc, the column holds what is already known and is completed when the doc
+  is written.
 - **No code in design docs.** A design doc explains what the code will do, in
   prose, tables and diagrams. Code lives in code files.
 - **Merging.** Claude's work is done in a git worktree on its own branch and
@@ -40,16 +47,16 @@ tracked separately in [buglog.md](buglog.md).
 
 ## Backlog
 
-| ID | Title | Area | Doc | Updated | Status |
-|---|---|---|---|---|---|
-| DES-001 | Design docs system | Process | [doc](archive/DES-001-design-docs-system.md) | 2026-11-11 | Done |
-| DES-002 | GCP infrastructure (stage on Cloud Run) | Infrastructure | [doc](active/DES-002-gcp-infrastructure.md) | 2026-11-11 | In Progress |
-| DES-003 | Dependency management and Python version (Pipfile → pyproject) | Infrastructure | | 2026-11-11 | Idea |
-| DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | | 2026-11-11 | Idea |
-| DES-005 | Environment config and secrets | Infrastructure | | 2026-11-11 | Idea |
-| DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | 2026-11-11 | Idea |
-| DES-007 | Media storage for user uploads | Infrastructure | | 2026-11-11 | Idea |
-| DES-008 | Container image (Tailwind build, ML dependencies) | Infrastructure | | 2026-11-11 | Idea |
-| DES-009 | CI pipeline: tests, lint, Terraform checks | Infrastructure | | 2026-11-11 | Idea |
-| DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | | 2026-11-11 | Idea |
-| DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | 2026-11-11 | Idea |
+| ID | Title | Area | Doc | Depends on | Updated | Status |
+|---|---|---|---|---|---|---|
+| DES-001 | Design docs system | Process | [doc](archive/DES-001-design-docs-system.md) | — | 2026-11-11 | Done |
+| DES-002 | GCP infrastructure (stage on Cloud Run) | Infrastructure | [doc](active/DES-002-gcp-infrastructure.md) | DES-003, DES-004, DES-005, DES-006, DES-007, DES-008 | 2026-11-11 | In Progress |
+| DES-003 | Dependency management and Python version (Pipfile → pyproject) | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-005 | Environment config and secrets | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-007 | Media storage for user uploads | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-008 | Container image (Tailwind build, ML dependencies) | Infrastructure | | DES-003 | 2026-11-11 | Idea |
+| DES-009 | CI pipeline: tests, lint, Terraform checks | Infrastructure | | DES-002 (Terraform roots) | 2026-11-11 | Idea |
+| DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | | DES-002 | 2026-11-11 | Idea |
+| DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | DES-002 | 2026-11-11 | Idea |

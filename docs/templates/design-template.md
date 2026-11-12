@@ -4,6 +4,7 @@
 - **Area:** <!-- e.g. Infrastructure, Process, Portfolio, Rates, Resume -->
 - **Created:** YYYY-MM-DD
 - **Updated:** YYYY-MM-DD
+- **Depends on:** <!-- DES- IDs that must be Done before the gated steps below can start; "None" if none -->
 - **Related:** <!-- other DES-/BUG- IDs, PRs, branches -->
 
 ## Summary
@@ -24,6 +25,19 @@ What problem does this solve? What happens if we don't do it?
 
 -
 
+## Dependencies
+
+Other designs this one needs, what it needs from each, and which steps of the
+Implementation Plan they block. Each is its own design and its own stream of
+work: never make "design and build DES-xxx" a step of this plan. Delete this
+section if there are none.
+
+| Design | What this design needs from it | Blocks |
+|---|---|---|
+
+Before starting a gated step, check the backlog: every design listed above
+must be **Done**. If any is not, stop and do not start the step.
+
 ## Proposed Design
 
 How it works, in prose, tables and diagrams. Name the affected apps, modules,
@@ -37,8 +51,10 @@ put code in a design doc: code lives in code files.
 
 ## Implementation Plan
 
+Mark any step that needs a dependency to be Done as **Gated.**
+
 - [ ] Step 1
-- [ ] Step 2
+- [ ] **Gated.** Step 2
 
 ## Testing / Verification
 

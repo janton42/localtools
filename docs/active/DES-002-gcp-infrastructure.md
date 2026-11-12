@@ -4,7 +4,8 @@
 - **Area:** Infrastructure
 - **Created:** 2026-11-11
 - **Updated:** 2026-11-11
-- **Related:** DES-003 to DES-011 (follow-ups, still ideas). Layout modeled on the hl_vae project's `infra/`; no resources are shared with it.
+- **Depends on:** DES-003, DES-004, DES-005, DES-006, DES-007, DES-008 (see Dependencies)
+- **Related:** DES-009 to DES-011 (follow-ups, still ideas). Layout modeled on the hl_vae project's `infra/`; no resources are shared with it.
 
 ## Summary
 
@@ -47,6 +48,28 @@ cutover are a later design (DES-011).
 - Moving the live data (DES-010).
 - Background workers or task queues. django-q is commented out today and stays out.
 - A cloud dev environment. Dev stays local.
+- Designing or building the app contract items. Each is its own design
+  (DES-003 to DES-008) and its own stream of work; this design depends on
+  them but does not contain them.
+
+## Dependencies
+
+The infrastructure can be written and applied without the app changes, but
+stage cannot be deployed until the app meets the app contract below. Each
+item is a separate design with its own doc, branch and pull requests.
+
+| Design | What DES-002 needs from it | Blocks |
+|---|---|---|
+| DES-003 | Pinned dependencies, a production WSGI server, the PostgreSQL driver | First deploy |
+| DES-004 | `localtools.settings.stage` and a default settings module that resolves | First deploy |
+| DES-005 | The app loads the secret at startup, and the list of keys the secret must hold | First secret version, first deploy |
+| DES-006 | Static files collected at build time and served by the app | First deploy |
+| DES-007 | Uploads stored in the media bucket | First deploy |
+| DES-008 | The Dockerfile the pipeline builds; the memory the image needs | First deploy |
+
+Before starting a step marked as gated in the Implementation Plan, check the
+backlog: every design listed above must be **Done**. If any is not, stop and
+do not start the step.
 
 ## Proposed Design
 
@@ -143,7 +166,8 @@ never to a local branch.
 ### App contract
 
 What the app has to provide before the first deploy can work. Each item is
-designed in its own doc.
+designed in its own doc, and each is a dependency of this design (see
+Dependencies).
 
 | Need | Doc |
 |---|---|
@@ -153,7 +177,10 @@ designed in its own doc.
 | Static files collected at build time and served by the app, with the build output no longer tracked in git | DES-006 |
 | Uploads stored in the media bucket | DES-007 |
 | A Dockerfile that builds the Tailwind stylesheet and installs the ML dependencies and their data files, and listens on the port Cloud Run provides | DES-008 |
-| Tests, lint and Terraform format and validate checks on every pull request | DES-009 |
+
+CI (DES-009) is not part of the contract. A deploy does not need it, and its
+Terraform checks run against the Terraform written here, so it follows this
+design, not the other way round.
 
 The resume parser loads scikit-learn models and NLTK data, so the web
 service and the jobs start at 1 GiB of memory, and the figure is revisited
@@ -181,16 +208,18 @@ started by hand.
 ## Implementation Plan
 
 Each step is its own branch and pull request unless marked as done by hand.
+Steps marked **gated** need every design in Dependencies to be Done first;
+check the backlog before starting one, and stop if any is not.
 
 - [x] Settle the open questions below and update this doc.
-- [ ] Design and build the app contract items (DES-003 to DES-008) and CI (DES-009).
 - [ ] Bootstrap by hand, following `infra/BOOTSTRAP.md`: base APIs, state bucket, GitHub connection, `staging` branch, credentials for Terraform.
 - [ ] Write `terraform/shared`: project-wide APIs and the image repository.
 - [ ] Write `terraform/modules/home-env` and `terraform/envs/stage`.
 - [ ] Write the Cloud Build pipeline in `infra/cloudbuild/`.
 - [ ] Apply `shared`, then `envs/stage` (by hand).
-- [ ] Create the database user and the first secret version (by hand).
-- [ ] First deploy: promote `develop` to `staging`.
+- [ ] Create the database user (by hand).
+- [ ] **Gated.** Create the first secret version (by hand), holding the keys DES-005 lists.
+- [ ] **Gated.** First deploy: promote `develop` to `staging`.
 - [ ] Fill in the runbook in `infra/README.md`: promote, run a management command, edit and rotate secrets.
 
 ## Testing / Verification
@@ -223,3 +252,6 @@ None. Settled on 2026-11-11:
   job and its service account, the state bucket name, the environment
   variables Terraform sets, and the cache table step in the migrate job.
   Moved to In Progress.
+- 2026-11-11 — DES-003 to DES-008 listed as dependencies instead of being an
+  implementation step; the steps that need them are marked as gated. CI
+  (DES-009) taken out of the app contract, since it depends on this design.

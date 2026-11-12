@@ -1,6 +1,6 @@
 # DES-002: GCP infrastructure (stage on Cloud Run)
 
-- **Status:** Designed
+- **Status:** In Progress
 - **Area:** Infrastructure
 - **Created:** 2026-11-11
 - **Updated:** 2026-11-11
@@ -54,8 +54,8 @@ cutover are a later design (DES-011).
 
 Resources are named `home-<env>-<thing>`, so on stage that is `home-stage-*`.
 The project `home-stage-514419` stands alone: it belongs to a personal
-account and has no organization or folder above it. The proposed region is
-us-west1 (see Open Questions).
+account and has no organization or folder above it. Everything is in
+us-west1.
 
 ### Resources
 
@@ -63,14 +63,29 @@ us-west1 (see Open Questions).
 |---|---|---|
 | Project | `home-stage-514419` | Already created with billing attached. |
 | Cloud Run web | `home-stage-web` | Public. Scales from zero to a small maximum. Starts on a placeholder image; Terraform ignores later image changes because Cloud Build owns the image |
-| Cloud Run jobs | `home-stage-migrate`, `home-stage-manage` | The first runs database migrations on every deploy. The second runs any management command, with the command given at execution time |
-| Database | `home-stage-sql` | Cloud SQL, smallest shared-core tier, small disk, single zone, one retained backup, no deletion protection. Engine is an open question. Terraform creates the instance and the database; the user and password are created by hand so they stay out of state |
+| Cloud Run jobs | `home-stage-migrate`, `home-stage-manage` | The first runs on every deploy: it applies database migrations and then creates the database cache table if it is missing (the app's cache backend is a database table). The second runs any management command, with the command given at execution time |
+| Database | `home-stage-sql` | Cloud SQL for PostgreSQL 17, Enterprise edition, smallest shared-core tier, 10 GB hard-disk storage, single zone, one retained backup, no point-in-time recovery, no deletion protection. Terraform creates the instance and a database named `localtools`; the user (also `localtools`) and its password are created by hand so they stay out of state |
+| Nightly database stop | `home-stage-sql-nightly-stop` | A Cloud Scheduler job that stops the database every night at 02:00 Pacific, so it only runs while someone is testing. Deploys start it again. While it is stopped, pages that need the database fail; it can also be started and stopped by hand. Terraform ignores whether the instance is running |
 | Secret | `home-stage-app-env` | One Secret Manager secret holding the app's environment as a single block of key-value lines. Terraform creates only the empty secret; values are added by hand |
-| Media bucket | `home-stage-media` (globally unique name to be settled) | Holds user uploads, which today go to the local `media/` directory and would be lost on Cloud Run. How the app uses it is DES-007 |
-| Service accounts | `home-stage-app`, `home-stage-deploy` | The first is the runtime identity for the web service and jobs: it can connect to the database, read the secret, read and write the media bucket and write logs. The second is the Cloud Build deployer: it can push images, update the service and jobs, and act as the runtime identity. Neither has keys. The default compute service account is not used |
+| Media bucket | `home-stage-media-4269` | Holds user uploads, which today go to the local `media/` directory and would be lost on Cloud Run. How the app uses it is DES-007 |
+| Service accounts | `home-stage-app`, `home-stage-deploy`, `home-stage-sql-scheduler` | The first is the runtime identity for the web service and jobs: it can connect to the database, read the secret, read and write the media bucket and write logs. The second is the Cloud Build deployer: it can push images, update the service and jobs, start the database and act as the runtime identity. The third is used only by the nightly stop and can only administer Cloud SQL instances. None has keys. The default compute service account is not used |
 | Images | Artifact Registry repository in the same project | Each build is tagged with the short commit hash and with the environment name. A cleanup policy keeps recent images and removes old ones |
-| Deploy trigger | `home-stage-deploy` | Cloud Build trigger on `janton42/localtools`, branch `staging`, reading the pipeline file from `infra/cloudbuild/`. Changes that touch only Terraform or Markdown do not trigger a deploy |
-| Terraform state | A versioned bucket inside `home-stage-514419` | Created by hand in the bootstrap. One prefix per Terraform root |
+| Deploy trigger | `home-stage-deploy` | Cloud Build trigger on `janton42/localtools`, connected through the first-generation Cloud Build GitHub App, branch `staging`, reading the pipeline file from `infra/cloudbuild/`. Changes that touch only Terraform or Markdown do not trigger a deploy |
+| Terraform state | `home-stage-514419-tfstate` | A versioned bucket inside the project, created by hand in the bootstrap. One prefix per Terraform root: `shared` and `stage` |
+
+### Environment variables set by Terraform
+
+The web service and both jobs get the same five plain environment variables.
+Everything else the app needs comes from the secret. DES-004, DES-005 and
+DES-007 are designed against these names.
+
+| Variable | Value on stage | Used for |
+|---|---|---|
+| `DJANGO_SETTINGS_MODULE` | `localtools.settings.stage` | Which settings module to load (DES-004) |
+| `GCP_PROJECT_ID` | `home-stage-514419` | Where to find the secret (DES-005) |
+| `GCP_SECRETS_NAME` | `home-stage-app-env` | Which secret to read at startup (DES-005) |
+| `GCP_CLOUDSQL_CONNECTION_NAME` | The instance's connection name | The database socket lives under `/cloudsql/` in a directory with this name (DES-004) |
+| `GCP_MEDIA_BUCKET` | `home-stage-media-4269` | Where uploads are stored (DES-007) |
 
 ### How this differs from hl_vae
 
@@ -82,6 +97,8 @@ us-west1 (see Open Questions).
 | State in a shared, pre-existing bucket | Own bucket, created in the bootstrap | Nothing is shared |
 | `shared/` root attaches the VPC, overrides policy, creates the image repo | `shared/` enables project-wide APIs and creates the image repo | Kept as its own root so a later prod project can read images from one place |
 | No media bucket | Media bucket | This app accepts uploads |
+| Public service by turning off the invoker check | Public service by granting the invoker role to everyone | With no organization there is no sharing restriction to work around, so the plain grant is enough |
+| Migrate job only migrates | Migrate job also creates the cache table | This app caches in a database table |
 
 ### Repo layout
 
@@ -112,10 +129,11 @@ order and stops at the first failure:
 2. Build the container image from the repo's Dockerfile and tag it with the
    commit hash and the environment name.
 3. Push both tags to the image repository.
-4. If the database is configured to be stopped when idle, start it and wait
-   until it is ready.
-5. Point both jobs at the new image and run the migrate job, waiting for it
-   to finish.
+4. Start the database and wait until it is ready. It is stopped every
+   night, and starting it can take around fifteen minutes. (An environment
+   whose database always runs skips this step.)
+5. Point both jobs at the new image and run the migrate job (migrations, then
+   the cache table), waiting for it to finish.
 6. Deploy the new image to the web service.
 
 No step reads the app secret; only the runtime service account can. `develop`
@@ -138,15 +156,17 @@ designed in its own doc.
 | Tests, lint and Terraform format and validate checks on every pull request | DES-009 |
 
 The resume parser loads scikit-learn models and NLTK data, so the web
-service's memory setting is chosen once DES-008 shows what the image needs.
+service and the jobs start at 1 GiB of memory, and the figure is revisited
+once DES-008 shows what the image needs.
 
 ### Cost
 
 Rough expectation for an idle stage, to be confirmed after the first month's
 bill: the web service, image repository, secret and buckets cost cents. The
-database is the only real cost: about ten dollars a month if it runs all the
-time, or a dollar or two for storage alone if it is stopped when nobody is
-testing (see Open Questions).
+database is the only real cost: about ten dollars a month if it ran all the
+time, or a dollar or two for storage alone when it is stopped. Because it is
+stopped every night, the bill depends on how often stage is deployed or
+started by hand.
 
 ## Alternatives Considered
 
@@ -162,9 +182,9 @@ testing (see Open Questions).
 
 Each step is its own branch and pull request unless marked as done by hand.
 
-- [ ] Settle the open questions below and update this doc.
+- [x] Settle the open questions below and update this doc.
 - [ ] Design and build the app contract items (DES-003 to DES-008) and CI (DES-009).
-- [ ] Bootstrap by hand, following `infra/BOOTSTRAP.md`: state bucket, GitHub connection, `staging` branch, local credentials.
+- [ ] Bootstrap by hand, following `infra/BOOTSTRAP.md`: base APIs, state bucket, GitHub connection, `staging` branch, credentials for Terraform.
 - [ ] Write `terraform/shared`: project-wide APIs and the image repository.
 - [ ] Write `terraform/modules/home-env` and `terraform/envs/stage`.
 - [ ] Write the Cloud Build pipeline in `infra/cloudbuild/`.
@@ -184,14 +204,22 @@ Each step is its own branch and pull request unless marked as done by hand.
   contains no password or secret value.
 
 ## Open Questions
-All answered below
-- **Database engine.** Postgres
-- **Region.** us-west1
-- **Stopping the database when idle.** yes, stop when idle, just like hl_vae
-- **GitHub connection.** Use the Cloud Build GitHub App first generation, as
-  on hl_vae
-- **Media bucket name.** `home-stage-media-4269`
+
+None. Settled on 2026-11-11:
+
+- **Database engine.** PostgreSQL. Version 17 was picked when the answers
+  were folded in.
+- **Region.** us-west1.
+- **Stopping the database when idle.** Yes, as on hl_vae: a nightly stop, and
+  deploys start it.
+- **GitHub connection.** The first-generation Cloud Build GitHub App, as on hl_vae.
+- **Media bucket name.** `home-stage-media-4269`.
 
 ## Changelog
 
 - 2026-11-11 — Created.
+- 2026-11-11 — Open questions settled: PostgreSQL, us-west1, nightly database
+  stop, first-generation GitHub App, media bucket name. Added the scheduler
+  job and its service account, the state bucket name, the environment
+  variables Terraform sets, and the cache table step in the migrate job.
+  Moved to In Progress.

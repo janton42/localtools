@@ -1,7 +1,7 @@
 # infra/
 
 Where the Google Cloud infrastructure for localtools will live. The design is
-[DES-002](../docs/designed/DES-002-gcp-infrastructure.md).
+[DES-002](../docs/active/DES-002-gcp-infrastructure.md).
 
 **Nothing is provisioned yet.** This directory is a skeleton: the Terraform
 and Cloud Build files are added when DES-002 is implemented, and the runbook

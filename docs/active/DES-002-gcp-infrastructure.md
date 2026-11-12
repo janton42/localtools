@@ -212,9 +212,9 @@ Steps marked **gated** need every design in Dependencies to be Done first;
 check the backlog before starting one, and stop if any is not.
 
 - [x] Settle the open questions below and update this doc.
-- [ ] Bootstrap by hand, following `infra/BOOTSTRAP.md`: base APIs, state bucket, GitHub connection, `staging` branch, credentials for Terraform.
-- [ ] Write `terraform/shared`: project-wide APIs and the image repository.
-- [ ] Write `terraform/modules/home-env` and `terraform/envs/stage`.
+- [x] Bootstrap by hand, following `infra/BOOTSTRAP.md`: base APIs, state bucket, GitHub connection, `staging` branch, credentials for Terraform.
+- [x] Write `terraform/shared`: project-wide APIs and the image repository (#7).
+- [x] Write `terraform/modules/home-env` and `terraform/envs/stage` (#8).
 - [ ] Write the Cloud Build pipeline in `infra/cloudbuild/`.
 - [ ] Apply `shared`, then `envs/stage` (by hand).
 - [ ] Create the database user (by hand).

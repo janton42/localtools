@@ -1,0 +1,106 @@
+# Deploy pipeline (DES-002). Run by the home-<env>-deploy trigger on a push to
+# the environment's branch, as the home-<env>-deploy service account.
+# Steps run in order and the build stops at the first failure.
+#
+# Substitutions set by the trigger (infra/terraform/modules/home-env):
+#   _ENV        environment name, e.g. stage
+#   _REGION     region of the Cloud Run service, jobs and database
+#   _IMAGE      Artifact Registry image path without a tag
+#   _START_SQL  "true" if the database may be stopped and must be started first
+#
+# This step never reads the app secret; only the runtime service account can.
+
+substitutions:
+  _ENV: stage
+  _REGION: us-west1
+  _IMAGE: us-west1-docker.pkg.dev/home-stage-514419/home-images/localtools
+  _START_SQL: "true"
+
+options:
+  # A user-chosen service account needs this or a logs bucket; the deployer
+  # can write logs but has no bucket.
+  logging: CLOUD_LOGGING_ONLY
+
+# Starting a stopped database can take around fifteen minutes.
+timeout: 3600s
+
+steps:
+  # 1. Previous image for this environment, as a build cache. Missing is fine.
+  - id: pull-cache
+    name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - -c
+      - docker pull "${_IMAGE}:${_ENV}" || echo "No cached image for ${_ENV}; building from scratch."
+
+  # 2. Build from the repo's Dockerfile, tagged with the commit and the env.
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --cache-from=${_IMAGE}:${_ENV}
+      - --tag=${_IMAGE}:${SHORT_SHA}
+      - --tag=${_IMAGE}:${_ENV}
+      - .
+
+  # 3. Push both tags now, so the jobs and service can use the image below.
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args: [push, --all-tags, "${_IMAGE}"]
+
+  # 4. Start the database if this environment stops it, and wait for it.
+  - id: start-sql
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        if [ "${_START_SQL}" != "true" ]; then
+          echo "Database is always on; not starting it."
+          exit 0
+        fi
+        instance="home-${_ENV}-sql"
+        gcloud sql instances patch "$$instance" --project="${PROJECT_ID}" \
+          --activation-policy=ALWAYS --quiet
+        for _ in $$(seq 1 90); do
+          state="$$(gcloud sql instances describe "$$instance" --project="${PROJECT_ID}" --format='value(state)')"
+          if [ "$$state" = "RUNNABLE" ]; then
+            echo "$$instance is running."
+            exit 0
+          fi
+          echo "$$instance is $$state; waiting."
+          sleep 20
+        done
+        echo "$$instance did not become ready in time." >&2
+        exit 1
+
+  # 5. Point both jobs at the new image, then run the migrate job and wait.
+  - id: migrate
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        for job in migrate manage; do
+          gcloud run jobs update "home-${_ENV}-$$job" --project="${PROJECT_ID}" \
+            --region="${_REGION}" --image="${_IMAGE}:${SHORT_SHA}" --quiet
+        done
+        gcloud run jobs execute "home-${_ENV}-migrate" --project="${PROJECT_ID}" \
+          --region="${_REGION}" --wait
+
+  # 6. Deploy the new image to the web service. Only the image changes; the
+  #    rest of the service is Terraform's.
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    args:
+      - gcloud
+      - run
+      - services
+      - update
+      - home-${_ENV}-web
+      - --project=${PROJECT_ID}
+      - --region=${_REGION}
+      - --image=${_IMAGE}:${SHORT_SHA}
+      - --quiet

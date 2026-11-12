@@ -108,3 +108,7 @@ directory that matches its `Status:` line.
 ## Changelog
 
 - 2026-11-11 — Created and delivered in the same PR.
+- 2026-11-11 — The merging rule above was extended after this doc was
+  archived: Claude's pull requests now come from the machine account
+  `janton42-claude` and a repository ruleset requires Jeff's approval. The
+  current wording is in the Conventions section of `docs/backlog.md`.

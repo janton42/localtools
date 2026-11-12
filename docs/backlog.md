@@ -24,10 +24,17 @@ tracked separately in [buglog.md](buglog.md).
   `Status:` line, update the row's status and link — all in one commit.
 - **No code in design docs.** A design doc explains what the code will do, in
   prose, tables and diagrams. Code lives in code files.
-- **Merging.** Work is done in a git worktree on its own branch and reaches
-  `develop` only through a pull request that is opened and reviewed first.
-  Local changes are never merged into `develop`. Merging `origin/develop` into
-  a working branch to bring it up to date is fine.
+- **Merging.** Claude's work is done in a git worktree on its own branch and
+  is committed, pushed and opened as a pull request by the machine account
+  `janton42-claude`. Jeff reviews, approves and merges; Claude never merges.
+  A repository ruleset enforces this on `main`, `develop` and `staging`: a
+  pull request with one approval is required, a new push dismisses an earlier
+  approval, and only the repository admin can bypass. Jeff may push his own
+  changes directly. Local changes are never merged into `develop`. Merging
+  `origin/develop` into a working branch to bring it up to date is fine.
+- **Attribution.** Commits written by Claude are authored by
+  `janton42-claude` and carry no co-author trailer. Commits authored by Jeff
+  are Jeff's own work.
 
 ---
 

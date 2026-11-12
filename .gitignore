@@ -139,3 +139,6 @@ output/
 
 .idea/
 venv/
+
+# Claude Code: machine-specific settings
+.claude/settings.local.json

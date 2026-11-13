@@ -230,6 +230,7 @@ One branch and pull request.
   once the live data has moved off MySQL (DES-010), and the `DB_HOST`
   override already lets anyone run the stage settings against a local
   PostgreSQL in the meantime.
+- **Answer** Leave it on MySQL until DES-010
 
 ## Changelog
 

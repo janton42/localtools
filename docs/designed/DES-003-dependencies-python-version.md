@@ -163,6 +163,8 @@ One branch and pull request.
 - **PythonAnywhere's Python.** The live site's Python version is unknown
   here. If it is older than 3.12, the exported requirements are still
   usable, but it needs a 3.12 virtualenv there. Jeff to check.
+- **Answer** Python 3.10.5. If you mean that PythonAnywhere needs a 3.12 virtualenv,
+  explain why. Nothing should need to change on that side.
 
 ## Changelog
 

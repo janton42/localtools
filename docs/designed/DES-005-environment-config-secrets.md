@@ -5,7 +5,7 @@
 - **Created:** 2026-11-12
 - **Updated:** 2026-11-12
 - **Depends on:** DES-003 (see Dependencies)
-- **Related:** DES-002 (app contract, the `home-stage-app-env` secret, the runbook step), DES-004 (stage settings read the keys listed here), DES-010 and DES-011 (PythonAnywhere keeps its `.env` until cutover)
+- **Related:** DES-002 (app contract, the `home-stage-app-env` secret, the runbook step), DES-004 (stage settings read the keys listed here), DES-006 and DES-008 (`collectstatic` in the image build runs without a secret), DES-013 (outgoing email), DES-010 and DES-011 (PythonAnywhere keeps its `.env` until cutover)
 
 ## Summary
 
@@ -63,7 +63,8 @@ gated step) and stage can't start.
 - Media storage settings (DES-007). The bucket name is already a plain
   variable set by Terraform.
 - Configuring email. The password reset pages send mail, but no email
-  backend is configured anywhere today. See Open Questions.
+  backend is configured anywhere today. That is DES-013; its credentials
+  will be added to the key table below when it is designed.
 - Moving PythonAnywhere off its `.env` file. It keeps the file until
   cutover (DES-011).
 - Splitting the secret into one Secret Manager secret per key.
@@ -152,9 +153,10 @@ both:
 
 ### The keys
 
-Plain variables (set by Terraform on Cloud Run, never in the secret or file):
-`DJANGO_SETTINGS_MODULE`, `GCP_PROJECT_ID`, `GCP_SECRETS_NAME`,
-`GCP_CLOUDSQL_CONNECTION_NAME`, `GCP_MEDIA_BUCKET`. They are in DES-002.
+Plain variables are set by Terraform on Cloud Run and never go in the
+secret or the file. DES-002's environment variable table is the list
+(`DJANGO_SETTINGS_MODULE`, the `GCP_*` names, and any that later designs
+such as DES-007 add there).
 
 Keys in the secret or the `.env` file:
 
@@ -164,8 +166,7 @@ Keys in the secret or the `.env` file:
 | `DJANGO_SECRET_KEY_FALLBACKS` | — | — | Optional, empty | Comma-separated old keys, read into `SECRET_KEY_FALLBACKS` so sessions and reset links survive a rotation. Only `base.py` reads it, and an empty value means none |
 | `DB_USER` | Required | Required | Required (`localtools`) | Database user. The names are kept as they are, so dev, prod and stage read the same keys |
 | `DB_PASSWORD` | Required | Required | Required | Database password; on stage, the one set by hand when the user was created (DES-002) |
-| `ALLOWED_HOSTS` | — | — | Required | Comma-separated hostnames: the stage Cloud Run URL's host. DES-004 turns it into the setting |
-| `CSRF_TRUSTED_ORIGINS` | — | — | Required | Comma-separated origins with scheme, for the same URL. DES-004 turns it into the setting |
+| `DJANGO_ALLOWED_HOSTS` | — | — | Required | Comma-separated hostnames: both URLs Cloud Run gives the stage service. DES-004 reads it into `ALLOWED_HOSTS` and derives the CSRF trusted origins from it, so there is no separate CSRF key |
 
 `DJANGO_SETTINGS_MODULE` is removed from the local file's example: it has
 never had an effect there. How the default settings module resolves is
@@ -175,8 +176,20 @@ The secret never holds anything that would turn a safety setting off. Stage
 settings hard-code `DEBUG` off and the secure cookie settings on (DES-004),
 and no key in the secret can change them.
 
-If DES-004 settles on different names for the host and origin keys, this
-table is changed in the same pull request so there is only ever one list.
+The names match DES-004's table of the variables the stage settings read.
+If either design renames a key, the other is changed in the same pull
+request so there is only ever one list.
+
+### Building the image without a secret
+
+The image build runs `collectstatic` with no secret and no database
+(DES-006, DES-008). It sets a throwaway `DJANGO_SECRET_KEY` for that one
+command and nothing else. The loader keeps this working: `GCP_SECRETS_NAME`
+is not set during the build, so it takes the local path, finds no `.env`
+file in the image (DES-008 keeps `.env` files out of the build context),
+carries on, and the placeholder already in the environment satisfies
+`base.py`. Nothing in the loader may require the file to exist or contact
+Google when `GCP_SECRETS_NAME` is unset.
 
 ### Example file
 
@@ -233,7 +246,6 @@ README.md                # setup: copy the example file
 
 - [ ] Build the `.env` path from `BASE_DIR`, add `localtools/.env.example`, update the README. Not gated.
 - [ ] **Gated.** Add the Secret Manager client library to the main group, write `localtools/appenv.py`, call it from `base.py`, read `DJANGO_SECRET_KEY_FALLBACKS`, and add the tests below.
-- [ ] Update DES-002's resource notes if a key name changed during DES-004 review.
 
 The first secret version itself is DES-002's step, done by hand from the key
 table above once this design is Done.
@@ -254,6 +266,9 @@ Google:
   the missing variable.
 - A missing required key fails with that key's name.
 - An empty `DJANGO_SECRET_KEY_FALLBACKS` gives an empty list.
+- With no `.env` file, no `GCP_SECRETS_NAME` and only a placeholder
+  `DJANGO_SECRET_KEY` in the environment, `collectstatic` runs (the DES-006
+  build step).
 
 Manual checks:
 
@@ -264,10 +279,6 @@ Manual checks:
 
 ## Open Questions
 
-- **Email.** The password reset pages send mail, but no email backend is
-  configured anywhere, so on stage they would fail. Recommend leaving it out
-  of this design and adding a backlog idea for it; its credentials would go
-  into the secret as new keys. Jeff to confirm.
 - **Secret as a mounted file instead of a library call.** Recommend the
   library call, as above. Jeff to confirm, since the other choice changes
   the Terraform module.
@@ -275,3 +286,7 @@ Manual checks:
 ## Changelog
 
 - 2026-11-12 — Created.
+- 2026-11-12 — Aligned with the designs written alongside it: the host key is
+  `DJANGO_ALLOWED_HOSTS` with CSRF origins derived from it (DES-004), email
+  points to DES-013, and the image build's `collectstatic` without a secret
+  is spelled out (DES-006, DES-008).

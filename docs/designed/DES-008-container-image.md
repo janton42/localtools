@@ -61,7 +61,8 @@ packages, its pickled models and NLTK data are DES-012's problem.
 - The stage settings module (DES-004) and loading the secret (DES-005).
 - Serving the resume parser or installing its packages (DES-012).
 - Local development in containers. Dev stays on uv and `manage.py tailwind dev`.
-- Image scanning, signing, or multi-architecture builds. Cloud Run is amd64.
+- Image scanning (off until prod, decided in DES-011), signing, or
+  multi-architecture builds. Cloud Run is amd64.
 - The unused root `package.json` (it lists only jQuery, which the templates
   load from a CDN). The image ignores it; removing it is DES-013.
 
@@ -268,9 +269,9 @@ One branch and pull request for the files, then the by-hand apply.
 
 ## Open Questions
 
-- **Vulnerability scanning.** Artifact Registry can scan each pushed image
-  for known vulnerabilities, but it is billed per image. Turn it on for
-  stage, or leave it off until prod (DES-011)? Recommendation: leave it off.
+- **Vulnerability scanning.** Settled 2026-11-12: off for stage. Artifact
+  Registry's scanning is billed per image; whether to turn it on for prod is
+  decided in DES-011.
 - **The root `package.json`.** Settled 2026-11-12: it installs only jQuery,
   which nothing uses (the templates load it from a CDN). Removing it and the
   root `node_modules` is DES-013.
@@ -280,3 +281,4 @@ One branch and pull request for the files, then the by-hand apply.
 - 2026-11-12 — Created. The ML part of the backlog title was already settled
   by DES-003, so the title now names the Dockerfile and the Tailwind build.
 - 2026-11-12 — Removing the root `package.json` split out as DES-013.
+- 2026-11-12 — Vulnerability scanning left off until prod.

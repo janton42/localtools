@@ -52,6 +52,8 @@ tracked separately in [buglog.md](buglog.md).
 | DES-001 | Design docs system | Process | [doc](archive/DES-001-design-docs-system.md) | — | 2026-11-11 | Done |
 | DES-002 | GCP infrastructure (stage on Cloud Run) | Infrastructure | [doc](active/DES-002-gcp-infrastructure.md) | DES-003, DES-004, DES-005, DES-006, DES-007, DES-008 | 2026-11-11 | In Progress |
 | DES-003 | Dependency management and Python version (Pipfile → pyproject) | Infrastructure | [doc](designed/DES-003-dependencies-python-version.md) | — | 2026-11-11 | Designed |
+| DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-005 | Environment config and secrets | Infrastructure | [doc](designed/DES-005-environment-config-secrets.md) | DES-003 | 2026-11-12 | Designed |
 | DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | [doc](designed/DES-004-settings-package.md) | DES-003 | 2026-11-12 | Designed |
 | DES-005 | Environment config and secrets | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | — | 2026-11-11 | Idea |

@@ -56,6 +56,8 @@ tracked separately in [buglog.md](buglog.md).
 | DES-005 | Environment config and secrets | Infrastructure | [doc](designed/DES-005-environment-config-secrets.md) | DES-003 | 2026-11-12 | Designed |
 | DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | [doc](designed/DES-004-settings-package.md) | DES-003 | 2026-11-12 | Designed |
 | DES-005 | Environment config and secrets | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | [doc](designed/DES-006-static-files.md) | — | 2026-11-12 | Designed |
+| DES-007 | Media storage for user uploads | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-007 | Media storage for user uploads | Infrastructure | [doc](designed/DES-007-media-storage.md) | DES-003, DES-004 | 2026-11-12 | Designed |
 | DES-008 | Container image (Tailwind build, ML dependencies) | Infrastructure | | DES-003 | 2026-11-11 | Idea |

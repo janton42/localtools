@@ -16,7 +16,7 @@ tracked separately in [buglog.md](buglog.md).
 
 **Conventions**
 
-- **IDs:** `DES-001`, `DES-002`, … — sequential, never reused. Next free ID: **DES-013**.
+- **IDs:** `DES-001`, `DES-002`, … — sequential, never reused. Next free ID: **DES-014**.
 - **File names:** `<ID>-<kebab-slug>.md`, e.g. `designed/DES-002-gcp-infrastructure.md`.
 - **Promoting an idea:** copy [`templates/design-template.md`](templates/design-template.md)
   into `designed/`, fill it in, and link it from the row (changing its status to *Designed*).
@@ -54,6 +54,8 @@ tracked separately in [buglog.md](buglog.md).
 | DES-003 | Dependency management and Python version (Pipfile → pyproject) | Infrastructure | [doc](designed/DES-003-dependencies-python-version.md) | — | 2026-11-11 | Designed |
 | DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-005 | Environment config and secrets | Infrastructure | [doc](designed/DES-005-environment-config-secrets.md) | DES-003 | 2026-11-12 | Designed |
+| DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | [doc](designed/DES-004-settings-package.md) | DES-003 | 2026-11-12 | Designed |
+| DES-005 | Environment config and secrets | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-007 | Media storage for user uploads | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-008 | Container image (Tailwind build, ML dependencies) | Infrastructure | | DES-003 | 2026-11-11 | Idea |
@@ -61,3 +63,4 @@ tracked separately in [buglog.md](buglog.md).
 | DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | | DES-002 | 2026-11-11 | Idea |
 | DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | DES-002 | 2026-11-11 | Idea |
 | DES-012 | Serving the resume parser (models no longer load; ML stack kept out of the web image) | Feature | | DES-003 | 2026-11-11 | Idea |
+| DES-013 | Outgoing email (password reset is broken: no email backend configured) | Feature | | — | 2026-11-12 | Idea |

@@ -63,7 +63,7 @@ packages, its pickled models and NLTK data are DES-012's problem.
 - Local development in containers. Dev stays on uv and `manage.py tailwind dev`.
 - Image scanning, signing, or multi-architecture builds. Cloud Run is amd64.
 - The unused root `package.json` (it lists only jQuery, which the templates
-  load from a CDN). The image ignores it; removing it is a backlog item.
+  load from a CDN). The image ignores it; removing it is DES-013.
 
 ## Dependencies
 
@@ -271,11 +271,12 @@ One branch and pull request for the files, then the by-hand apply.
 - **Vulnerability scanning.** Artifact Registry can scan each pushed image
   for known vulnerabilities, but it is billed per image. Turn it on for
   stage, or leave it off until prod (DES-011)? Recommendation: leave it off.
-- **The root `package.json`.** It installs only jQuery, which nothing uses
-  (the templates load it from a CDN). Add a backlog row to remove it and the
-  root `node_modules`, or keep it for something not visible in the repo?
+- **The root `package.json`.** Settled 2026-11-12: it installs only jQuery,
+  which nothing uses (the templates load it from a CDN). Removing it and the
+  root `node_modules` is DES-013.
 
 ## Changelog
 
 - 2026-11-12 — Created. The ML part of the backlog title was already settled
   by DES-003, so the title now names the Dockerfile and the Tailwind build.
+- 2026-11-12 — Removing the root `package.json` split out as DES-013.

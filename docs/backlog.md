@@ -16,7 +16,7 @@ tracked separately in [buglog.md](buglog.md).
 
 **Conventions**
 
-- **IDs:** `DES-001`, `DES-002`, … — sequential, never reused. Next free ID: **DES-013**.
+- **IDs:** `DES-001`, `DES-002`, … — sequential, never reused. Next free ID: **DES-014**.
 - **File names:** `<ID>-<kebab-slug>.md`, e.g. `designed/DES-002-gcp-infrastructure.md`.
 - **Promoting an idea:** copy [`templates/design-template.md`](templates/design-template.md)
   into `designed/`, fill it in, and link it from the row (changing its status to *Designed*).
@@ -61,3 +61,4 @@ tracked separately in [buglog.md](buglog.md).
 | DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | | DES-002 | 2026-11-11 | Idea |
 | DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | DES-002 | 2026-11-11 | Idea |
 | DES-012 | Serving the resume parser (models no longer load; ML stack kept out of the web image) | Feature | | DES-003 | 2026-11-11 | Idea |
+| DES-013 | Remove the unused root `package.json` and `node_modules` (jQuery comes from a CDN) | Cleanup | | — | 2026-11-12 | Idea |

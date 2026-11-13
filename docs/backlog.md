@@ -56,7 +56,7 @@ tracked separately in [buglog.md](buglog.md).
 | DES-005 | Environment config and secrets | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-007 | Media storage for user uploads | Infrastructure | | — | 2026-11-11 | Idea |
-| DES-008 | Container image (Tailwind build, ML dependencies) | Infrastructure | | DES-003 | 2026-11-11 | Idea |
+| DES-008 | Container image (Dockerfile, Tailwind build) | Infrastructure | [doc](designed/DES-008-container-image.md) | DES-003 | 2026-11-12 | Designed |
 | DES-009 | CI pipeline: tests, lint, Terraform checks | Infrastructure | | DES-002 (Terraform roots) | 2026-11-11 | Idea |
 | DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | | DES-002 | 2026-11-11 | Idea |
 | DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | DES-002 | 2026-11-11 | Idea |

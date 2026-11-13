@@ -54,7 +54,7 @@ tracked separately in [buglog.md](buglog.md).
 | DES-003 | Dependency management and Python version (Pipfile → pyproject) | Infrastructure | [doc](designed/DES-003-dependencies-python-version.md) | — | 2026-11-11 | Designed |
 | DES-004 | Settings package for cloud (stage settings, default settings module) | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-005 | Environment config and secrets | Infrastructure | | — | 2026-11-11 | Idea |
-| DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | | — | 2026-11-11 | Idea |
+| DES-006 | Static files (stop tracking build output, serve from the container) | Infrastructure | [doc](designed/DES-006-static-files.md) | — | 2026-11-12 | Designed |
 | DES-007 | Media storage for user uploads | Infrastructure | | — | 2026-11-11 | Idea |
 | DES-008 | Container image (Tailwind build, ML dependencies) | Infrastructure | | DES-003 | 2026-11-11 | Idea |
 | DES-009 | CI pipeline: tests, lint, Terraform checks | Infrastructure | | DES-002 (Terraform roots) | 2026-11-11 | Idea |

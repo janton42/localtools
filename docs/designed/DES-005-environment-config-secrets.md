@@ -3,9 +3,9 @@
 - **Status:** Designed
 - **Area:** Infrastructure
 - **Created:** 2026-11-12
-- **Updated:** 2026-11-12
+- **Updated:** 2026-11-19
 - **Depends on:** DES-003 (see Dependencies)
-- **Related:** DES-002 (app contract, the `home-stage-app-env` secret, the runbook step), DES-004 (stage settings read the keys listed here), DES-006 and DES-008 (`collectstatic` in the image build runs without a secret), DES-013 (outgoing email), DES-010 and DES-011 (PythonAnywhere keeps its `.env` until cutover)
+- **Related:** DES-002 (app contract, the `home-stage-app-env` secret, the runbook step), DES-004 (stage settings read the keys listed here), DES-006 and DES-008 (`collectstatic` in the image build runs without a secret), DES-014 (outgoing email), DES-010 and DES-011 (PythonAnywhere keeps its `.env` until cutover)
 
 ## Summary
 
@@ -63,7 +63,7 @@ gated step) and stage can't start.
 - Media storage settings (DES-007). The bucket name is already a plain
   variable set by Terraform.
 - Configuring email. The password reset pages send mail, but no email
-  backend is configured anywhere today. That is DES-013; its credentials
+  backend is configured anywhere today. That is DES-014; its credentials
   will be added to the key table below when it is designed.
 - Moving PythonAnywhere off its `.env` file. It keeps the file until
   cutover (DES-011).
@@ -279,10 +279,9 @@ Manual checks:
 
 ## Open Questions
 
-- **Secret as a mounted file instead of a library call.** Recommend the
-  library call, as above. Jeff to confirm, since the other choice changes
-  the Terraform module.
-- **Answer** Library call is preferred.
+- **Secret as a mounted file instead of a library call.** Settled 2026-11-19:
+  the library call, as above. The Terraform module does not change, and the
+  alternative is not revisited.
 
 ## Changelog
 
@@ -291,3 +290,6 @@ Manual checks:
   `DJANGO_ALLOWED_HOSTS` with CSRF origins derived from it (DES-004), email
   points to DES-013, and the image build's `collectstatic` without a secret
   is spelled out (DES-006, DES-008).
+- 2026-11-19 — Open question settled (library call). Outgoing email
+  references corrected from DES-013 to DES-014, since DES-013 is now the
+  root `package.json` cleanup.

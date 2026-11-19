@@ -113,7 +113,7 @@ is written into this doc.
 | Local dev | `pipenv install` | `uv sync --extra mysql` for the full local site; add `--extra parser` to work on the parser |
 | PythonAnywhere (live) | Installed by hand from the Pipfile | Installed by hand from a requirements file that uv exports from the lock, with the `mysql` and `parser` groups, so the live site keeps its parser until cutover |
 | Container image (DES-008) | Not built yet | Frozen sync, main group only. The Tailwind build is still DES-008's job. Without ML packages or NLTK data, the image is much smaller, and the DES-002 memory figure of 1 GiB can be revisited |
-| CI (DES-009) | None | Will run the same frozen sync with the dev group |
+| CI (DES-009) | None | Runs the same frozen sync with the dev group and the `mysql` extra, since the dev settings use MySQL until DES-010 |
 
 ### Files
 
@@ -170,3 +170,4 @@ One branch and pull request.
 
 - 2026-11-11 — Created. The resume parser's packages moved into an optional
   group; how it is served is split out as DES-012.
+- 2026-11-19 — CI row updated to include the `mysql` extra (DES-009).

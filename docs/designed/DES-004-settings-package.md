@@ -5,7 +5,7 @@
 - **Created:** 2026-11-12
 - **Updated:** 2026-11-12
 - **Depends on:** DES-003 (see Dependencies)
-- **Related:** DES-002 (app contract, environment variables), DES-005 (loads the secret these settings read), DES-006 (static files), DES-007 (media), DES-011 (prod settings on Cloud Run), DES-013 (outgoing email)
+- **Related:** DES-002 (app contract, environment variables), DES-005 (loads the secret these settings read), DES-006 (static files), DES-007 (media), DES-011 (prod settings on Cloud Run), DES-014 (outgoing email)
 
 ## Summary
 
@@ -68,7 +68,7 @@ anyone running the project:
   them.
 - Settings for a prod environment on Cloud Run (DES-011). `prod.py` stays the
   PythonAnywhere configuration until the cutover.
-- Sending real email (DES-013). Stage writes outgoing email to the log.
+- Sending real email (DES-014). Stage writes outgoing email to the log.
 - Moving local development off MySQL. Dev keeps its current database settings.
 - The broken `asgi.py`, which imports packages and an app that don't exist.
   DES-003 adds it to the backlog. Nothing here touches it.
@@ -137,7 +137,7 @@ when not using dev.
 | Database | PostgreSQL, database `localtools`, user from `DB_USER`, password from `DB_PASSWORD` | Host is the Cloud SQL socket directory, `/cloudsql/` followed by `GCP_CLOUDSQL_CONNECTION_NAME`, which Cloud Run mounts. No port |
 | Database host override | `DB_HOST`, if set, replaces the socket directory | Not set on Cloud Run. Lets the stage settings run locally against a local PostgreSQL or the Cloud SQL Auth Proxy |
 | Persistent connections | Kept for 60 seconds, checked before reuse | Saves a connection per request. The smallest shared-core instance allows about 25 connections, so instances times workers must stay under that; DES-008 sets the worker count |
-| Email backend | Console | Outgoing email, such as password resets, is written to the log instead of failing. DES-013 replaces this |
+| Email backend | Console | Outgoing email, such as password resets, is written to the log instead of failing. DES-014 replaces this |
 | Cache | Inherited database cache table | The migrate job creates the table (DES-002) |
 | Static files, media | Inherited from `base.py` | Changed by DES-006 and DES-007 |
 
@@ -235,3 +235,5 @@ One branch and pull request.
 ## Changelog
 
 - 2026-11-12 — Created. Outgoing email split out as DES-013.
+- 2026-11-19 — Outgoing email references corrected to DES-014 (DES-013 is the
+  root `package.json` cleanup).

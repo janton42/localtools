@@ -58,8 +58,8 @@ tracked separately in [buglog.md](buglog.md).
 | DES-007 | Media storage for user uploads | Infrastructure | [doc](designed/DES-007-media-storage.md) | DES-003, DES-004 | 2026-11-12 | Designed |
 | DES-008 | Container image (Dockerfile, Tailwind build) | Infrastructure | [doc](designed/DES-008-container-image.md) | DES-003 | 2026-11-12 | Designed |
 | DES-009 | CI pipeline: tests, lint, Terraform checks | Infrastructure | [doc](designed/DES-009-ci-pipeline.md) | DES-002, DES-003 | 2026-11-19 | Designed |
-| DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | | DES-002 | 2026-11-11 | Idea |
-| DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | DES-002 | 2026-11-11 | Idea |
+| DES-010 | Data migration from PythonAnywhere MySQL | Infrastructure | [doc](designed/DES-010-data-migration.md) | DES-002, DES-003, DES-004, DES-007 | 2026-11-19 | Designed |
+| DES-011 | Prod environment and jeffstock.us cutover | Infrastructure | | DES-002, DES-010 | 2026-11-19 | Idea |
 | DES-012 | Serving the resume parser (models no longer load; ML stack kept out of the web image) | Feature | | DES-003 | 2026-11-11 | Idea |
 | DES-013 | Remove the unused root `package.json` and `node_modules` (jQuery comes from a CDN) | Cleanup | | — | 2026-11-12 | Idea |
 | DES-014 | Outgoing email (password reset is broken: no email backend configured) | Feature | | — | 2026-11-12 | Idea |

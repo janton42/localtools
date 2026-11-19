@@ -282,6 +282,7 @@ Manual checks:
 - **Secret as a mounted file instead of a library call.** Recommend the
   library call, as above. Jeff to confirm, since the other choice changes
   the Terraform module.
+- **Answer** Library call is preferred.
 
 ## Changelog
 
